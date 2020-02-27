@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+
+    <data>
+        <variable
+                name="verifViewModel"
+                type="com.example.fleet.viewmodels.OTPVerificationModel"/>
+
+        <variable
+                name="resendOTP"
+                type="Integer"/>
+
+
+    </data>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:id="@+id/cl_mainLayout"
+            app:hideKeyBoardOnClick="@{`back`}"
+            android:background="@color/colorWhite"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+        <include
+                android:id="@+id/toolbarCommon"
+                layout="@layout/common_toolbar_back"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"/>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/shape_round_corner"
+                android:gravity="center"
+                android:layout_marginTop="@dimen/dp_20"
+                android:layout_marginRight="@dimen/dp_10"
+                android:layout_marginLeft="@dimen/dp_10"
+                tools:ignore="MissingConstraints">
+
+            <TextView
+                    android:id="@+id/tv_verifyEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_15"
+                    android:gravity="center"
+                    android:text="@string/verification_code"
+                    android:textColor="@color/colorLightBlue"
+                    android:textSize="@dimen/sp_22"
+                    app:font="@{`semibold`}"
+
+            />
+
+            <TextView
+                    android:id="@+id/tv_otp_sent"
+                    android:layout_width="@dimen/dp_300"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:gravity="center"
+                    android:lines="4"
+                    android:text="@string/otp_verification_text"
+                    android:textColor="@color/colorBlack2"
+                    android:textSize="@dimen/sp_14"
+                    app:font="@{`regular`}"
+                    tools:ignore="MissingConstraints"
+                    tools:layout_editor_absoluteX="116dp"
+                    tools:layout_editor_absoluteY="306dp"/>
+
+            <TextView
+                    android:id="@+id/tv_otp_email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_2"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/sp_10"
+                    app:font="@{`semibold`}"
+            />
+
+            <com.goodiebag.pinview.Pinview
+                    android:id="@+id/pinview"
+                    app:pinBackground="@drawable/shape_round_corner_back"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_100"
+                    app:pinWidth="@dimen/dp_35"
+                    app:pinHeight="@dimen/dp_45"
+                    app:textSize="@dimen/sp_9"
+                    app:pinLength="6"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_marginRight="@dimen/dp_10"
+                    app:cursorVisible="false"
+                    app:forceKeyboard="true"
+                    app:hint=""
+                    app:inputType="number"
+                    app:password="false"/>
+
+
+            <Button
+                    android:id="@+id/btn_send"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/btn_height"
+                    android:background="@drawable/round_button_layout_red"
+                    android:paddingLeft="@dimen/dp_40"
+                    android:paddingRight="@dimen/dp_40"
+                    android:layout_marginTop="@dimen/dp_30"
+                    android:text="@string/proceed"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/btn_text"
+                    android:layout_marginBottom="@dimen/dp_10"
+                    app:font="@{`regular`}"
+                    android:textAllCaps="false"
+                    android:onClick="@{(v) -> verifViewModel.clickListener(v)}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+            />
+
+
+            <TextView
+                    android:id="@+id/tv_resend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/resend_otp"
+                    android:padding="@dimen/dp_10"
+                    android:visibility="@{resendOTP==0}"
+                    android:textColor="@color/colorButton"
+                    app:font="@{`semibold`}"
+                    android:onClick="@{(v) -> verifViewModel.clickListener(v)}"
+                    android:textSize="@dimen/sp_14"/>
+
+
+
+            <TextView
+                    android:id="@+id/tv_resend_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/todo"
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:padding="@dimen/dp_10"
+                    android:visibility="@{resendOTP==1}"
+                    android:textColor="@color/colorLightBlue"
+                    app:font="@{`semibold`}"
+                    android:onClick="@{(v) -> verifViewModel.clickListener(v)}"
+                    android:textSize="@dimen/sp_18"/>
+
+
+
+            <TextView
+                    android:id="@+id/tv_resend_time_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/resend_otp_time"
+                    android:padding="@dimen/dp_10"
+                    android:visibility="@{resendOTP==1}"
+                    android:textColor="@color/colorBlack"
+                    app:font="@{`regular`}"
+                    android:gravity="center"
+                    android:onClick="@{(v) -> verifViewModel.clickListener(v)}"
+                    android:textSize="@dimen/sp_12"/>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>

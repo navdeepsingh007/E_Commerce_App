@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="btn_width">300dp</dimen>
+    <dimen name="dp_tablayout">60dp</dimen>
+    <dimen name="dp_130">130dp</dimen>
+    <dimen name="dp_200">200dp</dimen>
+</resources>
