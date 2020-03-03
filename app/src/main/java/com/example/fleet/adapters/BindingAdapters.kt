@@ -24,7 +24,7 @@ object BindingAdapters {
     @BindingAdapter("android:src")
     @JvmStatic
     fun setImageViewResource(imageView: ImageView, resource: String) {
-        var drawable1 = MyApplication.instance.resources.getDrawable(R.drawable.user)
+        var drawable1 = MyApplication.instance.resources.getDrawable(R.drawable.ic_dummy_image)
 
         if (resource.contains("set_default")) {
             drawable1 = try {
@@ -34,7 +34,7 @@ object BindingAdapters {
                 MyApplication.instance.resources.getDrawable(id)
 
             } catch (e: Exception) {
-                MyApplication.instance.resources.getDrawable(R.drawable.user)
+                MyApplication.instance.resources.getDrawable(R.drawable.ic_dummy_image)
             }
 
         }
@@ -101,7 +101,7 @@ object BindingAdapters {
                     calendar.set(Calendar.YEAR, year)
                     calendar.set(Calendar.MONTH, monthOfYear)
                     calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                    val myFormat = "dd/MM/yyyy"
+                    val myFormat = "dd-MM--/yyyy"
                     val sdf = SimpleDateFormat(myFormat, Locale.US)
 
                     strDate = sdf.format(calendar.time)

@@ -47,7 +47,10 @@ class OtpFirebaseActivity {
             mBaseActivity!!.stopProgressDialog()
         }
 
-        override fun onCodeSent(s : String, forceResendingToken : PhoneAuthProvider.ForceResendingToken) {
+        override fun onCodeSent(
+            s : String,
+            forceResendingToken : PhoneAuthProvider.ForceResendingToken
+        ) {
             super.onCodeSent(s, forceResendingToken)
             mBaseActivity!!.stopProgressDialog()
             SharedPrefClass().putObject(
@@ -56,13 +59,13 @@ class OtpFirebaseActivity {
                 s.toString()
             )
             //storing the verification id that is sent to the user
-            if (otpAction == "signup" || otpAction == "forgot") {
-                val intent = Intent(mBaseActivity, OTPVerificationActivity::class.java)
-                intent.putExtra("data", mJsonObject!!.toString())
-                intent.putExtra("action", otpAction)
-                mBaseActivity!!.startActivity(intent)
-            }
+            //if (otpAction == "signup" || otpAction == "forgot") {
 
+            val intent = Intent(mBaseActivity, OTPVerificationActivity::class.java)
+            intent.putExtra("data", mJsonObject!!.toString())
+            intent.putExtra("action", otpAction)
+            mBaseActivity!!.startActivity(intent)
+            //  }
             if (otpAction == "resend") {
                 UtilsFunctions.showToastSuccess(mBaseActivity!!.getString(R.string.resend_otp_message))
             }

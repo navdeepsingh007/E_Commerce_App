@@ -13,14 +13,12 @@ import com.example.fleet.views.authentication.LoginActivity
 import com.example.fleet.views.home.DashboardActivity
 import java.util.*
 
-
 class SplashActivity : BaseActivity() {
-    private var mActivitySplashBinding: ActivitySplashBinding? = null
-    private var sharedPrefClass: SharedPrefClass? = null
-    private var mContext: Context? = null
+    private var mActivitySplashBinding : ActivitySplashBinding? = null
+    private var sharedPrefClass : SharedPrefClass? = null
+    private var mContext : Context? = null
 
-
-    override fun getLayoutId(): Int {
+    override fun getLayoutId() : Int {
         return R.layout.activity_splash
     }
 
@@ -29,7 +27,7 @@ class SplashActivity : BaseActivity() {
         mActivitySplashBinding = DataBindingUtil.setContentView(this, R.layout.activity_splash)
 
         sharedPrefClass = SharedPrefClass()
-        val token: String? = "sd"
+        val token : String? = "sd"
 
         if (token != null) {
             sharedPrefClass!!.putObject(
@@ -42,16 +40,13 @@ class SplashActivity : BaseActivity() {
         Timer().schedule(object : TimerTask() {
             override fun run() {
                 runOnUiThread {
-
                     checkScreenType()
                 }
             }
         }, 3000)
     }
 
-
     private fun checkScreenType() {
-
         var login = ""
         if (checkObjectNull(
                 SharedPrefClass().getPrefValue(
@@ -61,19 +56,16 @@ class SplashActivity : BaseActivity() {
             )
         )
             login = sharedPrefClass!!.getPrefValue(this, "isLogin").toString()
-
-
         val intent = if (login == "true") {
-
             Intent(this, DashboardActivity::class.java)
         } else {
             Intent(this, LoginActivity::class.java)
+            // Intent(this, AddFuelDetailActivity::class.java)
 
         }
 
         startActivity(intent)
         finish()
     }
-
 
 }

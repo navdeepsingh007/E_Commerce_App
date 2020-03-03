@@ -5,20 +5,21 @@ import androidx.lifecycle.MutableLiveData
 import android.view.View
 import com.example.fleet.common.UtilsFunctions
 import com.example.fleet.model.CommonModel
+import com.example.fleet.model.LoginResponse
 import com.example.fleet.repositories.LoginRepository
 import com.google.gson.JsonObject
 import org.json.JSONObject
 
 class LoginViewModel : BaseViewModel() {
-    private var emialExistenceResponse = MutableLiveData<CommonModel>()
+    private var emialExistenceResponse = MutableLiveData<LoginResponse>()
     private var loginRepository = LoginRepository()
     private val mIsUpdating = MutableLiveData<Boolean>()
     private val btnClick = MutableLiveData<String>()
 
     init {
-        emialExistenceResponse = loginRepository.checkPhoneExistence(null)
+        emialExistenceResponse = loginRepository.getLoginData(null)
     }
-    fun checkEmailExistence() : LiveData<CommonModel> {
+    fun checkEmailExistence() : LiveData<LoginResponse> {
         return emialExistenceResponse!!
     }
 
@@ -37,7 +38,8 @@ class LoginViewModel : BaseViewModel() {
 
     fun checkPhoneExistence(mJsonObject : JsonObject) {
         if (UtilsFunctions.isNetworkConnected()) {
-            emialExistenceResponse = loginRepository.checkPhoneExistence(mJsonObject)
+            //emialExistenceResponse = loginRepository.checkPhoneExistence(mJsonObject)
+            emialExistenceResponse = loginRepository.getLoginData(mJsonObject)
             mIsUpdating.postValue(true)
         }
 

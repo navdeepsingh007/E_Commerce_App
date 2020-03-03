@@ -1,35 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools" package="com.example.fleet">
+        xmlns:tools="http://schemas.android.com/tools"
+        package="com.example.fleet">
 
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.VIBRATE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
-    <uses-permission android:name="android.permission.READ_SMS"/>
-    <uses-permission android:name="android.permission.SEND_SMS"/>
-    <uses-permission android:name="android.permission.BROADCAST_SMS" tools:ignore="ProtectedPermissions"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission
+            android:name="android.permission.BROADCAST_SMS"
+            tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-feature android:name="android.hardware.camera"/>
-    <uses-feature android:name="android.hardware.camera.flash" android:required="true"/>
-    <uses-feature android:name="android.hardware.camera.autofocus"/>
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature
+            android:name="android.hardware.camera.flash"
+            android:required="true" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
     <application
+            android:name=".application.MyApplication"
+            android:fullBackupContent="@xml/backup_descriptor"
             android:icon="@drawable/ic_app"
+            android:label="@string/app_name"
+            android:networkSecurityConfig="@xml/network_security_config"
             android:roundIcon="@drawable/ic_app"
             android:supportsRtl="true"
-            android:networkSecurityConfig="@xml/network_security_config"
             android:theme="@style/AppTheme.NoActionBar"
-            android:name="com.example.fleet.application.MyApplication"
-            android:label="@string/app_name" tools:ignore="GoogleAppIndexingWarning" tools:targetApi="n"
-            android:fullBackupContent="@xml/backup_descriptor">
+            tools:ignore="GoogleAppIndexingWarning"
+            tools:targetApi="n">
+        <activity android:name=".views.services.UpdateServiceActivity"></activity>
+        <activity android:name=".views.services.ServicesListActivity" />
+        <activity android:name=".views.fuel.FuelEntryList" />
+        <activity android:name=".views.fuel.AddFuelDetailActivity" />
+        <activity android:name=".views.profile.ProfileActivity" />
 
         <provider
                 android:name="androidx.core.content.FileProvider"
@@ -38,87 +52,69 @@
                 android:grantUriPermissions="true">
             <meta-data
                     android:name="android.support.FILE_PROVIDER_PATHS"
-                    android:resource="@xml/fileprovider"/>
+                    android:resource="@xml/fileprovider" />
         </provider>
 
         <activity
-                android:name="com.example.fleet.views.SplashActivity"
+                android:name=".views.SplashActivity"
                 android:screenOrientation="portrait"
                 android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-                android:name="com.example.fleet.views.authentication.LoginActivity"
+                android:name=".views.authentication.LoginActivity"
                 android:launchMode="singleTop"
-                android:screenOrientation="portrait"
-        />
+                android:screenOrientation="portrait" />
         <activity
-                android:name="com.example.fleet.views.authentication.LoginPasswordActivity"
+                android:name=".views.authentication.LoginPasswordActivity"
                 android:launchMode="singleTop"
-                android:screenOrientation="portrait"
-        />
-
+                android:screenOrientation="portrait" />
         <activity
-                android:name="com.example.fleet.views.authentication.OTPVerificationActivity"
+                android:name=".views.authentication.OTPVerificationActivity"
                 android:launchMode="singleTop"
-                android:screenOrientation="portrait"
-        />
-
+                android:screenOrientation="portrait" />
         <activity
-                android:name="com.example.fleet.views.authentication.ResetPasswrodActivity"
+                android:name=".views.authentication.ResetPasswrodActivity"
                 android:launchMode="singleTop"
-                android:screenOrientation="portrait"
-        />
+                android:screenOrientation="portrait" />
         <activity
-                android:name="com.example.fleet.views.authentication.ChangePasswrodActivity"
+                android:name=".views.authentication.ChangePasswrodActivity"
                 android:launchMode="singleTop"
-                android:screenOrientation="portrait"
-        />
-
+                android:screenOrientation="portrait" />
         <activity
                 android:name=".views.home.DashboardActivity"
                 android:launchMode="singleTop"
-                android:screenOrientation="portrait"
-        />
+                android:screenOrientation="portrait" />
         <activity
                 android:name=".views.settings.MyAccountsActivity"
                 android:launchMode="singleTop"
-                android:screenOrientation="portrait"
-        />
+                android:screenOrientation="portrait" />
         <activity
                 android:name=".views.authentication.RegisterActivity"
                 android:launchMode="singleTop"
-                android:screenOrientation="portrait"
-        />
+                android:screenOrientation="portrait" />
         <activity
                 android:name=".socket.TrackingActivity"
                 android:launchMode="singleTop"
-                android:screenOrientation="portrait"
-        />
+                android:screenOrientation="portrait" />
 
         <receiver
                 android:name=".views.authentication.SMSBroadcastReciever"
                 android:exported="true"
-                android:priority="1000"
-                android:permission="android.permission.BROADCAST_SMS">
-
+                android:permission="android.permission.BROADCAST_SMS"
+                android:priority="1000">
             <intent-filter>
-                <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED"/>
+                <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED" />
             </intent-filter>
         </receiver>
+
         <meta-data
                 android:name="com.google.android.geo.API_KEY"
-                android:value="AIzaSyD2-RDPo0jssFqwwTXr6NDpOFzQTcIc3dI"/>
-
-        <!--<receiver android:name=".views.authentication.SMSBroadcastReciever"-->
-        <!--android:permission="android.permission.BROADCAST_SMS">-->
-        <!--<intent-filter>-->
-        <!--<action android:name="android.provider.Telephony.SMS_RECEIVED" />-->
-        <!--</intent-filter>-->
-        <!--</receiver>-->
+                android:value="AIzaSyD2-RDPo0jssFqwwTXr6NDpOFzQTcIc3dI" />
     </application>
+
 </manifest>

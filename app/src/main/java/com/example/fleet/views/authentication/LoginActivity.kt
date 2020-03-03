@@ -14,6 +14,7 @@ import com.example.fleet.common.UtilsFunctions
 import com.example.fleet.constants.GlobalConstants
 import com.example.fleet.databinding.ActivityLoginBinding
 import com.example.fleet.model.CommonModel
+import com.example.fleet.model.LoginResponse
 import com.example.fleet.sharedpreference.SharedPrefClass
 import com.example.fleet.utils.BaseActivity
 import com.example.fleet.viewmodels.LoginViewModel
@@ -34,20 +35,65 @@ class LoginActivity : BaseActivity() {
         loginViewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
         activityLoginbinding.loginViewModel = loginViewModel
         loginViewModel.checkEmailExistence().observe(this,
-            Observer<CommonModel> { response->
+            Observer<LoginResponse> { response->
                 stopProgressDialog()
                 if (response != null) {
                     val message = response.message
                     when {
                         response.code == 200 -> {
-                            val intent = Intent(this, LoginPasswordActivity::class.java)
-                            intent.putExtra("data", mJsonObject.toString())
-                            startActivity(intent)
+                            FirebaseFunctions.sendOTP("login", mJsonObject, this)
+                            mJsonObject.addProperty("phone_number", response.data?.phoneNumber)
+                            mJsonObject.addProperty("country_code", response.data?.countryCode)
+
+                            SharedPrefClass().putObject(
+                                this,
+                                GlobalConstants.ACCESS_TOKEN,
+                                response.data!!.session_token
+                            )
+                            SharedPrefClass().putObject(
+                                this,
+                                GlobalConstants.USERID,
+                                response.data!!.driver_id
+                            )
+                            SharedPrefClass().putObject(
+                                this,
+                                GlobalConstants.USER_IAMGE,
+                                response.data!!.profile_image
+                            )
+
+                            SharedPrefClass().putObject(
+                                this, GlobalConstants.USERDATA,
+                                response.data!!
+                            )
+
+                            SharedPrefClass().putObject(
+                                applicationContext,
+                                getString(R.string.first_name),
+                                response.data!!.firstName + " " + response.data!!.lastName
+                            )
+                            SharedPrefClass().putObject(
+                                this,
+                                getString(R.string.key_phone),
+                                response.data!!.phoneNumber
+                            )
+                            SharedPrefClass().putObject(
+                                this,
+                                getString(R.string.key_country_code),
+                                response.data!!.countryCode
+                            )
+                            SharedPrefClass().putObject(
+                                this,
+                                getString(R.string.key_country_code),
+                                response.data!!.countryCode
+                            )
+                            /*  val intent = Intent(this, OTPVerificationActivity::class.java)
+                              intent.putExtra("data", mJsonObject.toString())
+                              startActivity(intent)*/
 
                         }
-                        response.code == 204 -> {
-                            FirebaseFunctions.sendOTP("signup", mJsonObject, this)
-                        }
+                        /* response.code == 204 -> {
+                             FirebaseFunctions.sendOTP("signup", mJsonObject, this)
+                         }*/
                         else -> showToastError(message)
                     }
 
@@ -64,9 +110,10 @@ class LoginActivity : BaseActivity() {
                         when {
                             TextUtils.isEmpty(phone) -> run {
                                 activityLoginbinding.etPhoneNo.requestFocus()
-                                activityLoginbinding.etPhoneNo.error = getString(R.string.empty) + " " + getString(
-                                    R.string.phone_number
-                                )
+                                activityLoginbinding.etPhoneNo.error =
+                                    getString(R.string.empty) + " " + getString(
+                                        R.string.phone_number
+                                    )
                             }
                             else -> {
                                 mJsonObject.addProperty("phone_number", phone)
@@ -78,7 +125,8 @@ class LoginActivity : BaseActivity() {
                                     ) as String
                                 )
                                 val versionName = MyApplication.instance.packageManager
-                                    .getPackageInfo(MyApplication.instance.packageName, 0).versionName
+                                    .getPackageInfo(MyApplication.instance.packageName, 0)
+                                    .versionName
                                 val androidId = UtilsFunctions.getAndroidID()
 
                                 mJsonObject.addProperty("device_type", GlobalConstants.PLATFORM)
@@ -93,24 +141,23 @@ class LoginActivity : BaseActivity() {
                                 SharedPrefClass().putObject(
                                     applicationContext,
                                     getString(R.string.key_phone),
-                                   phone
+                                    phone
                                 )
+
+
                                 SharedPrefClass().putObject(
                                     applicationContext,
                                     getString(R.string.key_country_code),
                                     "+" + activityLoginbinding.btnCcp.selectedCountryCode
                                 )
-
-                              //  FirebaseFunctions.sendOTP("signup", mJsonObject, this)
+                                //  FirebaseFunctions.sendOTP("signup", mJsonObject, this)
                                 val mSmsBroadcastReceiver = SMSBroadcastReciever()
                                 //set google api client for hint request
-                              //  mSmsBroadcastReceiver.setOnOtpListeners(baseContext)
-
+                                //  mSmsBroadcastReceiver.setOnOtpListeners(baseContext)
                                 val intentFilter = IntentFilter()
                                 intentFilter.addAction(SmsRetriever.SMS_RETRIEVED_ACTION)
-                                LocalBroadcastManager.getInstance(this).registerReceiver(mSmsBroadcastReceiver, intentFilter)
-
-
+                                LocalBroadcastManager.getInstance(this)
+                                    .registerReceiver(mSmsBroadcastReceiver, intentFilter)
 
                             }
                         }

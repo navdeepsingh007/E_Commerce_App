@@ -17,6 +17,7 @@ import com.example.fleet.databinding.ActivityOtpVerificationBinding
 import com.example.fleet.sharedpreference.SharedPrefClass
 import com.example.fleet.utils.BaseActivity
 import com.example.fleet.viewmodels.OTPVerificationModel
+import com.example.fleet.views.home.DashboardActivity
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.credentials.HintRequest
 import com.google.android.gms.auth.api.phone.SmsRetriever
@@ -69,7 +70,7 @@ class OTPVerificationActivity : BaseActivity(),
 
         try {
             mJsonObject = JSONObject(intent.extras.get("data").toString())
-            action = intent.extras.get("action").toString()
+            //  action = intent.extras.get("action").toString()
             var mSmsBroadcastReceiver = SMSBroadcastReciever()
             //set google api client for hint request
 //            mSmsBroadcastReceiver.setOnOtpListeners(this)
@@ -127,15 +128,22 @@ class OTPVerificationActivity : BaseActivity(),
                     }
                     "tv_resend" -> {
                         val mJsonObject1 = JsonObject()
-                        mJsonObject1.addProperty("country_code", mJsonObject.get("country_code").toString())
-                        mJsonObject1.addProperty("phone_number", mJsonObject.get("phone_number").toString())
+                        mJsonObject1.addProperty(
+                            "country_code",
+                            mJsonObject.get("country_code").toString()
+                        )
+                        mJsonObject1.addProperty(
+                            "phone_number",
+                            mJsonObject.get("phone_number").toString()
+                        )
                         FirebaseFunctions.sendOTP("resend", mJsonObject1, this)
                         startProgressDialog()
 
                         object : CountDownTimer(60000, 1000) {
                             override fun onTick(millisUntilFinished : Long) {
                                 activityOtpVerificationBinding.resendOTP = 1
-                                activityOtpVerificationBinding.tvResendTime.text = "00:" + millisUntilFinished / 1000
+                                activityOtpVerificationBinding.tvResendTime.text =
+                                    "00:" + millisUntilFinished / 1000
                                 //here you can have your logic to set text to edittext
                             }
 
@@ -222,21 +230,27 @@ class OTPVerificationActivity : BaseActivity(),
                 { task->
                     stopProgressDialog()
                     if (task.isSuccessful) {
-//                        val intent = Intent(this, LoginPasswordActivity::class.java)
-//                        intent.putExtra("data", mJsonObject.toString())
-//                        startActivity(intent)
-//                        finish()
-                        // otpVerificationModel.login(mJsonObject)
-                        if (action.equals("signup"))
-                        {
-                            val intent = Intent(this, RegisterActivity::class.java)
-                            startActivity(intent)
-                        }
+                        SharedPrefClass().putObject(
+                            MyApplication.instance.applicationContext,
+                            "isLogin",
+                            true
+                        )
 
-                        if (action.equals("forgot")) {
-                            val intent = Intent(this, ResetPasswrodActivity::class.java)
-                            startActivity(intent)
-                        }
+                        val intent = Intent(this, DashboardActivity::class.java)
+                        intent.putExtra("data", mJsonObject.toString())
+                        startActivity(intent)
+                        finish()
+                        // otpVerificationModel.login(mJsonObject)
+                        /* if (action.equals("signup"))
+                         {
+                             val intent = Intent(this, RegisterActivity::class.java)
+                             startActivity(intent)
+                         }
+
+                         if (action.equals("forgot")) {
+                             val intent = Intent(this, ResetPasswrodActivity::class.java)
+                             startActivity(intent)
+                         }*/
 
                     } else {
                         //verification unsuccessful.. display an error message

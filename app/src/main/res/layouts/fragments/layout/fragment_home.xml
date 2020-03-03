@@ -6,23 +6,19 @@
 
     <data>
 
-        <import type="com.example.fleet.common.BindingUtils"/>
+        <import type="com.example.fleet.common.BindingUtils" />
 
         <variable
                 name="homeViewModel"
-                type="com.example.fleet.viewmodels.HomeViewModel"/>
+                type="com.example.fleet.viewmodels.home.HomeViewModel" />
 
     </data>
-    <ScrollView android:id="@+id/scroll_view"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:fillViewport="true"
-    >
+
+
 
         <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-        >
+                android:layout_height="wrap_content">
 
             <LinearLayout
                     android:id="@+id/upper_container"
@@ -31,6 +27,7 @@
                     android:background="@drawable/splash"
                     android:gravity="center"
                     android:orientation="vertical"
+                    android:visibility="gone"
                     android:weightSum="10">
 
                 <TextView
@@ -44,7 +41,7 @@
                         android:textColor="@color/colorWhite"
                         android:textSize="@dimen/sp_22"
                         app:font="@{`bold`}"
-                        tools:ignore="RtlSymmetry"/>
+                        tools:ignore="RtlSymmetry" />
 
                 <TextView
                         android:id="@+id/tv_name"
@@ -57,7 +54,7 @@
                         android:textSize="@dimen/sp_22"
                         app:font="@{`bold`}"
                         tools:ignore="RtlSymmetry"
-                        tools:text="Karan!"/>
+                        tools:text="Karan!" />
 
                 <RelativeLayout
                         android:id="@+id/childLayout"
@@ -67,20 +64,29 @@
                         android:layout_weight="8.7"
                         android:gravity="center">
 
-
                 </RelativeLayout>
 
-                <com.google.android.material.tabs.TabLayout
-                        android:id="@+id/tabLayout"
-                        style="@style/TabLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:tabIndicatorHeight="@dimen/dp_4"
-                        app:tabMode="fixed"
-                />
             </LinearLayout>
 
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_jobs"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_above="@+id/tabLayout"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp" />
+
+            <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tabLayout"
+                    style="@style/TabLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorBlack"
+                    android:visibility="gone"
+                    app:tabIndicatorHeight="@dimen/dp_4"
+                    app:tabMode="fixed" />
         </RelativeLayout>
 
-    </ScrollView>
 </layout>

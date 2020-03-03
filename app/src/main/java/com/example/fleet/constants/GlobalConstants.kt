@@ -13,6 +13,8 @@ object GlobalConstants {
     @JvmStatic
     val CUSTOMER_IAMGE = "customer_image"
     @JvmStatic
+    val USER_IAMGE = "user_image"
+    @JvmStatic
     val USERNAME = "username"
 
     @JvmStatic
@@ -34,7 +36,7 @@ object GlobalConstants {
     var SESSION_TOKEN = "session_token"
 
     @JvmStatic
-    val BASE_URL = "http://infinitywebtechnologies.com:9062/api/"
+    val BASE_URL = "http://10.8.23.202:9062/"
 
     @JvmStatic
     val BASE_SERVER = "http://infinitywebtechnologies.com:9062"

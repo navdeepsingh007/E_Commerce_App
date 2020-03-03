@@ -1,30 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="invalid_number">Invalid Number</string>
-    <string name="already_exist">Phone number is already exist</string>
-    <string name="invalid_otp">Invalid OTP</string>
-    <string name="something_error">Somthing is wrong, we will fix it soon...</string>
-    <string name="welcome_back_password">Welcome back, Please sign in to continue</string>
-    <string name="enter_password">Enter your password</string>
-    <string name="dont_account">I don\'t have an account</string>
-    <string name="current_password">Current Password</string>
-    <string name="new_password">New Password</string>
-    <string name="resend_otp_time">If you have not recieved the SMS,Please press resend code after the time elapse</string>
-    <string name="key_phone">phone_number</string>
-    <string name="regex_message">Your password must be more than 6 characters long ,Should contain at-least 1 Numeric
-        and 1 Special character
-    </string>
-    <string name="first_name">First Name</string>
-    <string name="last_name">Last Name</string>
-    <string name="address">Address</string>
-    <string name="key_country_code">country_code</string>
-    <string name="upload_profile_picture">Upload profile picture</string>
-    <string name="upload_with_camera">Upload with camera</string>
-    <string name="select_option">Select option</string>
-    <string name="place_image_here">Upload from gallery</string>
-    <string name="stop_ride">Stop Ride</string>
-    <string name="location_permissions">Location Permissions Turned Off</string>
-    <string name="allow_location">Allow to turn on Location Permissions</string>
-    <string name="turn_on_location">Turn on Location</string>
-    <string name="GPS_enabled">Location Services is not enabled,Please enable Location Services</string>
+    <string name="my_jobs">My Jobs</string>
+    <string name="job_requests">Job Requests</string>
+    <string name="accept">Accept</string>
+    <string name="reject">Reject</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="persons">Persons : </string>
+    <string name="tons">Tons</string>
+    <string name="no_record_found">No Record Found</string>
+
+
 </resources>
