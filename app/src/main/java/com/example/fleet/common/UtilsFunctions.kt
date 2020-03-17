@@ -117,6 +117,24 @@ object UtilsFunctions {
         }
     }
 
+
+    @JvmStatic
+    @TargetApi(Build.VERSION_CODES.M)
+    fun isNetworkConnectedWithoutToast() : Boolean {
+        val cm = MyApplication.instance.applicationContext
+            .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        var activeNetwork : NetworkInfo? = null
+        activeNetwork = cm.activeNetworkInfo
+
+        return if (activeNetwork != null && activeNetwork.isConnectedOrConnecting) {
+            activeNetwork != null && activeNetwork.isConnectedOrConnecting
+        } else {
+           // showToastWarning(MyApplication.instance.getString(R.string.internet_connection))
+            // Toast.makeText(MyApplication.getInstance().getApplicationContext(), R.string.internet_connection, Toast.LENGTH_SHORT).show();
+            false
+        }
+    }
+
     @JvmStatic
     @TargetApi(Build.VERSION_CODES.M)
     fun isNetworkConnectedReturn() : Boolean {

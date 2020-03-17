@@ -8,6 +8,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
 import java.io.IOException
+import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -100,6 +101,21 @@ class Utils(internal var context: Context) {
         String postalCode = addresses.get(0).getPostalCode();
         String knownName = addresses.get(0).getFeatureName(); // Only if available else return NULL*/
         return mString.toString()
+    }
+
+    fun getDate(format: String, milisec: String?,outputFormat:String?): String {
+        val inputFormat = SimpleDateFormat(format, Locale.getDefault())
+        val outputFormat1 = SimpleDateFormat(outputFormat, Locale.getDefault())
+
+        val tz = TimeZone.getTimeZone("UTC")
+        inputFormat.timeZone = tz
+        val date = inputFormat.parse(milisec)
+
+        val tzLocal = TimeZone.getDefault()
+        outputFormat1.timeZone = tzLocal
+       return  outputFormat1.format(date)
+
+
     }
 
 }

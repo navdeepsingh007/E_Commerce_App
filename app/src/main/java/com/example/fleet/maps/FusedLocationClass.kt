@@ -11,6 +11,8 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
@@ -18,21 +20,21 @@ import com.google.android.gms.location.LocationListener
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 
-class FusedLocationClass
 /**
  * constructor
  *
  */
-    (private val mContext : Context?) : GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
+class FusedLocationClass(private val mContext : Context?) : GoogleApiClient.ConnectionCallbacks,
+    GoogleApiClient.OnConnectionFailedListener,
     LocationListener {
     private var mGoogleApiClient : GoogleApiClient? = null
     private var mLocationRequest : LocationRequest? = null
 
     init {
-        if (mContext != null)
+        if (mContext != null) {
             buildGoogleApiClient()
+        }
     }
-
     /**
      * destructor
      *
@@ -75,9 +77,17 @@ class FusedLocationClass
                     Manifest.permission.ACCESS_FINE_LOCATION
                 ) == PackageManager.PERMISSION_GRANTED
             )
-                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this)
+                LocationServices.FusedLocationApi.requestLocationUpdates(
+                    mGoogleApiClient,
+                    mLocationRequest,
+                    this
+                )
         } else
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this)
+            LocationServices.FusedLocationApi.requestLocationUpdates(
+                mGoogleApiClient,
+                mLocationRequest,
+                this
+            )
     }
 
     /**
@@ -95,7 +105,7 @@ class FusedLocationClass
     /**
      * removes location updates from the FusedLocationApi
      */
-    private fun stopLocationUpdates() {
+    public fun stopLocationUpdates() {
         // stop updates, disconnect from google api
         if (null != mGoogleApiClient && mGoogleApiClient!!.isConnected) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this)
@@ -150,7 +160,10 @@ class FusedLocationClass
     /***********************************************************************************************
      * Location Listener Callback
      */
-    override fun onLocationChanged(location : Location) {}
+    override fun onLocationChanged(location : Location) {
+        Log.d("Inside", "Fused")
+        //Toast.makeText(mContext,"iNSIDE",Toast.LENGTH_LONG).show()
+    }
 
     interface FusedLocationInterface {
         fun onLocationChanged(location : Location)

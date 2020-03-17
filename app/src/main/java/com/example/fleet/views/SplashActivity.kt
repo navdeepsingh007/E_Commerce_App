@@ -8,19 +8,19 @@ import com.example.fleet.application.MyApplication
 import com.example.fleet.constants.GlobalConstants
 import com.example.fleet.databinding.ActivitySplashBinding
 import com.example.fleet.sharedpreference.SharedPrefClass
+import com.example.fleet.socket.TrackingActivity
 import com.example.fleet.utils.BaseActivity
 import com.example.fleet.views.authentication.LoginActivity
 import com.example.fleet.views.home.DashboardActivity
+import com.google.gson.JsonObject
 import java.util.*
 
-
 class SplashActivity : BaseActivity() {
-    private var mActivitySplashBinding: ActivitySplashBinding? = null
-    private var sharedPrefClass: SharedPrefClass? = null
-    private var mContext: Context? = null
+    private var mActivitySplashBinding : ActivitySplashBinding? = null
+    private var sharedPrefClass : SharedPrefClass? = null
+    private var mContext : Context? = null
 
-
-    override fun getLayoutId(): Int {
+    override fun getLayoutId() : Int {
         return R.layout.activity_splash
     }
 
@@ -29,7 +29,7 @@ class SplashActivity : BaseActivity() {
         mActivitySplashBinding = DataBindingUtil.setContentView(this, R.layout.activity_splash)
 
         sharedPrefClass = SharedPrefClass()
-        val token: String? = "sd"
+        val token : String? = "sd"
 
         if (token != null) {
             sharedPrefClass!!.putObject(
@@ -42,16 +42,13 @@ class SplashActivity : BaseActivity() {
         Timer().schedule(object : TimerTask() {
             override fun run() {
                 runOnUiThread {
-
                     checkScreenType()
                 }
             }
         }, 3000)
     }
 
-
     private fun checkScreenType() {
-
         var login = ""
         if (checkObjectNull(
                 SharedPrefClass().getPrefValue(
@@ -61,19 +58,41 @@ class SplashActivity : BaseActivity() {
             )
         )
             login = sharedPrefClass!!.getPrefValue(this, "isLogin").toString()
-
-
+        var jobId = sharedPrefClass!!.getPrefValue(this, GlobalConstants.JOBID).toString()
         val intent = if (login == "true") {
+            if (!jobId.equals("null") && !jobId.equals("0")) {
+                var mJsonObjectStartJob = JsonObject()
+                var destLat =
+                    sharedPrefClass!!.getPrefValue(this, GlobalConstants.DEST_LAT).toString()
+                var destLong =
+                    sharedPrefClass!!.getPrefValue(this, GlobalConstants.DEST_LONG).toString()
+                mJsonObjectStartJob.addProperty(
+                    "jobId", jobId
+                )
+                mJsonObjectStartJob.addProperty(
+                    "dest_lat", destLat
+                )
+                mJsonObjectStartJob.addProperty(
+                    "dest_long", destLong
+                )
+                mJsonObjectStartJob.addProperty(
+                    "trackOrStart", "Track"
+                )
+                val intent = Intent(this, TrackingActivity::class.java)
+                intent.putExtra("data", mJsonObjectStartJob.toString())
+                //startActivity(intent)
+            } else {
+                Intent(this, DashboardActivity::class.java)
+            }
 
-            Intent(this, DashboardActivity::class.java)
         } else {
-            Intent(this, LoginActivity::class.java)
+            //  Intent(this, LoginActivity::class.java)
+            Intent(this, DashboardActivity::class.java)
 
         }
 
         startActivity(intent)
         finish()
     }
-
 
 }

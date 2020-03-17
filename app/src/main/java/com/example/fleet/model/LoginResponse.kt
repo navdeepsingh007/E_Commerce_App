@@ -15,12 +15,30 @@ class LoginResponse {
     var data : Data? = null
 
     inner class Data {
+
+        @SerializedName("driver_id")
+        @Expose
+        var driver_id : Int? = null
+
         @SerializedName("user_id")
         @Expose
         var userId : Int? = null
         @SerializedName("user_type")
         @Expose
         var userType : String? = null
+        @SerializedName("profile_image")
+        @Expose
+        var profile_image : String? = null
+        @SerializedName("session_token")
+        @Expose
+        var session_token : String? = null
+        @SerializedName("status")
+        @Expose
+        var status : String? = null
+        @SerializedName("availablity")
+        @Expose
+        var availablity : String? = null
+
         @SerializedName("country_code")
         @Expose
         var countryCode : String? = null

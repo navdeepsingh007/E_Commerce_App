@@ -354,7 +354,7 @@ abstract class BaseActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    private fun checkAndRequestPermissions(): Boolean {
+    public fun checkAndRequestPermissions(): Boolean {
         val camerapermission = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
         val writepermission = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
         val permissionLocation = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)

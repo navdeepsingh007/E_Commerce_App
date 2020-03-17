@@ -127,14 +127,12 @@ internal class SocketClass private constructor() {
         // Get a handler that can be used to post to the main thread
         Handler(Looper.getMainLooper()).post {
             mSocket!!.emit("socketFromClient", mObject)
-            Log.e("method", "$methodName Object$mObject")
+            Log.e("Emit Method", "$methodName Object$mObject")
         }
     }
-
     /*
      * Interface for Socket Callbacks
      * */
-
     companion object {
         private var mSocketClass : SocketClass? = null
         private val TAG = SocketClass::class.java.canonicalName

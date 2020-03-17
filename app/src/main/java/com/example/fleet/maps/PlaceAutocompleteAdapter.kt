@@ -103,7 +103,7 @@ internal constructor(
         return object : Filter() {
             override fun performFiltering(constraint : CharSequence?) : Filter.FilterResults {
                 val results = Filter.FilterResults()
-                // We need a separate list to store the results, since
+                // We need a separate latLongList to store the results, since
                 // this is run asynchronously.
                 var filterData : ArrayList<AutocompletePrediction>? = ArrayList()
                 // Skip the autocomplete query if no constraints are given.
@@ -150,7 +150,7 @@ internal constructor(
     /**
      * Submits an autocomplete query to the Places Geo Data Autocomplete API.
      * Results are returned as frozen AutocompletePrediction objects, ready to be cached.
-     * Returns an empty list if no results were found.
+     * Returns an empty latLongList if no results were found.
      * Returns null if the API client is not available or the query did not complete
      * successfully.
      * This method MUST be called off the main UI thread, as it will block until data is returned
