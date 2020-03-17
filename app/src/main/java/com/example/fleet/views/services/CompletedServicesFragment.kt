@@ -7,18 +7,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fleet.R
 import com.example.fleet.common.UtilsFunctions
-import com.example.fleet.common.UtilsFunctions.showToastError
-import com.example.fleet.databinding.FragmentHomeBinding
 import com.example.fleet.databinding.FragmentServicesBinding
 import com.example.fleet.model.home.JobsResponse
-import com.example.fleet.model.vehicle.ServicesListResponse
+import com.example.fleet.model.services.ServicesListResponse
 import com.example.fleet.utils.BaseFragment
 import com.example.fleet.viewmodels.home.HomeViewModel
 import com.example.fleet.viewmodels.services.ServicesViewModel
 import com.google.gson.JsonObject
 import com.uniongoods.adapters.MyJobsListAdapter
 import com.uniongoods.adapters.ServicesHistoryListAdapter
-import com.uniongoods.adapters.ServicesListAdapter
 
 class CompletedServicesFragment : BaseFragment() {
     private var jobsList = ArrayList<JobsResponse.Data>()
@@ -48,6 +45,8 @@ class CompletedServicesFragment : BaseFragment() {
         //   servicesViewModel.getServicesList()
         servicesViewModel.getServicesList().observe(this,
             Observer<ServicesListResponse> { response->
+                baseActivity.stopProgressDialog()
+
                 if (response != null) {
                     val message = response.message
                     baseActivity.stopProgressDialog()

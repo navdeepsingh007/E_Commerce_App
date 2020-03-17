@@ -15,7 +15,9 @@ class HomeViewModel : BaseViewModel() {
     private val isClick = MutableLiveData<String>()
     private var homeRepository = HomeJobsRepository()
     private var jobsListResponse = MutableLiveData<JobsResponse>()
+    private var jobsHistoryResponse = MutableLiveData<JobsResponse>()
     private var acceptRejectJob = MutableLiveData<CommonModel>()
+    private var startCompleteJob = MutableLiveData<CommonModel>()
 
     init {
         /* val mJsonObject = JsonObject()
@@ -24,15 +26,25 @@ class HomeViewModel : BaseViewModel() {
          if (UtilsFunctions.isNetworkConnectedReturn()) mIsUpdating.postValue(true)
  */
         jobsListResponse = homeRepository.getMyJobsList("")
+        jobsHistoryResponse = homeRepository.getMyJobsHistoryList("")
         acceptRejectJob = homeRepository.acceptRejectJob(null)
+        startCompleteJob = homeRepository.startCompleteJob(null)
     }
 
     fun getJobs() : LiveData<JobsResponse> {
-        return jobsListResponse!!
+        return jobsListResponse
+    }
+
+    fun startCompleteJob() : LiveData<CommonModel> {
+        return startCompleteJob
+    }
+
+    fun getJobsHistory() : LiveData<JobsResponse> {
+        return jobsHistoryResponse
     }
 
     fun acceptReject() : LiveData<CommonModel> {
-        return acceptRejectJob!!
+        return acceptRejectJob
     }
 
     override fun isLoading() : LiveData<Boolean> {
@@ -55,9 +67,27 @@ class HomeViewModel : BaseViewModel() {
 
     }
 
+    fun getMyJobsHistory(mJsonObject : String) {
+        if (UtilsFunctions.isNetworkConnected()) {
+            jobsListResponse = homeRepository.getMyJobsHistoryList(mJsonObject)
+            mIsUpdating.postValue(true)
+        }
+    }
+
     fun acceptRejectJob(mJsonObject : JsonObject) {
         if (UtilsFunctions.isNetworkConnected()) {
             acceptRejectJob = homeRepository.acceptRejectJob(mJsonObject)
+            mIsUpdating.postValue(true)
+        }
+
+    }
+
+    fun startJob(status : String, jobId : String) {
+        if (UtilsFunctions.isNetworkConnected()) {
+            var jsonObject = JsonObject()
+            jsonObject.addProperty("progressStatus", status)
+            jsonObject.addProperty("jobId", jobId)
+            startCompleteJob = homeRepository.startCompleteJob(jsonObject)
             mIsUpdating.postValue(true)
         }
 

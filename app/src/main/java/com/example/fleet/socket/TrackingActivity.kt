@@ -3,29 +3,55 @@ package com.example.fleet.socket
 import android.Manifest
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
+import android.app.Activity
+import android.app.Application
 import android.app.Dialog
+import android.app.Service
+import android.app.job.JobInfo
+import android.app.job.JobScheduler
+import android.bluetooth.BluetoothClass
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.location.Location
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.os.IBinder
 import android.provider.Settings
+import android.text.TextUtils
+import android.util.Log
 import android.view.View
+import android.widget.Toast
+import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.akexorcist.googledirection.GoogleDirection
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.example.fleet.R
+import com.example.fleet.application.MyApplication
+import com.example.fleet.common.UtilsFunctions
+import com.example.fleet.constants.GlobalConstants
+import com.example.fleet.database.*
+import com.example.fleet.databinding.FragmentTrackingBinding
 import com.example.fleet.maps.FusedLocationClass
 import com.example.fleet.maps.MapClass
 import com.example.fleet.maps.MapInterface
+import com.example.fleet.model.CommonModel
 import com.example.fleet.sharedpreference.SharedPrefClass
 import com.example.fleet.utils.*
+import com.example.fleet.viewmodels.tracking.TrackingViewModel
+import com.example.fleet.views.home.DashboardActivity
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.LocationListener
@@ -37,17 +63,76 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
+import com.google.gson.JsonObject
+import com.google.maps.DirectionsApi
+import com.google.maps.GeoApiContext
 import org.json.JSONArray
+import org.json.JSONException
 import org.json.JSONObject
-import org.w3c.dom.Document
+import java.security.Provider
+import kotlin.collections.ArrayList
 
 open class TrackingActivity : BaseActivity(), OnMapReadyCallback, LocationListener, SocketInterface,
-    GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, MapInterface, DialogssInterface,
-    GoogleMap.OnInfoWindowClickListener {
+    GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, MapInterface,
+    DialogssInterface,
+    GoogleMap.OnInfoWindowClickListener, Application.ActivityLifecycleCallbacks {
+    override fun onActivityPaused(activity : Activity?) {
+        Log.e("LifeCycle: ", "Pause")
+        /* var service = Intent(this, LocationTrackingService::class.java)
+         startService(service)*/
+
+        gpsService?.startTracking()
+
+    }
+
+    var gpsService : BackgroundLocationService? = null
+    override fun onActivityResumed(activity : Activity?) {
+        Log.e("LifeCycle: ", "Resumed")
+        /*  var service = Intent(this, LocationTrackingService::class.java)
+          stopService(service)*/
+        gpsService?.stopTracking()
+
+    }
+
+    private val serviceConnection = object : ServiceConnection {
+        override fun onServiceConnected(
+            className : ComponentName,
+            service : IBinder
+        ) {
+            // gpsService = ((BackgroundLocationService.LocationServiceBinder) service).getService()
+            val binder = service as BackgroundLocationService.LocationServiceBinder
+            gpsService = binder.service
+        }
+
+        override fun onServiceDisconnected(name : ComponentName) {
+            gpsService = null
+        }
+    }
+
+    override fun onActivityStarted(activity : Activity?) {
+        Log.e("LifeCycle: ", "Started")
+    }
+
+    override fun onActivityDestroyed(activity : Activity?) {
+        Log.e("LifeCycle: ", "Destroyed")
+    }
+
+    override fun onActivitySaveInstanceState(activity : Activity?, outState : Bundle?) {
+        Log.e("LifeCycle: ", "SavedInstance")
+    }
+
+    override fun onActivityStopped(activity : Activity?) {
+        Log.e("LifeCycle: ", "Stopped")
+
+    }
+
+    override fun onActivityCreated(activity : Activity?, savedInstanceState : Bundle?) {
+        Log.e("LifeCycle: ", "Created")
+    }
+
     internal var cameraZoom = 16.0f
     private var mAddress = ""
-    private var mInterface :DialogssInterface?=null
-
+    private var mInterface : DialogssInterface? = null
     private var mGoogleMap : GoogleMap? = null
     private var mFusedLocationClass : FusedLocationClass? = null
     private var mLocation : Location? = null
@@ -73,7 +158,20 @@ open class TrackingActivity : BaseActivity(), OnMapReadyCallback, LocationListen
     private var start = 0
     private var permanent_deny = 0
     val MY_PERMISSIONS_REQUEST_LOCATION = 99
+    private var mJsonObject = JSONObject()
     private val mMarkers = java.util.ArrayList<Marker>()
+    var jobId = ""
+    var destlat = ""
+    var destLong = ""
+    var istrack = ""
+    private lateinit var fkip : LatLng
+    private lateinit var destLocation : LatLng
+    lateinit var trackingViewModel : TrackingViewModel
+    lateinit var trackingActivityBinding : FragmentTrackingBinding
+    private lateinit var locationsViewModel : LocationsViewModel
+    var runCall = 0
+    var serviceIntent : Intent? = null
+    var polyPath : MutableList<LatLng>? = null
 
     companion object {
         var categoryListids : ArrayList<String>? = null
@@ -84,18 +182,20 @@ open class TrackingActivity : BaseActivity(), OnMapReadyCallback, LocationListen
         override fun run() {
             if (mFusedLocationClass != null) {
                 mLocation = mFusedLocationClass!!.getLastLocation(mContext!!)
+
                 if (mLocation != null) {
+                    Log.e("OnLocationChange1: ", "Called")
                     val mAddress = utils!!.getAddressFromLocation(
                         mContext!!,
                         mLocation!!.latitude,
                         mLocation!!.longitude,
                         "Address"
                     )
-                    mLatitude = mLocation!!.latitude.toString() + ""
-                    mLongitude = mLocation!!.longitude.toString() + ""
+                    mLatitude = (mLocation!!.latitude).toString() + ""
+                    mLongitude = (mLocation!!.longitude).toString() + ""
                     // Log.d(TAG, "get_current_address: $mAddress")
-                    mLatitude = mLocation!!.latitude.toString() + ""
-                    mLongitude = mLocation!!.longitude.toString() + ""
+                    runCall++
+                    // showToastSuccess(runCall.toString() + " " + mLocation!!.latitude.toString() + " " + mLocation!!.longitude.toString())
                     val mCameraPosition = CameraPosition.Builder()
                         .target(
                             LatLng(
@@ -107,12 +207,13 @@ open class TrackingActivity : BaseActivity(), OnMapReadyCallback, LocationListen
                         .tilt(30f)
                         .build()
                     mGoogleMap!!.moveCamera(CameraUpdateFactory.newCameraPosition(mCameraPosition))
-
+                    // mHandler.postDelayed(this, 1000)
                     mHandler.removeCallbacks(this)
+
                 } else
-                    mHandler.postDelayed(this, 500)
+                    mHandler.postDelayed(this, 1000)
             } else
-                mHandler.postDelayed(this, 500)
+                mHandler.postDelayed(this, 1000)
         }
     }
 
@@ -120,14 +221,68 @@ open class TrackingActivity : BaseActivity(), OnMapReadyCallback, LocationListen
         return R.layout.fragment_tracking
     }
 
+    override fun onBackPressed() {
+        //  super.onBackPressed()
+        var intent = Intent(Intent.ACTION_MAIN)
+        intent.addCategory(Intent.CATEGORY_HOME)
+        startActivity(intent)
+
+    }
+
     override fun initViews() {
+        trackingActivityBinding = viewDataBinding as FragmentTrackingBinding
+        trackingViewModel = ViewModelProviders.of(this).get(TrackingViewModel::class.java)
+        mFusedLocationClass = FusedLocationClass(this)
+
+        locationsViewModel = ViewModelProvider(this).get(LocationsViewModel::class.java)
+        trackingActivityBinding.trackingViewModel = trackingViewModel
+//        var records = locationsViewModel.allLocations
+        application.registerActivityLifecycleCallbacks(this);
         sharedPrefClass = SharedPrefClass()
+        GlobalConstants.JOB_STARTED = "true"
         categoryListids = ArrayList()
+        try {
+            mJsonObject = JSONObject(intent.extras?.get("data")?.toString())
+            jobId = mJsonObject.get("jobId").toString()
+            destlat = mJsonObject.get("dest_lat").toString()
+            destLong = mJsonObject.get("dest_long").toString()
+            istrack = mJsonObject.get("trackOrStart").toString()
+
+            if (!TextUtils.isEmpty(destLong)) {
+                val latLng = LatLng(destlat.toDouble(), destLong.toDouble())
+                val markerOptions = MarkerOptions()
+                markerOptions.position(latLng)
+                markerOptions.title("Destination Position")
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA))
+            }
+        } catch (e : JSONException) {
+            e.printStackTrace()
+        }
+        //service
+        serviceIntent = Intent(this.getApplication(), BackgroundLocationService::class.java)
+        this.getApplication().startService(serviceIntent)
+        this.getApplication()
+            .bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE)
+        var jobsDetail = locationsViewModel.getJob(jobId)
+        if (istrack != resources?.getString(R.string.track)) {
+            var jobDetails = JobDetails()
+            jobDetails.complete_status = "0"
+            jobDetails.job_id = jobId
+            jobDetails.status = "0"
+            jobDetails.start_date = ""
+            jobDetails.end_date = ""
+            jobDetails.user_id = sharedPrefClass!!.getPrefValue(
+                MyApplication.instance,
+                GlobalConstants.USERID
+            ).toString()
+            locationsViewModel.insertJob(jobDetails)
+        }
         mContext = this
-        val supportMapFragment = supportFragmentManager.findFragmentById(R.id.map_view) as SupportMapFragment?
+        val supportMapFragment =
+            supportFragmentManager.findFragmentById(R.id.map_view) as SupportMapFragment?
         mMapClass.setSupportMapFragmentAsync(supportMapFragment!!, this)
         mMapClass.getGeoDataClient(mContext!!)
-        mInterface=this
+        mInterface = this
         utils = Utils(this)
 
         dialog = Dialog(this)
@@ -138,11 +293,88 @@ open class TrackingActivity : BaseActivity(), OnMapReadyCallback, LocationListen
             "GPSCheck",
             getString(R.string.GPS_enabled)
         )
-
-        mFusedLocationClass = FusedLocationClass(mContext)
         //Socket Initialization
+        Log.e("Connect Socket", "Track activity")
         socket.updateSocketInterface(this)
         socket.onConnect()
+
+        destLocation = LatLng(destlat.toDouble(), destLong.toDouble())
+
+        trackingViewModel.isClick().observe(
+            this, Observer<String>(function =
+            fun(it : String?) {
+                when (it) {
+                    "btn_clear" -> {
+                        GlobalConstants.JOB_STARTED = "false"
+                        locationsViewModel.updateJobStatus("1", jobId.toInt())
+                        var upload = UploadDataToServer()
+                        upload.synchData(jobId, "track")
+
+                        SharedPrefClass().putObject(
+                            MyApplication.instance.applicationContext,
+                            GlobalConstants.JOB_STARTED,
+                            "false"
+                        )
+
+                        SharedPrefClass().putObject(
+                            MyApplication.instance.applicationContext,
+                            GlobalConstants.JOBID,
+                            0
+                        )
+
+                        SharedPrefClass().putObject(
+                            MyApplication.instance.applicationContext,
+                            GlobalConstants.DEST_LAT,
+                            ""
+                        )
+
+                        SharedPrefClass().putObject(
+                            MyApplication.instance.applicationContext,
+                            GlobalConstants.DEST_LONG,
+                            ""
+                        )
+
+                        gpsService?.stopTracking()
+                        gpsService?.stopService(
+                            Intent(
+                                this,
+                                BackgroundLocationService::class.java
+                            )
+                        )
+                        this.getApplication()
+                            .unbindService(serviceConnection)
+
+                        mFusedLocationClass?.stopLocationUpdates()
+                        if (UtilsFunctions.isNetworkConnected()) {
+                            trackingViewModel.startJob("1", jobId)
+                        } else {
+                            showToastSuccess(getString(R.string.job_finished_msg))
+                            startActivity(Intent(this, DashboardActivity::class.java))
+                            finish()
+                        }
+                    }
+                }
+            })
+        )
+
+        trackingViewModel.startCompleteJob().observe(this,
+            Observer<CommonModel> { response->
+                stopProgressDialog()
+                if (response != null) {
+                    val message = response.message
+                    when {
+                        response.code == 200 -> {
+                            UtilsFunctions.showToastSuccess(message!!)
+                            GlobalConstants.JOB_STARTED = "false"
+                            startActivity(Intent(this, DashboardActivity::class.java))
+                            finish()
+                        }
+                        else -> message?.let {
+                            UtilsFunctions.showToastError(it)
+                        }
+                    }
+                }
+            })
 
     }
 
@@ -161,7 +393,7 @@ open class TrackingActivity : BaseActivity(), OnMapReadyCallback, LocationListen
         super.onDestroy()
         // mSocket.disconnect();
         if (mGoogleApiClient != null) {
-            mGoogleApiClient!!.disconnect()
+            // mGoogleApiClient!!.disconnect()
 
         }
 
@@ -183,7 +415,6 @@ open class TrackingActivity : BaseActivity(), OnMapReadyCallback, LocationListen
     override fun onResume() {
         if (click_settings > 0) {
             checkPermission()
-
         }
 
         if (click_gps > 0) {
@@ -199,6 +430,8 @@ open class TrackingActivity : BaseActivity(), OnMapReadyCallback, LocationListen
         mGoogleMap!!.setMinZoomPreference(5f)
         buildGoogleApiClient()
         googleMap.uiSettings.isCompassEnabled = false
+        googleMap.isTrafficEnabled = false
+        googleMap.isMyLocationEnabled = true
 
         mHandler.postDelayed(mRunnable, 500)
         mPermissionCheck = false
@@ -246,7 +479,11 @@ open class TrackingActivity : BaseActivity(), OnMapReadyCallback, LocationListen
         ) {
             return
         }
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this)
+        LocationServices.FusedLocationApi.requestLocationUpdates(
+            mGoogleApiClient,
+            mLocationRequest,
+            this
+        )
     }
 
     override fun onConnectionSuspended(i : Int) {
@@ -257,6 +494,12 @@ open class TrackingActivity : BaseActivity(), OnMapReadyCallback, LocationListen
 //Not In Use
     }
 
+    override fun onPause() {
+        super.onPause()
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onLocationChanged(location : Location) {
         getCurrentLocation(location)
         val mCameraPosition = CameraPosition.Builder()
@@ -269,17 +512,84 @@ open class TrackingActivity : BaseActivity(), OnMapReadyCallback, LocationListen
             .zoom(17.0f)
             .tilt(30f)
             .build()
+        /*  mGoogleMap!!.moveCamera(CameraUpdateFactory.newCameraPosition(mCameraPosition))
+          mGoogleMap!!.setMinZoomPreference(2.0f)
+          mGoogleMap!!.setMaxZoomPreference(17.0f)*/
+        if (!SharedPrefClass().getPrefValue(
+                MyApplication.instance.applicationContext,
+                GlobalConstants.JOBID
+            ).toString().equals("null") && !SharedPrefClass().getPrefValue(
+                MyApplication.instance.applicationContext,
+                GlobalConstants.JOBID
+            ).toString().equals("0")
+        ) {
+            // var icon = BitmapDescriptorFactory.fromResource(R.drawable.ic_car)
+            var icon = bitmapDescriptorFromVector(this, R.drawable.ic_car)
+            mGoogleMap!!.addMarker(
+                MarkerOptions()
+                    .position(LatLng(location.latitude, location.longitude))
+                    //.snippet(points[0].longitude.toString() + "")
+                    .icon(icon)
+            )
 
-        mGoogleMap!!.moveCamera(CameraUpdateFactory.newCameraPosition(mCameraPosition))
-        mGoogleMap!!.setMinZoomPreference(2.0f)
-        mGoogleMap!!.setMaxZoomPreference(17.0f)
-        Handler().postDelayed({
-            callSocketMethods("updateLocation")
-        }, 2000)
+            fkip = LatLng(location.latitude, location.longitude)
+            var jobLocationsDetails = JobLocationsDetails()
+            jobLocationsDetails.job_id = jobId
+            jobLocationsDetails.job_lat = location.latitude.toString()
+            jobLocationsDetails.job_long = location.longitude.toString()
+            jobLocationsDetails.status = "0"
+            locationsViewModel.insert(jobLocationsDetails)
+            var upload = UploadDataToServer()
+            //showToastSuccess("OnLocationCalled")
+            Log.e("OnLocationChange: ", "Called")
+            if (UtilsFunctions.isNetworkConnectedWithoutToast()) {
+                drawPolyline()
+                upload.synchData(jobId, "track")
+            } else {
+                drawLine(polyPath!!)
+                val jobScheduler =
+                    getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+                val jobInfo = JobInfo.Builder(
+                    11,
+                    ComponentName(this@TrackingActivity, NetworkJobService::class.java)
+                )
+                    // only add if network access is required
+                    .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY).build()
+                jobScheduler.schedule(jobInfo)
+            }
+        }
+
+    }
+
+    fun bitmapDescriptorFromVector(context : Context, @DrawableRes vectorDrawableResourceId : Int) : BitmapDescriptor {
+        var background = ContextCompat.getDrawable(this, R.drawable.ic_car);
+        background?.setBounds(
+            0,
+            0,
+            background.getIntrinsicWidth(),
+            background.getIntrinsicHeight()
+        )
+        var vectorDrawable = ContextCompat.getDrawable(context, vectorDrawableResourceId);
+        vectorDrawable?.setBounds(
+            40,
+            20,
+            vectorDrawable.getIntrinsicWidth(),
+            vectorDrawable.getIntrinsicHeight()
+        )
+        var bitmap = Bitmap.createBitmap(
+            background!!.getIntrinsicWidth(),
+            background.getIntrinsicHeight(),
+            Bitmap.Config.ARGB_8888
+        )
+        var canvas = Canvas(bitmap)
+        background?.draw(canvas)
+        vectorDrawable?.draw(canvas)
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
     private fun getCurrentLocation(location : Location) {
-        mAddress = utils!!.getAddressFromLocation(this, location.latitude, location.longitude, "Address")
+        mAddress =
+            utils!!.getAddressFromLocation(this, location.latitude, location.longitude, "Address")
         mLongitude = location.longitude.toString() + ""
         mLatitude = location.latitude.toString() + ""
 
@@ -311,8 +621,6 @@ open class TrackingActivity : BaseActivity(), OnMapReadyCallback, LocationListen
         points.clear()
         removeMarkers(mMarkers)
 
-
-
         for (t in 0 until latitudes.length() - 1) {
             val point = LatLng(
                 java.lang.Double.parseDouble(latitudes.get(t).toString()),
@@ -327,7 +635,12 @@ open class TrackingActivity : BaseActivity(), OnMapReadyCallback, LocationListen
         if (points.size > 0) {
             val mMarker = mGoogleMap!!.addMarker(
                 MarkerOptions()
-                    .position(LatLng(points[points.size - 1].latitude, points[points.size - 1].longitude))
+                    .position(
+                        LatLng(
+                            points[points.size - 1].latitude,
+                            points[points.size - 1].longitude
+                        )
+                    )
                     //.snippet(points[0].longitude.toString() + "")
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA))
             )
@@ -344,13 +657,6 @@ open class TrackingActivity : BaseActivity(), OnMapReadyCallback, LocationListen
         }
         if (mLine != null) mLine!!.remove()
         mLine = mGoogleMap!!.addPolyline(polyline)
-
-
-
-
-
-
-
         // List<LatLng> snappedPoints = new ArrayList<>();
         //new GetSnappedPointsAsyncTask().execute(sourcePoints, null, snappedPoints);
         ///
@@ -360,22 +666,28 @@ open class TrackingActivity : BaseActivity(), OnMapReadyCallback, LocationListen
     override fun onSocketCall(onMethadCall : String, vararg jsonObject : Any) {
         val serverResponse = jsonObject[0] as JSONObject
         var methodName = serverResponse.get("method")
-        println("serverResponse............" + serverResponse)
+        Log.e("", "serverResponse: " + serverResponse)
         try {
             this.runOnUiThread {
                 when (methodName) {
                     "updateLocation" -> try {
-                        callSocketMethods("getLocation")
+                        //callSocketMethods("getLocation")
                     } catch (e1 : Exception) {
                         e1.printStackTrace()
                     }
                     "getLocation" -> try {
-                        val innerResponse = serverResponse.get("data") as JSONObject
-                        if (innerResponse.get("location_latitude") != null) {
-                            val locationLatitude = innerResponse.get("location_latitude") as JSONArray
-                            val locationLongitude = innerResponse.get("location_longitude") as JSONArray
-                            drawPolyLine(locationLatitude, locationLongitude)
-                        }
+                        val innerResponse = serverResponse.get("data") as JSONArray
+                        val obj = innerResponse[0] as JSONObject
+                        obj.optString("to_lat")
+                        obj.getString("to_lat")
+                        obj.get("to_lat").toString()
+                        /*  if (obj.get("location_latitude") != null) {
+                              val locationLatitude =
+                                  innerResponse.get("location_latitude") as JSONArray
+                              val locationLongitude =
+                                  innerResponse.get("location_longitude") as JSONArray
+                              drawPolyLine(locationLatitude, locationLongitude)
+                          }*/
                     } catch (e1 : Exception) {
                         e1.printStackTrace()
                     }
@@ -387,21 +699,36 @@ open class TrackingActivity : BaseActivity(), OnMapReadyCallback, LocationListen
 
     }
 
-    private fun callSocketMethods(methodName : String) {
+    private fun callSocketMethods(
+        methodName : String,
+        list : ArrayList<JsonObject>
+    ) {
         val object5 = JSONObject()
         when (methodName) {
             "updateLocation" -> try {
                 object5.put("methodName", methodName)
-                object5.put("latitude", mLatitude)
-                object5.put("longitude", mLongitude)
-                object5.put("driverId", 1)
+                object5.put("lat_long", list.toString())
+                //  object5.put("longitude", mLongitude)
+                object5.put(
+                    "driverId", sharedPrefClass!!.getPrefValue(
+                        MyApplication.instance,
+                        GlobalConstants.USERID
+                    ).toString()
+                )
+                object5.put("jobId", jobId)
                 socket.sendDataToServer(methodName, object5)
             } catch (e : Exception) {
                 e.printStackTrace()
             }
             "getLocation" -> try {
                 object5.put("methodName", methodName)
-                object5.put("driverId", 1)
+                object5.put(
+                    "driverId", sharedPrefClass!!.getPrefValue(
+                        MyApplication.instance,
+                        GlobalConstants.USERID
+                    ).toString()
+                )
+                object5.put("jobId", jobId)
                 socket.sendDataToServer(methodName, object5)
             } catch (e : Exception) {
                 e.printStackTrace()
@@ -412,15 +739,13 @@ open class TrackingActivity : BaseActivity(), OnMapReadyCallback, LocationListen
 
     override fun onSocketConnect(vararg args : Any) {
         //OnSocket Connect Call It
-
+        Log.e("Socket Status : ", "Connected")
     }
 
     override fun onSocketDisconnect(vararg args : Any) {
         // //OnSocket Disconnect Call It
-
+        Log.e("Socket Status : ", "Disconnected")
     }
-
-
 
     fun checkPermission() {
         if (!mPermissionCheck) {
@@ -474,7 +799,8 @@ open class TrackingActivity : BaseActivity(), OnMapReadyCallback, LocationListen
     }
 
     fun checkGPS() {
-        val mLocationManager = mContext!!.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val mLocationManager =
+            mContext!!.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         var gps_enabled = false
         var network_enabled = false
         if (mLocationManager != null) {
@@ -535,6 +861,90 @@ open class TrackingActivity : BaseActivity(), OnMapReadyCallback, LocationListen
                 }
             }
         }
+    }
+
+    private fun drawPolyline() {
+        var path : MutableList<LatLng> = ArrayList()
+        val context = GeoApiContext.Builder()
+            .apiKey(getString(R.string.api_key))
+            .build()
+        val req = DirectionsApi.getDirections(
+            context,
+            fkip.latitude.toString().plus(",").plus(fkip.longitude.toString()),
+            destLocation.latitude.toString().plus(",").plus(destLocation.longitude.toString())
+        )
+        try {
+            val res = req.await()
+            //Loop through legs and steps to get encoded polylines of each step
+            if (res.routes != null && res.routes.isNotEmpty()) {
+                val route = res.routes[0]
+                if (route.legs != null) {
+                    for (i in 0 until route.legs.size) {
+                        val leg = route.legs[i]
+                        if (leg.steps != null) {
+                            for (j in 0 until leg.steps.size) {
+                                val step = leg.steps[j]
+                                if (step.steps != null && step.steps.isNotEmpty()) {
+                                    for (k in 0 until step.steps.size) {
+                                        val step1 = step.steps[k]
+                                        val points1 = step1.polyline
+                                        if (points1 != null) {
+                                            //Decode polyline and add points to latLongList of route coordinates
+                                            val coords1 = points1.decodePath()
+                                            for (coord1 in coords1) {
+                                                // path.add(LatLng(coord1.lat, coord1.lng))
+                                                path.add(LatLng(coord1.lat, coord1.lng))
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    val points = step.polyline
+                                    if (points != null) {
+                                        //Decode polyline and add points to latLongList of route coordinates
+                                        val coords = points.decodePath()
+                                        for (coord in coords) {
+                                            path.add(LatLng(coord.lat, coord.lng))
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                //  mGoogleMap.drawPolyline("Destination is not detected,unable to draw path")
+                Log.d("MapPath", "Unable to draw path")
+            }
+        } catch (ex : Exception) {
+            ex.printStackTrace()
+        }
+
+        drawLine(path)
+
+    }
+
+    private fun drawLine(path : MutableList<LatLng>) {
+        polyPath = path
+        mGoogleMap?.clear()
+        //  var icon = BitmapDescriptorFactory.fromResource(R.drawable.ic_car)
+        var icon = bitmapDescriptorFromVector(this, R.drawable.ic_car)
+        mGoogleMap!!.addMarker(
+            MarkerOptions()
+                .position(LatLng(fkip.latitude, fkip.longitude))
+                //.snippet(points[0].longitude.toString() + "")
+                .icon(icon)
+        )
+        mGoogleMap!!.addMarker(
+            MarkerOptions()
+                .position(LatLng(destLocation.latitude, destLocation.longitude))
+                //.snippet(points[0].longitude.toString() + "")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
+        )
+        if (polyPath!!.size > 0) {
+            val opts = PolylineOptions().addAll(path).color(R.color.colorRed).width(20f)
+            /*polylineFinal = */mGoogleMap?.addPolyline(opts)
+        }
+
     }
 
 }

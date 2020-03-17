@@ -1,4 +1,4 @@
-package com.example.fleet.model.vehicle
+package com.example.fleet.model.services
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName

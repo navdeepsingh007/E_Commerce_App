@@ -18,12 +18,12 @@
 
         <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
             <LinearLayout
                     android:id="@+id/upper_container"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:background="@drawable/splash"
                     android:gravity="center"
                     android:orientation="vertical"
@@ -77,6 +77,13 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="8dp" />
+            <TextView
+                    android:id="@+id/tv_no_record"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="@string/no_record_found"
+                    app:font="@{`regular`}" />
 
             <com.google.android.material.tabs.TabLayout
                     android:id="@+id/tabLayout"

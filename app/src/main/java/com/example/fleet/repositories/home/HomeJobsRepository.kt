@@ -58,6 +58,40 @@ class HomeJobsRepository {
         return data!!
     }
 
+    fun getMyJobsHistoryList(mJsonObject : String) : MutableLiveData<JobsResponse> {
+        if (!TextUtils.isEmpty(mJsonObject)) {
+            val mApiService = ApiService<JsonObject>()
+            mApiService.get(
+                object : ApiResponse<JsonObject> {
+                    override fun onResponse(mResponse : Response<JsonObject>) {
+                        val loginResponse = if (mResponse.body() != null)
+                            gson.fromJson<JobsResponse>(
+                                "" + mResponse.body(),
+                                JobsResponse::class.java
+                            )
+                        else {
+                            gson.fromJson<JobsResponse>(
+                                mResponse.errorBody()!!.charStream(),
+                                JobsResponse::class.java
+                            )
+                        }
+
+                        data!!.postValue(loginResponse)
+
+                    }
+
+                    override fun onError(mKey : String) {
+                        UtilsFunctions.showToastError(MyApplication.instance.getString(R.string.internal_server_error))
+                        data!!.postValue(null)
+
+                    }
+
+                }, ApiClient.getApiInterface().getJobsHistory(mJsonObject)
+            )
+        }
+        return data!!
+    }
+
     fun acceptRejectJob(mJsonObject : JsonObject?) : MutableLiveData<CommonModel> {
         if (mJsonObject != null) {
             val mApiService = ApiService<JsonObject>()
@@ -87,6 +121,40 @@ class HomeJobsRepository {
                     }
 
                 }, ApiClient.getApiInterface().acceptRejectJob(mJsonObject)
+            )
+        }
+        return data1!!
+    }
+
+    fun startCompleteJob(mJsonObject : JsonObject?) : MutableLiveData<CommonModel> {
+        if (mJsonObject != null) {
+            val mApiService = ApiService<JsonObject>()
+            mApiService.get(
+                object : ApiResponse<JsonObject> {
+                    override fun onResponse(mResponse : Response<JsonObject>) {
+                        val loginResponse = if (mResponse.body() != null)
+                            gson.fromJson<CommonModel>(
+                                "" + mResponse.body(),
+                                CommonModel::class.java
+                            )
+                        else {
+                            gson.fromJson<CommonModel>(
+                                mResponse.errorBody()!!.charStream(),
+                                CommonModel::class.java
+                            )
+                        }
+
+                        data1!!.postValue(loginResponse)
+
+                    }
+
+                    override fun onError(mKey : String) {
+                        UtilsFunctions.showToastError(MyApplication.instance.getString(R.string.internal_server_error))
+                        data1!!.postValue(null)
+
+                    }
+
+                }, ApiClient.getApiInterface().startCompleteJob(mJsonObject)
             )
         }
         return data1!!

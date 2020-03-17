@@ -13,18 +13,12 @@ import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fleet.R
-import com.example.fleet.databinding.FuelEntryItemBinding
 import com.example.fleet.databinding.ServiceItemBinding
-import com.example.fleet.model.LoginResponse
-import com.example.fleet.model.fuel.FuelListResponse
-import com.example.fleet.model.vehicle.ServicesListResponse
+import com.example.fleet.model.services.ServicesListResponse
 import com.example.fleet.utils.Utils
-import com.example.fleet.views.services.ServicesListActivity
 import com.example.fleet.views.services.UpcomingServicesFragment
 import com.example.fleet.views.services.UpdateServiceActivity
 import com.google.gson.JsonObject
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -58,10 +52,11 @@ class ServicesListAdapter(
     @SuppressLint("SetTextI18n", "ResourceAsColor")
     override fun onBindViewHolder(@NonNull holder : ViewHolder, position : Int) {
         viewHolder = holder
+
         holder.binding!!.tvDueDate.text = Utils(activity).getDate(
             "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
             servicesList[position].service_date,
-            "dd-MMM-yyyy"
+            "dd/MM/yyyy"
         )
         holder.binding.tvServiceType.text = servicesList[position].vehicle_type
 
@@ -83,26 +78,33 @@ class ServicesListAdapter(
         var month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
         var cur_date = day.toString() + "/" + (month + 1) + "/" + year
-        var date1 = Date(cur_date/*holder.binding!!.tvDueDate.text.toString()*/)
+        var date1 = Date(cur_date)
         var date2 = Date(holder.binding.tvDueDate.text.toString())
 // To calculate the time difference of two dates
         var Difference_In_Time = date2.getTime() - date1.getTime()
 // To calculate the no. of days between two dates
         var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24)
-        /*  if (Difference_In_Days < 0) {
-              holder.binding.mainLayout.setBackgroundColor(R.color.colorRed)
-          } else if (Difference_In_Days > 0 && Difference_In_Days <= 3) {
-              holder.binding.mainLayout.setBackgroundColor(R.color.colorSuccess)
-          } else if (Difference_In_Days > 3 *//*&& Difference_In_Days <= 15*//*) {
-            holder.binding.mainLayout.setBackgroundColor(R.color.colorBlack)
-        }*/
+        if (Difference_In_Days < 0) {
+            holder.binding.mainLayout.setBackgroundColor(mContext.resources.getColor(R.color.colorRed))
+        } else if (Difference_In_Days > 0 && Difference_In_Days <= 3) {
+            holder.binding.mainLayout.setBackgroundColor(mContext.resources.getColor(R.color.colorSuccess))
+        } else if (Difference_In_Days > 3 ) {
+            holder.binding.mainLayout.setBackgroundColor(mContext.resources.getColor(R.color.colorLightBlue))
+        }
         holder.binding.btnUpdateService.setOnClickListener {
+            var vendorId = "0"
+            if (!TextUtils.isEmpty(servicesList[position].vendor_id)) {
+                vendorId = servicesList[position].vendor_id.toString()
+            }
             val mJsonObject = JsonObject()
             mJsonObject.addProperty(
-                "vendor_id", servicesList[position].vehicle_id
+                "vendor_id", vendorId
             )
             mJsonObject.addProperty(
                 "service_id", servicesList[position].service_id
+            )
+            mJsonObject.addProperty(
+                "vendor_name", servicesList[position].vendor_name
             )
             val intent = Intent(mContext.baseActivity, UpdateServiceActivity::class.java)
             intent.putExtra("data", mJsonObject.toString())

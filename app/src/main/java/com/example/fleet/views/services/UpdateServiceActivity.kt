@@ -1,34 +1,32 @@
 package com.example.fleet.views.services
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.Dialog
-import android.app.TimePickerDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
+import android.text.TextUtils
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.TextView
-import android.widget.TimePicker
 import androidx.core.content.FileProvider
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.example.fleet.R
-import com.example.fleet.application.MyApplication
 import com.example.fleet.callbacks.ChoiceCallBack
 import com.example.fleet.common.UtilsFunctions
 import com.example.fleet.databinding.ActivityUpdateServiceBinding
 import com.example.fleet.model.CommonModel
-import com.example.fleet.model.LoginResponse
-import com.example.fleet.sharedpreference.SharedPrefClass
+import com.example.fleet.model.vendor.VendorListResponse
 import com.example.fleet.utils.BaseActivity
 import com.example.fleet.utils.DialogClass
 import com.example.fleet.utils.Utils
 import com.example.fleet.viewmodels.services.ServicesViewModel
-import com.example.fleet.views.authentication.SMSBroadcastReciever
-import com.google.gson.JsonObject
-import kotlinx.android.synthetic.main.activity_update_service.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import org.json.JSONException
@@ -39,6 +37,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class UpdateServiceActivity : BaseActivity(), ChoiceCallBack {
+    val vendorList = ArrayList<String>()
+    private lateinit var vendorData : ArrayList<VendorListResponse.Data>
     lateinit var updateServiceBinding : ActivityUpdateServiceBinding
     lateinit var servicesViewModel : ServicesViewModel
     private var mJsonObject = JSONObject()
@@ -47,6 +47,8 @@ class UpdateServiceActivity : BaseActivity(), ChoiceCallBack {
     private val RESULT_LOAD_IMAGE = 100
     private val CAMERA_REQUEST = 1888
     private var profileImage = ""
+    var final = ""
+    var vendorId : String? = null
 
     override fun initViews() {
         updateServiceBinding = viewDataBinding as ActivityUpdateServiceBinding
@@ -57,6 +59,17 @@ class UpdateServiceActivity : BaseActivity(), ChoiceCallBack {
 
         try {
             mJsonObject = JSONObject(intent.extras.get("data").toString())
+            vendorId = mJsonObject.get("vendor_id").toString()
+            var vendorName = mJsonObject.get("vendor_name").toString()
+            if (!TextUtils.isEmpty(vendorName) && vendorName != "null") {
+                updateServiceBinding.etVendorName.visibility = View.VISIBLE
+                updateServiceBinding.spVendor.visibility = View.GONE
+                updateServiceBinding.etVendorName.setText(vendorName)
+
+            } else {
+                updateServiceBinding.etVendorName.visibility = View.GONE
+                updateServiceBinding.spVendor.visibility = View.VISIBLE
+            }
         } catch (e : JSONException) {
             e.printStackTrace()
         }
@@ -77,9 +90,32 @@ class UpdateServiceActivity : BaseActivity(), ChoiceCallBack {
                 }
             })
 
+        servicesViewModel.getVendorList().observe(this,
+            Observer<VendorListResponse> { response->
+                stopProgressDialog()
+                if (response != null) {
+                    val message = response.message
+                    when {
+                        response.code == 200 -> {
+                            vendorData = response.data!!
+                            vendorList.add(getString(R.string.select_vendor))
+                            for (i in response.data!!) {
+                                vendorList.add(i.vendor_name!!)
+                            }
+                            setVendorSpinner()
+                        }
+                        /* response.code == 204 -> {
+                             FirebaseFunctions.sendOTP("signup", mJsonObject, this)
+                         }*/
+                        else -> showToastError(message)
+                    }
+
+                }
+            })
 
         servicesViewModel.isClick().observe(
             this, Observer<String>(function =
+            @SuppressLint("SetTextI18n", "SimpleDateFormat")
             fun(it : String?) {
                 when (it) {
                     "et_date_service" -> {
@@ -91,7 +127,7 @@ class UpdateServiceActivity : BaseActivity(), ChoiceCallBack {
                             this@UpdateServiceActivity,
                             DatePickerDialog.OnDateSetListener
                             { view, year, monthOfYear, dayOfMonth->
-                                updateServiceBinding.etDateService.setText("" + dayOfMonth + "-" + (monthOfYear + 1) + "-" + year)
+                                updateServiceBinding.etDateService.setText("" + year + "-" + (monthOfYear + 1) + "-" + dayOfMonth)
                             },
                             year,
                             month,
@@ -180,7 +216,7 @@ class UpdateServiceActivity : BaseActivity(), ChoiceCallBack {
                                 mHashMap["service_date"] =
                                     Utils(this).createPartFromString(updateServiceBinding.etDateService.text.toString())
                                 mHashMap["vendor_id"] =
-                                    Utils(this).createPartFromString(mJsonObject.get("vendor_id").toString())
+                                    Utils(this).createPartFromString(vendorId.toString())
                                 mHashMap["labor_price"] =
                                     Utils(this).createPartFromString(updateServiceBinding.etLabourPrice.text.toString())
                                 mHashMap["odometer"] =
@@ -213,6 +249,29 @@ class UpdateServiceActivity : BaseActivity(), ChoiceCallBack {
 
     override fun getLayoutId() : Int {
         return R.layout.activity_update_service
+    }
+
+    private fun setVendorSpinner() {
+        val adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_item, vendorList
+        )
+        updateServiceBinding.spVendor.adapter = adapter
+
+        updateServiceBinding.spVendor.onItemSelectedListener = object :
+            AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent : AdapterView<*>,
+                view : View, position : Int, id : Long
+            ) {
+                if (position > 0)
+                    vendorId = vendorData[position - 1].vendor_id.toString()
+            }
+
+            override fun onNothingSelected(parent : AdapterView<*>) {
+
+            }
+        }
     }
 
     override fun photoFromCamera(mKey : String) {

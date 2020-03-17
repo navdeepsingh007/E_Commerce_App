@@ -26,6 +26,7 @@ import com.example.fleet.utils.DialogssInterface
 import com.example.fleet.views.authentication.LoginActivity
 import com.example.fleet.views.fuel.AddFuelDetailActivity
 import com.example.fleet.views.fuel.FuelEntryList
+import com.example.fleet.views.notifications.NotificationsListActivity
 import com.example.fleet.views.profile.ProfileActivity
 import com.example.fleet.views.services.ServicesListActivity
 import com.example.fleet.views.settings.MyAccountsActivity
@@ -64,6 +65,8 @@ class DashboardActivity : BaseActivity(),
         // checkForRating(0)
         /*****************/
         activityDashboardBinding!!.toolbarCommon.toolbar.setImageResource(R.drawable.ic_sidebar)
+        activityDashboardBinding!!.toolbarCommon.imgRight.visibility = View.VISIBLE
+        activityDashboardBinding!!.toolbarCommon.imgRight.setImageResource(R.drawable.ic_notifications)
         val name = SharedPrefClass().getPrefValue(
             MyApplication.instance.applicationContext,
             getString(R.string.first_name)
@@ -83,11 +86,21 @@ class DashboardActivity : BaseActivity(),
         dashboardViewModel!!.isClick().observe(
             this, Observer<String>(function =
             fun(it : String?) {
-                activityDashboardBinding!!.toolbarCommon.imgRight.visibility = View.GONE
-
                 when (it) {
+                    "img_right" -> {
+                        val intent = Intent(this, NotificationsListActivity::class.java)
+                        startActivity(intent)
+                    }
+                    "tv_nav_notification" -> {
+                        val intent = Intent(this, NotificationsListActivity::class.java)
+                        startActivity(intent)
+                    }
                     "tv_nav_fuel" -> {
                         val intent = Intent(this, FuelEntryList::class.java)
+                        startActivity(intent)
+                    }
+                    "tv_nav_history" -> {
+                        val intent = Intent(this, JobsHistoryActivity::class.java)
                         startActivity(intent)
                     }
                     "tv_nav_services" -> {
@@ -97,7 +110,7 @@ class DashboardActivity : BaseActivity(),
                     "tv_nav_home" -> {
                         activityDashboardBinding!!.toolbarCommon.imgRight.visibility = View.VISIBLE
                         activityDashboardBinding!!.toolbarCommon.imgRight.setImageDrawable(
-                            getDrawable(R.drawable.ic_email)
+                            getDrawable(R.drawable.ic_notifications)
                         )
                         val fragment = HomeFragment()
                         activityDashboardBinding!!.toolbarCommon.imgToolbarText.text =
@@ -110,13 +123,13 @@ class DashboardActivity : BaseActivity(),
                             "send_data",
                             ""
                         )
-                        activityDashboardBinding!!.tablayout.getTabAt(1)?.select()
+                        activityDashboardBinding!!.tablayout.getTabAt(0)?.select()
                         activityDashboardBinding!!.drawerLayout.closeDrawers()
 
                     }
                     "tv_nav_contact" -> {
-                        val intent = Intent(this, TrackingActivity::class.java)
-                        startActivity(intent)
+                        /* val intent = Intent(this, TrackingActivity::class.java)
+                         startActivity(intent)*/
                     }
                     "ic_profile" -> {
                         val intent = Intent(this, ProfileActivity::class.java)
@@ -129,7 +142,26 @@ class DashboardActivity : BaseActivity(),
                     "img_nav_cancel" -> {
                         activityDashboardBinding!!.drawerLayout.closeDrawers()
                     }
+                    "tv_nav_logout" -> {
+                        mDialogClass.setDefaultDialog(
+                            this,
+                            this,
+                            "logout",
+                            "Do you reallt want to logout?"
+                        )
+
+                    }
                     "toolbar" -> {
+                        val image = SharedPrefClass().getPrefValue(
+                            MyApplication.instance.applicationContext,
+                            GlobalConstants.USER_IAMGE
+                        )
+                        // ic_profile
+                        Glide.with(this)
+                            .load(image)
+                            .placeholder(R.drawable.user)
+                            .into(activityDashboardBinding!!.icProfile)
+
                         if (drawer!!.isDrawerOpen(GravityCompat.START)) {
                             drawer!!.closeDrawer(Gravity.LEFT) //CLOSE Nav Drawer!
                         } else {
@@ -162,7 +194,7 @@ class DashboardActivity : BaseActivity(),
                             false
                         )
 
-                        showToastSuccess(message)
+                        showToastSuccess(getString(R.string.logout_msg))
                         val intent1 = Intent(this, LoginActivity::class.java)
                         startActivity(intent1)
                         finish()
@@ -185,8 +217,7 @@ class DashboardActivity : BaseActivity(),
             TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab : TabLayout.Tab?) {
                 var fragment : Fragment? = null
-                activityDashboardBinding!!.toolbarCommon.imgRight.visibility = View.GONE
-
+                //   activityDashboardBinding!!.toolbarCommon.imgRight.visibility = View.GONE
                 when (tab!!.position) {
                     0 -> fragment = HomeFragment()
                     1 -> fragment = JobRequestsFragment()
@@ -236,6 +267,15 @@ class DashboardActivity : BaseActivity(),
               activityDashboardBinding!!.tablayout.getTabAt(GlobalConstants.selectedFragment)!!.select()
               GlobalConstants.selectedCheckedFragment = 0
           }*/
+        val image = SharedPrefClass().getPrefValue(
+            MyApplication.instance.applicationContext,
+            GlobalConstants.USER_IAMGE
+        )
+        // ic_profile
+        Glide.with(this)
+            .load(image)
+            .placeholder(R.drawable.user)
+            .into(activityDashboardBinding!!.icProfile)
 
     }
 
@@ -244,6 +284,7 @@ class DashboardActivity : BaseActivity(),
             "logout" -> {
                 confirmationDialog?.dismiss()
                 dashboardViewModel!!.callLogoutApi()
+                // dashboardViewModel!!.callLogoutApi()
 
             }
 //            "rating" -> {

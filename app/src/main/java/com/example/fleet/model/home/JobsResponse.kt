@@ -15,13 +15,18 @@ class JobsResponse {
     var data : ArrayList<Data>? = null
 
     inner class Data {
-
         @SerializedName("jobId")
         @Expose
         var jobId : Int? = null
         @SerializedName("from_location")
         @Expose
         var from_location : String? = null
+        @SerializedName("to_lat")
+        @Expose
+        var to_lat : String? = null
+        @SerializedName("to_longt")
+        @Expose
+        var to_longt : String? = null
         @SerializedName("to_location")
         @Expose
         var to_location : String? = null
@@ -37,7 +42,6 @@ class JobsResponse {
         @SerializedName("progressStatus")
         @Expose
         var progressStatus : String? = null
-
         @SerializedName("acceptStatus")
         @Expose
         var acceptStatus : String? = null

@@ -10,15 +10,10 @@ import androidx.annotation.NonNull
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fleet.R
-import com.example.fleet.databinding.FuelEntryItemBinding
 import com.example.fleet.databinding.ServiceItemBinding
-import com.example.fleet.model.LoginResponse
-import com.example.fleet.model.fuel.FuelListResponse
-import com.example.fleet.model.vehicle.ServicesListResponse
+import com.example.fleet.model.services.ServicesListResponse
 import com.example.fleet.utils.Utils
 import com.example.fleet.views.services.CompletedServicesFragment
-import com.example.fleet.views.services.ServicesListActivity
-import com.example.fleet.views.services.UpcomingServicesFragment
 
 class ServicesHistoryListAdapter(
     context : CompletedServicesFragment,
@@ -49,22 +44,29 @@ class ServicesHistoryListAdapter(
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(@NonNull holder : ViewHolder, position : Int) {
         viewHolder = holder
-        /* holder.binding!!.tvDueValue.text =  Utils(activity).getDate(
-             "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
-             servicesList[position].service_date,
-             "dd-MMM-yyyy"
-         )*/
-        /* holder.binding!!.tvVehicleNameValue.text = servicesList[position].vehicle_name
-         holder.binding.tvType.text = servicesList[position].vehicle_type
+        holder.binding!!.btnUpdateService.visibility = View.GONE
+        holder.binding.tvDueCompleted.setText(mContext.getString(R.string.completed_date))
+        holder.binding!!.tvDueDate.text = Utils(activity).getDate(
+            "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+            servicesList[position].service_date,
+            "dd-MM-yyyy"
+        )
+        holder.binding.tvServiceType.text = servicesList[position].vehicle_type
 
-         if (!TextUtils.isEmpty(servicesList[position].vendor_name)) {
-             holder.binding.tvVender.visibility = View.GONE
-             holder.binding.tvVendorValue.visibility = View.GONE
-             holder.binding.tvVendorValue.text = servicesList[position].vendor_name
-         } else {
-             holder.binding.tvVender.visibility = View.GONE
-             holder.binding.tvVendorValue.visibility = View.GONE
-         }*/
+        if (!TextUtils.isEmpty(servicesList[position].vendor_name)) {
+            holder.binding.tvVendorName.visibility = View.VISIBLE
+            holder.binding.tvVendorNameValue.visibility = View.VISIBLE
+            holder.binding.tvVendorNameValue.text = servicesList[position].vendor_name
+        } else {
+            holder.binding.tvVendorName.visibility = View.GONE
+            holder.binding.tvVendorNameValue.visibility = View.GONE
+        }
+        if (servicesList[position].service_for == 0) {
+            holder.binding.tvServiceType.text = mContext.getString(R.string.service)
+        } else {
+            holder.binding.tvServiceType.text = mContext.getString(R.string.renewal)
+        }
+
     }
 
     override fun getItemCount() : Int {

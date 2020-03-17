@@ -29,12 +29,18 @@ class JobRequestsFragment : BaseFragment() {
         fragmentHomeBinding = viewDataBinding as FragmentHomeBinding
         homeViewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
         fragmentHomeBinding.homeViewModel = homeViewModel
-         baseActivity.startProgressDialog()
+        baseActivity.startProgressDialog()
         //acceptStatus
         mJsonObject.addProperty(
             "acceptStatus", "0"
         )
-        homeViewModel.getMyJobs("0")
+
+        if (UtilsFunctions.isNetworkConnected()) {
+            homeViewModel.getMyJobs("0")
+        } else {
+            baseActivity.stopProgressDialog()
+        }
+
         homeViewModel.getJobs().observe(this,
             Observer<JobsResponse> { response->
                 baseActivity.stopProgressDialog()
@@ -44,12 +50,18 @@ class JobRequestsFragment : BaseFragment() {
                         response.code == 200 -> {
                             pendingJobsList.addAll(response.data!!)
                             fragmentHomeBinding.rvJobs.visibility = View.VISIBLE
+                            fragmentHomeBinding.tvNoRecord.visibility = View.GONE
                             initRecyclerView()
                         }
                         /* response.code == 204 -> {
                              FirebaseFunctions.sendOTP("signup", mJsonObject, this)
                          }*/
-                        else -> message?.let { UtilsFunctions.showToastError(it) }
+                        else -> message?.let {
+                            UtilsFunctions.showToastError(it)
+
+                            fragmentHomeBinding.rvJobs.visibility = View.GONE
+                            fragmentHomeBinding.tvNoRecord.visibility = View.VISIBLE
+                        }
                     }
 
                 }
@@ -65,6 +77,7 @@ class JobRequestsFragment : BaseFragment() {
                             pendingJobsList.clear()
                             pendingJobsList = ArrayList<JobsResponse.Data>()
                             homeViewModel.getMyJobs("0")
+
                             UtilsFunctions.showToastSuccess(message!!)
                         }
                         /* response.code == 204 -> {
@@ -89,7 +102,8 @@ class JobRequestsFragment : BaseFragment() {
     }
 
     private fun initRecyclerView() {
-        myJobsListAdapter = JobRequestsAdapter(this@JobRequestsFragment, pendingJobsList,activity!!)
+        myJobsListAdapter =
+            JobRequestsAdapter(this@JobRequestsFragment, pendingJobsList, activity!!)
         val linearLayoutManager = LinearLayoutManager(this.baseActivity)
         linearLayoutManager.orientation = RecyclerView.VERTICAL
         fragmentHomeBinding.rvJobs.layoutManager = linearLayoutManager

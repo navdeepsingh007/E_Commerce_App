@@ -8,13 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.fleet.R
 import com.example.fleet.common.UtilsFunctions
 import com.example.fleet.databinding.FragmentServicesBinding
-import com.example.fleet.model.LoginResponse
-import com.example.fleet.model.home.JobsResponse
-import com.example.fleet.model.vehicle.ServicesListResponse
+import com.example.fleet.model.services.ServicesListResponse
 import com.example.fleet.utils.BaseFragment
 import com.example.fleet.viewmodels.services.ServicesViewModel
 import com.google.gson.JsonObject
-import com.uniongoods.adapters.MyJobsListAdapter
 import com.uniongoods.adapters.ServicesListAdapter
 
 class UpcomingServicesFragment : BaseFragment() {
@@ -52,9 +49,16 @@ class UpcomingServicesFragment : BaseFragment() {
                             fragmentServicesBinding.tvNoRecord.visibility = View.GONE
                             initRecyclerView()
                         }
-                        else -> message?.let { UtilsFunctions.showToastError(it) }
+                        else -> message?.let {
+                            UtilsFunctions.showToastError(it)
+                            servicesList.clear()
+                            fragmentServicesBinding.rvServices.visibility = View.GONE
+                            fragmentServicesBinding.tvNoRecord.visibility = View.VISIBLE
+                        }
                     }
 
+                }else{
+                    baseActivity.stopProgressDialog()
                 }
             })
         // initRecyclerView()
@@ -73,6 +77,12 @@ class UpcomingServicesFragment : BaseFragment() {
 
             }
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        servicesList.clear()
+        servicesViewModel.getServices("0")
     }
 
 }

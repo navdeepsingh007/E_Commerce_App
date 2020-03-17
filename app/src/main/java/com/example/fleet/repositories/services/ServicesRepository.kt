@@ -9,8 +9,8 @@ import com.example.fleet.api.ApiService
 import com.example.fleet.application.MyApplication
 import com.example.fleet.common.UtilsFunctions
 import com.example.fleet.model.CommonModel
-import com.example.fleet.model.LoginResponse
-import com.example.fleet.model.vehicle.ServicesListResponse
+import com.example.fleet.model.services.ServicesListResponse
+import com.example.fleet.model.vendor.VendorListResponse
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import okhttp3.MultipartBody
@@ -22,10 +22,12 @@ class ServicesRepository {
     private var data : MutableLiveData<ServicesListResponse>? = null
     private var data1 : MutableLiveData<CommonModel>? = null
     private val gson = GsonBuilder().serializeNulls().create()
+    private var data2 : MutableLiveData<VendorListResponse>? = null
 
     init {
         data = MutableLiveData()
         data1 = MutableLiveData()
+        data2 = MutableLiveData()
     }
 
     fun getServicesList(serviceType : String) : MutableLiveData<ServicesListResponse> {
@@ -94,6 +96,37 @@ class ServicesRepository {
             )
         }
         return data1!!
+
+    }
+
+    fun getVendorList() : MutableLiveData<VendorListResponse> {
+        val mApiService = ApiService<JsonObject>()
+        mApiService.get(
+            object : ApiResponse<JsonObject> {
+                override fun onResponse(mResponse : Response<JsonObject>) {
+                    val loginResponse = if (mResponse.body() != null)
+                        gson.fromJson<VendorListResponse>(
+                            "" + mResponse.body(),
+                            VendorListResponse::class.java
+                        )
+                    else {
+                        gson.fromJson<VendorListResponse>(
+                            mResponse.errorBody()!!.charStream(),
+                            VendorListResponse::class.java
+                        )
+                    }
+                    data2!!.postValue(loginResponse)
+                }
+
+                override fun onError(mKey : String) {
+                    UtilsFunctions.showToastError(MyApplication.instance.getString(R.string.internal_server_error))
+                    data2!!.postValue(null)
+                }
+
+            }, ApiClient.getApiInterface().getVendorList(/*jsonObject*/)
+        )
+
+        return data2!!
 
     }
 

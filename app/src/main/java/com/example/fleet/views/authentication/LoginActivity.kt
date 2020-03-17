@@ -144,7 +144,6 @@ class LoginActivity : BaseActivity() {
                                     phone
                                 )
 
-
                                 SharedPrefClass().putObject(
                                     applicationContext,
                                     getString(R.string.key_country_code),

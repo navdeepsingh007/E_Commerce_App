@@ -193,6 +193,74 @@
                         tools:ignore="RtlSymmetry" />
 
                 <TextView
+                        android:id="@+id/tv_nav_history"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_20"
+                        android:gravity="center_vertical"
+                        android:onClick="@{(v) -> dashboardViewModel.clickListener(v)}"
+                        android:paddingStart="@dimen/dp_10"
+                        android:paddingLeft="@dimen/dp_10"
+                        android:paddingBottom="@dimen/dp_5"
+                        android:text="@string/job_history"
+                        android:textAllCaps="true"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/sp_18"
+                        app:font="@{`semibold`}"
+                        tools:ignore="RtlSymmetry" />
+
+                <TextView
+                        android:id="@+id/tv_nav_feedback"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_20"
+                        android:gravity="center_vertical"
+                        android:onClick="@{(v) -> dashboardViewModel.clickListener(v)}"
+                        android:paddingStart="@dimen/dp_10"
+                        android:paddingLeft="@dimen/dp_10"
+                        android:paddingBottom="@dimen/dp_5"
+                        android:text="@string/feedback"
+                        android:textAllCaps="true"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/sp_18"
+                        app:font="@{`semibold`}"
+                        tools:ignore="RtlSymmetry" />
+
+                <TextView
+                        android:id="@+id/tv_nav_notification"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_20"
+                        android:gravity="center_vertical"
+                        android:onClick="@{(v) -> dashboardViewModel.clickListener(v)}"
+                        android:paddingStart="@dimen/dp_10"
+                        android:paddingLeft="@dimen/dp_10"
+                        android:paddingBottom="@dimen/dp_5"
+                        android:text="@string/notifications"
+                        android:textAllCaps="true"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/sp_18"
+                        app:font="@{`semibold`}"
+                        tools:ignore="RtlSymmetry" />
+
+                <TextView
+                        android:id="@+id/tv_nav_setting"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_20"
+                        android:gravity="center_vertical"
+                        android:onClick="@{(v) -> dashboardViewModel.clickListener(v)}"
+                        android:paddingStart="@dimen/dp_10"
+                        android:paddingLeft="@dimen/dp_10"
+                        android:paddingBottom="@dimen/dp_5"
+                        android:text="@string/settings"
+                        android:textAllCaps="true"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/sp_18"
+                        app:font="@{`semibold`}"
+                        tools:ignore="RtlSymmetry" />
+
+                <TextView
                         android:id="@+id/tv_nav_account"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -207,6 +275,7 @@
                         android:textAllCaps="true"
                         android:textColor="@color/colorBlack"
                         android:textSize="@dimen/sp_18"
+                        android:visibility="gone"
                         app:font="@{`semibold`}"
                         tools:ignore="RtlSymmetry" />
 
@@ -225,6 +294,7 @@
                         android:textAllCaps="true"
                         android:textColor="@color/colorBlack"
                         android:textSize="@dimen/sp_18"
+                        android:visibility="gone"
                         app:font="@{`semibold`}"
                         tools:ignore="RtlSymmetry" />
 

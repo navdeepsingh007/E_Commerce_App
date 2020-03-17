@@ -68,6 +68,7 @@ class ProfileActivity : BaseActivity(), ChoiceCallBack {
                 GlobalConstants.USERID
             ).toString()*/
         )
+        startProgressDialog()
         profieViewModel.getProfileDetail(mJsonObject)
         profieViewModel.getDetail().observe(this,
             Observer<LoginResponse> { response->
@@ -100,6 +101,11 @@ class ProfileActivity : BaseActivity(), ChoiceCallBack {
                         response.code == 200 -> {
                             profileBinding.profileModel = response.data
                             showToastSuccess(message)
+                            SharedPrefClass().putObject(
+                                this,
+                                GlobalConstants.USER_IAMGE,
+                                response.data!!.profile_image
+                            )
                             makeEnableDisableViews(false)
                         }
                         else -> showToastError(message)
@@ -124,8 +130,11 @@ class ProfileActivity : BaseActivity(), ChoiceCallBack {
                         makeEnableDisableViews(true)
                     }
                     "upload_profile_layer" -> {
-                        confirmationDialog =
-                            mDialogClass.setUploadConfirmationDialog(this, this, "gallery")
+                        if (checkAndRequestPermissions()) {
+                            confirmationDialog =
+                                mDialogClass.setUploadConfirmationDialog(this, this, "gallery")
+                        }
+
                     }
                     "btn_submit" -> {
                         val fname = profileBinding.etFirstname.text.toString()
@@ -195,6 +204,7 @@ class ProfileActivity : BaseActivity(), ChoiceCallBack {
                                     val f1 = File(profileImage)
                                     userImage = Utils(this).prepareFilePart("profile_image", f1)
                                 }
+                                startProgressDialog()
                                 profieViewModel.updateProfile(mHashMap, userImage)
                             }
                         }

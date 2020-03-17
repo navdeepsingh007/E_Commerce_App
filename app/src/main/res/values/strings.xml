@@ -26,7 +26,7 @@
     <string name="otp_verification_text"> Enter the OTP below in case if we fail to detect SMS automatically</string>
     <string name="resend_otp"><u>Resend Code</u></string>
     <string name="OTP">OTP</string>
-    <string name="otp_verify">Otp verify</string>
+    <string name="otp_verify">OTP VERIFY</string>
     <string name="enter_new_password">Enter New Password</string>
     <string name="enter_new_password1">New Password</string>
     <string name="password_len_msg">Password Length should be of 8–20 characters</string>
@@ -265,4 +265,19 @@
     <string name="total_price">Total Price</string>
     <string name="additional_information">Additional Information</string>
     <string name="update_service_entry">Update Service Entry</string>
+    <string name="job_history">Job History</string>
+    <string name="completed_date">Completed Date :</string>
+    <string name="clear_all">Clear All</string>
+    <string name="start">Start</string>
+    <string name="api_key">AIzaSyA7Zj-PTZm4sDG-eoiLPA-XohvgxBe95wU</string>
+    <string name="base_url">https://maps.googleapis.com</string>
+    <string name="finish_job">Finish Job</string>
+    <string name="verify_mobile_number">Verify Mobile Number</string>
+    <string name="otp_sent_msg">OTP has been sent to you on your mobile number. Plese enter it below</string>
+    <string name="otp_not_received_text">Didn\'t Received OTP?</string>
+    <string name="resend">Resend</string>
+    <string name="track">Track</string>
+    <string name="job_finished_msg">Job Finished Successfully</string>
+    <string name="logout_msg">Logout Successfully</string>
+
 </resources>

@@ -58,7 +58,8 @@ object ApiClient {
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
 
-
+      /*  mAuthToken =
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZV9udW1iZXIiOiI5NTMwNjA2MDA2IiwiY291bnRyeV9jb2RlIjoiKzkxIiwidHlwZSI6MiwiaWQiOjEsImlhdCI6MTU4NDAwODAyOSwiZXhwIjoxNTg0MTgwODI5fQ.hSkvHRBHlHlwf1Drg2dtPaMamRg27aI48H4ZOgWTilY"*/
         if (!TextUtils.isEmpty(mAuthToken)) {
             val finalMAuthToken = mAuthToken
             val interceptor : Interceptor = object : Interceptor {
@@ -71,6 +72,11 @@ object ApiClient {
                     val request = builder.build()
                     val response = chain.proceed(request)
                     return if (response.code() == 401) {
+                        SharedPrefClass().putObject(
+                            MyApplication.instance.applicationContext,
+                            "isLogin",
+                            false
+                        )
                         val i = Intent(
                             MyApplication.instance.applicationContext,
                             LoginActivity::class.java

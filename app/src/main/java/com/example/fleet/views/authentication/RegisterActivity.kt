@@ -79,7 +79,8 @@ class RegisterActivity : BaseActivity(), ChoiceCallBack {
                     "btn_register" -> {
                         when {
                             fname.isEmpty() -> showError(
-                                binding.etFirstname, getString(R.string.empty) + " " + getString(
+                                binding.etFirstname,
+                                getString(R.string.empty) + " " + getString(
                                     R.string.fname
                                 )
                             )
@@ -138,10 +139,13 @@ class RegisterActivity : BaseActivity(), ChoiceCallBack {
                                 mHashMap["first_name"] = Utils(this).createPartFromString(fname)
                                 mHashMap["last_name"] = Utils(this).createPartFromString(lname)
                                 mHashMap["user_type"] = Utils(this).createPartFromString("1")
-                                mHashMap["phone_number"] = Utils(this).createPartFromString(phonenumber)
-                                mHashMap["country_code"] = Utils(this).createPartFromString(countrycode)
+                                mHashMap["phone_number"] =
+                                    Utils(this).createPartFromString(phonenumber)
+                                mHashMap["country_code"] =
+                                    Utils(this).createPartFromString(countrycode)
                                 mHashMap["device_id"] = Utils(this).createPartFromString(androidId)
-                                mHashMap["device_type"] = Utils(this).createPartFromString(GlobalConstants.PLATFORM)
+                                mHashMap["device_type"] =
+                                    Utils(this).createPartFromString(GlobalConstants.PLATFORM)
                                 mHashMap["address"] = Utils(this).createPartFromString(address)
                                 mHashMap["gender"] = Utils(this).createPartFromString("1")
                                 mHashMap["notify_id"] = Utils(this).createPartFromString(
@@ -165,16 +169,13 @@ class RegisterActivity : BaseActivity(), ChoiceCallBack {
 
                     }
                     "upload_profile_layer" -> {
-                        confirmationDialog = mDialogClass.setUploadConfirmationDialog(this, this, "gallery")
+                        confirmationDialog =
+                            mDialogClass.setUploadConfirmationDialog(this, this, "gallery")
 
                     }
                 }
             })
         )
-
-
-
-
 
         registerViewModel.getRegisterResponse().observe(this,
             Observer<LoginResponse> { response->
@@ -241,7 +242,8 @@ class RegisterActivity : BaseActivity(), ChoiceCallBack {
                 }
                 // Continue only if the File was successfully created
                 photoFile?.also {
-                    val photoURI : Uri = FileProvider.getUriForFile(this, packageName + ".fileprovider", it)
+                    val photoURI : Uri =
+                        FileProvider.getUriForFile(this, packageName + ".fileprovider", it)
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
                     startActivityForResult(takePictureIntent, CAMERA_REQUEST)
                 }
@@ -265,7 +267,10 @@ class RegisterActivity : BaseActivity(), ChoiceCallBack {
     }
 
     override fun photoFromGallery(mKey : String) {
-        val i = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        val i = Intent(
+            Intent.ACTION_PICK,
+            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        )
         startActivityForResult(i, RESULT_LOAD_IMAGE)
     }
 

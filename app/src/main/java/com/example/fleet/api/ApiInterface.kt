@@ -32,7 +32,7 @@ interface ApiInterface {
     @POST("checkPhoneNumber/")
     fun checkPhoneExistence(@Body jsonObject : JsonObject) : Call<JsonObject>
 
-    @POST("logout/")
+    @POST("driver/auth/logout")
     fun callLogout(@Body mJsonObject : JsonObject) : Call<JsonObject>
 
     @POST("resetpassword/")
@@ -43,10 +43,10 @@ interface ApiInterface {
     @POST("users/changepassword/")
     fun chnagePassword(@Body mJsonObject : JsonObject) : Call<JsonObject>
 
-    @GET("auth/getProfile")
+    @GET("driver/auth/getProfile")
     fun getProfile() : Call<JsonObject>
 
-    @GET("driver/vehicle/list")
+    @GET("driver/vehicle/latLongList")
     fun getVehicleList() : Call<JsonObject>
 
     @GET("service/driver/getServiceList")
@@ -55,11 +55,23 @@ interface ApiInterface {
     @GET("fuel/driver/getFuelList")
     fun getFuelEntryList() : Call<JsonObject>
 
+    @GET("notification/driver/getList")
+    fun getNotificationList() : Call<JsonObject>
+
+    @DELETE("notification/driver/clearAll")
+    fun clearAllNotification() : Call<JsonObject>
+
     @GET("vendor/getVendorList")
     fun getVendorList() : Call<JsonObject>
 
     @GET("job/getDriverJob")
     fun getJobs(@Query("acceptStatus") userId : String) : Call<JsonObject>
+
+    @GET("job/driver/jobsHistory")
+    fun getJobsHistory(@Query("progressStatus") userId : String) : Call<JsonObject>
+
+    @POST("job/driver/changeJobStatus")
+    fun startCompleteJob(@Body mJsonObject : JsonObject) : Call<JsonObject>
 
     @POST("job/driver/acceptRejectJob")
     fun acceptRejectJob(@Body mJsonObject : JsonObject) : Call<JsonObject>

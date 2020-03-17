@@ -5,7 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import android.view.View
 import com.example.fleet.common.UtilsFunctions
 import com.example.fleet.model.CommonModel
-import com.example.fleet.model.vehicle.ServicesListResponse
+import com.example.fleet.model.services.ServicesListResponse
+import com.example.fleet.model.vendor.VendorListResponse
 import com.example.fleet.repositories.services.ServicesRepository
 import com.example.fleet.viewmodels.BaseViewModel
 import okhttp3.MultipartBody
@@ -17,10 +18,12 @@ class ServicesViewModel : BaseViewModel() {
     private var servicesRepository = ServicesRepository()
     private val mIsUpdating = MutableLiveData<Boolean>()
     private val btnClick = MutableLiveData<String>()
+    private var vendorList = MutableLiveData<VendorListResponse>()
 
     init {
         serviceslist = servicesRepository.getServicesList("")
-
+        updateService=servicesRepository.updateService(null,null)
+        vendorList = servicesRepository.getVendorList()
     }
 
     fun getServicesList() : LiveData<ServicesListResponse> {
@@ -29,6 +32,10 @@ class ServicesViewModel : BaseViewModel() {
 
     fun updateServiceStatus() : LiveData<CommonModel> {
         return updateService
+    }
+
+    fun getVendorList() : LiveData<VendorListResponse> {
+        return vendorList
     }
 
     override fun isLoading() : LiveData<Boolean> {
