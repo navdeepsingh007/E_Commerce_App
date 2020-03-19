@@ -7,11 +7,11 @@
 
         <variable
                 name="profileViewModel"
-                type="com.example.fleet.viewmodels.profile.ProfileViewModel" />
+                type="com.example.services.viewmodels.profile.ProfileViewModel" />
 
         <variable
                 name="profileModel"
-                type="com.example.fleet.model.LoginResponse.Data" />
+                type="com.example.services.model.LoginResponse.Data" />
 
     </data>
 

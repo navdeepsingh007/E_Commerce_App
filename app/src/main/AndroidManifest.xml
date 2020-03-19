@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        package="com.example.fleet">
+        package="com.example.services">
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -39,17 +39,17 @@
             android:theme="@style/AppTheme.NoActionBar"
             tools:ignore="GoogleAppIndexingWarning"
             tools:targetApi="n">
-        <activity android:name=".views.notifications.NotificationsListActivity"></activity>
-        <activity android:name=".views.home.JobsHistoryActivity" />
-        <activity android:name=".views.services.UpdateServiceActivity" />
-        <activity android:name=".views.services.ServicesListActivity" />
-        <activity android:name=".views.fuel.FuelEntryList" />
-        <activity android:name=".views.fuel.AddFuelDetailActivity" />
+<!--        <activity android:name=".views.notifications.NotificationsListActivity"></activity>-->
+<!--        <activity android:name=".views.home.JobsHistoryActivity" />-->
+<!--        <activity android:name=".views.services.UpdateServiceActivity" />-->
+<!--        <activity android:name=".views.services.ServicesListActivity" />-->
+<!--        <activity android:name=".views.fuel.FuelEntryList" />-->
+<!--        <activity android:name=".views.fuel.AddFuelDetailActivity" />-->
         <activity android:name=".views.profile.ProfileActivity" />
 
         <provider
                 android:name="androidx.core.content.FileProvider"
-                android:authorities="com.example.fleet.fileprovider"
+                android:authorities="com.example.servies.fileprovider"
                 android:exported="false"
                 android:grantUriPermissions="true">
             <meta-data
@@ -103,16 +103,6 @@
                 android:name=".socket.TrackingActivity"
                 android:launchMode="singleTop"
                 android:screenOrientation="portrait" />
-
-        <receiver
-                android:name=".views.authentication.SMSBroadcastReciever"
-                android:exported="true"
-                android:permission="android.permission.BROADCAST_SMS"
-                android:priority="1000">
-            <intent-filter>
-                <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED" />
-            </intent-filter>
-        </receiver>
 
         <service
                 android:name="com.uniongoods.fcm.MyFirebaseMessagingService"

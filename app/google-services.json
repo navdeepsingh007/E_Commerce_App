@@ -1,50 +1,35 @@
 {
   "project_info": {
-    "project_number": "138343551746",
-    "firebase_url": "https://fleetmanagement-21f64.firebaseio.com",
-    "project_id": "fleetmanagement-21f64",
-    "storage_bucket": "fleetmanagement-21f64.appspot.com"
+    "project_number": "637061013375",
+    "firebase_url": "https://salon-services-app.firebaseio.com",
+    "project_id": "salon-services-app",
+    "storage_bucket": "salon-services-app.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:138343551746:android:9859e1fa7193b78f0ca81b",
+        "mobilesdk_app_id": "1:637061013375:android:37e9efc87c9351374d044a",
         "android_client_info": {
-          "package_name": "com.example.fleet"
+          "package_name": "com.example.services"
         }
       },
       "oauth_client": [
         {
-          "client_id": "138343551746-223pbdrf8tmptnrsmo4h268baemss3oe.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.fleet",
-            "certificate_hash": "875ed0427a0ce0ccc4e8694fccb17ccbc60e32f8"
-          }
-        },
-        {
-          "client_id": "138343551746-ceta7rnoqqg4vuvop0rn1mp2o28i5nki.apps.googleusercontent.com",
+          "client_id": "637061013375-88agteljb7e2r2lvmf5d708hmjo2rmj7.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyD2-RDPo0jssFqwwTXr6NDpOFzQTcIc3dI"
+          "current_key": "AIzaSyC_ZlqMqqGCzYAX2FkqxyQb1XDRraKYSvY"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "138343551746-ceta7rnoqqg4vuvop0rn1mp2o28i5nki.apps.googleusercontent.com",
+              "client_id": "637061013375-88agteljb7e2r2lvmf5d708hmjo2rmj7.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "138343551746-u1hlls9hsut7arp5ce7jnsve984tjkj2.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.fleetmanagement.seasia"
-              }
             }
           ]
         }

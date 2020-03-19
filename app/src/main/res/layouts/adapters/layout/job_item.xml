@@ -7,11 +7,11 @@
 
     <data>
 
-        <import type="com.example.fleet.common.BindingUtils" />
+        <import type="com.example.services.common.BindingUtils" />
 
         <variable
                 name="homeViewModel"
-                type="com.example.fleet.viewmodels.home.HomeViewModel" />
+                type="com.example.services.viewmodels.home.HomeViewModel" />
 
     </data>
 

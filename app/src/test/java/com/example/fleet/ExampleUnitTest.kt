@@ -1,4 +1,4 @@
-package com.example.fleet
+package com.example.services
 
 import org.junit.Test
 

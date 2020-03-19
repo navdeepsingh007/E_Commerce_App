@@ -1,4 +1,4 @@
-package com.example.fleet
+package com.example.services
 
 import androidx.test.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4
