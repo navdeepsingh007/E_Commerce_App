@@ -21,7 +21,6 @@
     <string name="send_otp">Send OTP</string>
     <string name="cancel">Cancel</string>
     <string name="forgot_password">I forgot my password</string>
-    <string name="verification_code">Sit back &amp; Relax! while we verify your mobile number </string>
     <string name="proceed">Proceed</string>
     <string name="otp_verification_text"> Enter the OTP below in case if we fail to detect SMS automatically</string>
     <string name="resend_otp"><u>Resend Code</u></string>
@@ -274,8 +273,7 @@
     <string name="finish_job">Finish Job</string>
     <string name="verify_mobile_number">Verify Mobile Number</string>
     <string name="otp_sent_msg">OTP has been sent to you on your mobile number. Plese enter it below</string>
-    <string name="otp_not_received_text">Didn\'t Received OTP?</string>
-    <string name="resend">Resend</string>
+
     <string name="track">Track</string>
     <string name="job_finished_msg">Job Finished Successfully</string>
     <string name="logout_msg">Logout Successfully</string>
@@ -290,4 +288,8 @@
     <string name="verify">Verify</string>
     <string name="enter_your_moble_number">Enter Your Moble Number</string>
     <string name="your_mobile_number">Your Mobile Number</string>
+    <string name="verification_code">Verification Code</string>
+    <string name="verification_code_msg">Please enter the code that has been sent to you at</string>
+    <string name="otp_not_received_text">Didn\'t Received Code?</string>
+    <string name="resend">Resend</string>
 </resources>

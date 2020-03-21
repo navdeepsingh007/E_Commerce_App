@@ -76,9 +76,9 @@ HomeFragment : BaseFragment(), SocketInterface, DialogssInterface {
 
         mFusedLocationClass = FusedLocationClass(activity)
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(activity!!)
-        baseActivity.startProgressDialog()
+       // baseActivity.startProgressDialog()
         jobsList.clear()
-        if (UtilsFunctions.isNetworkConnected()) {
+       /* if (UtilsFunctions.isNetworkConnected()) {
             fragmentHomeBinding.rvJobs.visibility = View.VISIBLE
             homeViewModel.getMyJobs("1")
             var jobId =
@@ -93,7 +93,7 @@ HomeFragment : BaseFragment(), SocketInterface, DialogssInterface {
         } else {
             baseActivity.stopProgressDialog()
             fragmentHomeBinding.rvJobs.visibility = View.GONE
-        }
+        }*/
 
         getLastLocation()
         socket.updateSocketInterface(this)

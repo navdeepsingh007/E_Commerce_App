@@ -32,7 +32,7 @@ interface ApiInterface {
     @POST("checkPhoneNumber/")
     fun checkPhoneExistence(@Body jsonObject : JsonObject) : Call<JsonObject>
 
-    @POST("driver/auth/logout")
+    @POST("mobile/auth/logout")
     fun callLogout(@Body mJsonObject : JsonObject) : Call<JsonObject>
 
     @POST("resetpassword/")
@@ -43,7 +43,7 @@ interface ApiInterface {
     @POST("users/changepassword/")
     fun chnagePassword(@Body mJsonObject : JsonObject) : Call<JsonObject>
 
-    @GET("driver/auth/getProfile")
+    @GET("mobile/profile/getProfile")
     fun getProfile() : Call<JsonObject>
 
     @GET("driver/vehicle/latLongList")

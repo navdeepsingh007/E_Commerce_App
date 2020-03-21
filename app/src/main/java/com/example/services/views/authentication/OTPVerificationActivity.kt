@@ -70,6 +70,7 @@ class OTPVerificationActivity : BaseActivity(),
 
         try {
             mJsonObject = JSONObject(intent.extras.get("data").toString())
+            activityOtpVerificationBinding.tvOtpSent.setText(activityOtpVerificationBinding.tvOtpSent.getText()/*+" "+ mJsonObject.get("phoneNumber").toString()*/)
             //  action = intent.extras.get("action").toString()
            // var mSmsBroadcastReceiver = SMSBroadcastReciever()
             //set google api client for hint request
@@ -129,12 +130,12 @@ class OTPVerificationActivity : BaseActivity(),
                     "tv_resend" -> {
                         val mJsonObject1 = JsonObject()
                         mJsonObject1.addProperty(
-                            "country_code",
-                            mJsonObject.get("country_code").toString()
+                            "countryCode",
+                            mJsonObject.get("countryCode").toString()
                         )
                         mJsonObject1.addProperty(
-                            "phone_number",
-                            mJsonObject.get("phone_number").toString()
+                            "phoneNumber",
+                            mJsonObject.get("phoneNumber").toString()
                         )
                         FirebaseFunctions.sendOTP("resend", mJsonObject1, this)
                         startProgressDialog()

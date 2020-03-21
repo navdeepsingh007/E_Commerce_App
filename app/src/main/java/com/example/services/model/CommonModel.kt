@@ -11,9 +11,9 @@ class CommonModel {
     @SerializedName("message")
     @Expose
     var message: String? = null
-    @SerializedName("data")
+   /* @SerializedName("data")
     @Expose
-    var data: Any? = null
+    var data: Any? = null*/
 
 
 }

@@ -48,7 +48,7 @@ class LoginActivity : BaseActivity() {
                             SharedPrefClass().putObject(
                                 this,
                                 GlobalConstants.ACCESS_TOKEN,
-                                response.data!!.session_token
+                                response.data!!.sessionToken
                             )
                             /*SharedPrefClass().putObject(
                                 this,
@@ -86,9 +86,9 @@ class LoginActivity : BaseActivity() {
                                 getString(R.string.key_country_code),
                                 response.data!!.countryCode
                             )
-                              val intent = Intent(this, OTPVerificationActivity::class.java)
+                            /*  val intent = Intent(this, OTPVerificationActivity::class.java)
                               intent.putExtra("data", mJsonObject.toString())
-                              startActivity(intent)
+                              startActivity(intent)*/
 
                         }
                         /* response.code == 204 -> {
@@ -135,8 +135,8 @@ class LoginActivity : BaseActivity() {
                                     "+" + activityLoginbinding.btnCcp.selectedCountryCode
                                 )
                                 mJsonObject.addProperty("companyId", "25cbf58b-46ba-4ba2-b25d-8f8f653e9f11")
-                               // mJsonObject.addProperty("device_id", androidId)
-                               // mJsonObject.addProperty("app-version", versionName)
+                                mJsonObject.addProperty("device_id", androidId)
+                               mJsonObject.addProperty("app-version", versionName)
                                 loginViewModel.checkPhoneExistence(mJsonObject)
 
                                 SharedPrefClass().putObject(
