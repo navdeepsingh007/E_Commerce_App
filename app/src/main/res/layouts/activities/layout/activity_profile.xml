@@ -11,7 +11,7 @@
 
         <variable
                 name="profileModel"
-                type="com.example.services.model.LoginResponse.Data" />
+                type="com.example.services.model.LoginResponse.Body" />
 
     </data>
 

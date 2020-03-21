@@ -283,4 +283,11 @@
     <string name="warning_cancel_job">Do you really want to cancel this job?</string>
     <string name="warning_reject_job">Do you really want to reject this job?</string>
 
+
+
+
+    <string name="hello">Hello</string>
+    <string name="verify">Verify</string>
+    <string name="enter_your_moble_number">Enter Your Moble Number</string>
+    <string name="your_mobile_number">Your Mobile Number</string>
 </resources>

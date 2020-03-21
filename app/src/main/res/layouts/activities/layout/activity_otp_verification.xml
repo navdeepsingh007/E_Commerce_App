@@ -127,12 +127,14 @@
                             tools:layout_editor_absoluteY="306dp" />
 
                     <TextView
+                            android:id="@+id/tv_resend"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/dp_2"
                             android:gravity="center"
                             android:text="@string/resend"
                             android:textAllCaps="true"
+                            android:onClick="@{(v) -> verifViewModel.clickListener(v)}"
                             android:textColor="@color/colorPrimary"
                             android:textSize="@dimen/sp_14"
                             app:font="@{`bold`}"
@@ -161,7 +163,7 @@
                         app:layout_constraintStart_toStartOf="parent" />
 
                 <TextView
-                        android:id="@+id/tv_resend"
+                        android:id="@+id/tv_resend1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:onClick="@{(v) -> verifViewModel.clickListener(v)}"

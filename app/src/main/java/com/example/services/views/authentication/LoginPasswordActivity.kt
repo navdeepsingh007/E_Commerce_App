@@ -121,15 +121,15 @@ class LoginPasswordActivity : BaseActivity() {
     }
 
     private fun saveSharedData(loginResponse : LoginResponse) {
-        SharedPrefClass().putObject(
+       /* SharedPrefClass().putObject(
             this,
             GlobalConstants.ACCESS_TOKEN,
             loginResponse.data!!.jwtToken
-        )
+        )*/
         SharedPrefClass().putObject(
             this,
             GlobalConstants.USERID,
-            loginResponse.data!!.userId
+            loginResponse.data!!.id
         )
 
         SharedPrefClass().putObject(

@@ -9,7 +9,7 @@ import java.util.HashMap
 
 interface ApiInterface {
     @Headers("Content-Type: application/json")
-    @POST("driver/auth/login")
+    @POST("mobile/auth/login")
     fun callLogin(@Body jsonObject : JsonObject) : Call<JsonObject>
 
     /*@POST("login/")

@@ -42,15 +42,15 @@ class LoginActivity : BaseActivity() {
                     when {
                         response.code == 200 -> {
                             FirebaseFunctions.sendOTP("login", mJsonObject, this)
-                            mJsonObject.addProperty("phone_number", response.data?.phoneNumber)
-                            mJsonObject.addProperty("country_code", response.data?.countryCode)
+                            mJsonObject.addProperty("phoneNumber", response.data?.phoneNumber)
+                            mJsonObject.addProperty("countryCode", response.data?.countryCode)
 
                             SharedPrefClass().putObject(
                                 this,
                                 GlobalConstants.ACCESS_TOKEN,
                                 response.data!!.session_token
                             )
-                            SharedPrefClass().putObject(
+                            /*SharedPrefClass().putObject(
                                 this,
                                 GlobalConstants.USERID,
                                 response.data!!.driver_id
@@ -70,7 +70,7 @@ class LoginActivity : BaseActivity() {
                                 applicationContext,
                                 getString(R.string.first_name),
                                 response.data!!.firstName + " " + response.data!!.lastName
-                            )
+                            )*/
                             SharedPrefClass().putObject(
                                 this,
                                 getString(R.string.key_phone),
@@ -116,9 +116,9 @@ class LoginActivity : BaseActivity() {
                                     )
                             }
                             else -> {
-                                mJsonObject.addProperty("phone_number", phone)
+                                mJsonObject.addProperty("phoneNumber", phone)
                                 mJsonObject.addProperty(
-                                    "notify_id",
+                                    "deviceToken",
                                     SharedPrefClass().getPrefValue(
                                         MyApplication.instance,
                                         GlobalConstants.NOTIFICATION_TOKEN
@@ -129,13 +129,14 @@ class LoginActivity : BaseActivity() {
                                     .versionName
                                 val androidId = UtilsFunctions.getAndroidID()
 
-                                mJsonObject.addProperty("device_type", GlobalConstants.PLATFORM)
+                                mJsonObject.addProperty("platform", GlobalConstants.PLATFORM)
                                 mJsonObject.addProperty(
-                                    "country_code",
+                                    "countryCode",
                                     "+" + activityLoginbinding.btnCcp.selectedCountryCode
                                 )
-                                mJsonObject.addProperty("device_id", androidId)
-                                mJsonObject.addProperty("app-version", versionName)
+                                mJsonObject.addProperty("companyId", "25cbf58b-46ba-4ba2-b25d-8f8f653e9f11")
+                               // mJsonObject.addProperty("device_id", androidId)
+                               // mJsonObject.addProperty("app-version", versionName)
                                 loginViewModel.checkPhoneExistence(mJsonObject)
 
                                 SharedPrefClass().putObject(

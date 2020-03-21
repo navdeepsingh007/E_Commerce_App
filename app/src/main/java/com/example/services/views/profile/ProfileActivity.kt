@@ -104,7 +104,7 @@ class ProfileActivity : BaseActivity(), ChoiceCallBack {
                             SharedPrefClass().putObject(
                                 this,
                                 GlobalConstants.USER_IAMGE,
-                                response.data!!.profile_image
+                                response.data!!.image
                             )
                             makeEnableDisableViews(false)
                         }

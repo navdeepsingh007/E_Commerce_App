@@ -12,15 +12,59 @@ class LoginResponse {
     var message : String? = null
     @SerializedName("data")
     @Expose
-    var data : Data? = null
+    var data : Body? = null
 
-    inner class Data {
+    inner class Body {
 
-        @SerializedName("driver_id")
+        @SerializedName("id")
         @Expose
-        var driver_id : Int? = null
-
-        @SerializedName("user_id")
+        var id : String? = null
+        @SerializedName("firstName")
+        @Expose
+        var firstName : String? = null
+        @SerializedName("lastName")
+        @Expose
+        var lastName : String? = null
+        @SerializedName("email")
+        @Expose
+        var email : String? = null
+        @SerializedName("phoneNumber")
+        @Expose
+        var phoneNumber : String? = null
+        @SerializedName("countryCode")
+        @Expose
+        var countryCode : String? = null
+        @SerializedName("password")
+        @Expose
+        var password : String? = null
+        @SerializedName("image")
+        @Expose
+        var image : String? = null
+        @SerializedName("deviceToken")
+        @Expose
+        var deviceToken : String? = null
+        @SerializedName("userType")
+        @Expose
+        var userType : String? = null
+        @SerializedName("sessionToken")
+        @Expose
+        var sessionToken : String? = null
+        @SerializedName("moduleType")
+        @Expose
+        var moduleType : String? = null
+        @SerializedName("platform")
+        @Expose
+        var platform : String? = null
+        @SerializedName("status")
+        @Expose
+        var status : Int? = null
+        @SerializedName("createdAt")
+        @Expose
+        var createdAt : String? = null
+        @SerializedName("updatedAt")
+        @Expose
+        var updatedAt : String? = null
+        /*@SerializedName("user_id")
         @Expose
         var userId : Int? = null
         @SerializedName("user_type")
@@ -29,7 +73,7 @@ class LoginResponse {
         @SerializedName("profile_image")
         @Expose
         var profile_image : String? = null
-        @SerializedName("session_token")
+        @SerializedName("sessionToken")
         @Expose
         var session_token : String? = null
         @SerializedName("status")
@@ -39,7 +83,7 @@ class LoginResponse {
         @Expose
         var availablity : String? = null
 
-        @SerializedName("country_code")
+        @SerializedName("countryCode")
         @Expose
         var countryCode : String? = null
         @SerializedName("email")
@@ -48,7 +92,7 @@ class LoginResponse {
         @SerializedName("password")
         @Expose
         var password : String? = null
-        @SerializedName("phone_number")
+        @SerializedName("phoneNumber")
         @Expose
         var phoneNumber : String? = null
         @SerializedName("first_name")
@@ -83,7 +127,7 @@ class LoginResponse {
         var createdAt : String? = null
         @SerializedName("updated_at")
         @Expose
-        var updatedAt : String? = null
+        var updatedAt : String? = null*/
 
     }
 }
