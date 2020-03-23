@@ -22,7 +22,7 @@ interface ApiInterface {
     ) : Call<JsonObject>
 
     @Multipart
-    @POST("driver/auth/updateProfile")
+    @POST("mobile/profile/updateprofile")
     fun callUpdateProfile(
         @PartMap mHashMap : HashMap<String,
                 RequestBody>, @Part image : MultipartBody.Part?

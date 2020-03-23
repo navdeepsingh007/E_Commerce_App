@@ -16,7 +16,7 @@
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/ic_back_img"
+            android:background="@drawable/ic_login_background"
             android:gravity="center"
             android:orientation="vertical"
             android:padding="@dimen/dp_5"
@@ -29,14 +29,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:background="@drawable/ic_app_logo"
+                android:background="@drawable/ic_makeup"
                 android:contentDescription="@string/todo" />
 
         <TextView
                 android:id="@+id/tv_heading"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_10"
                 android:layout_marginTop="@dimen/dp_5"
                 android:text="@string/hello"
                 android:textAllCaps="false"
@@ -49,7 +48,6 @@
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_10"
                 android:layout_marginTop="@dimen/dp_5"
                 android:text="@string/enter_your_moble_number"
                 android:textAllCaps="false"
@@ -135,7 +133,7 @@
                 android:paddingRight="@dimen/dp_20"
                 android:paddingBottom="@dimen/dp_10"
                 android:src="@drawable/ic_arrow_forward"
-                android:text="@string/verify"
+                android:text="@string/continues"
                 android:textColor="@color/colorWhite" />
 
     </LinearLayout>

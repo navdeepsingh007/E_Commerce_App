@@ -179,30 +179,27 @@ class ProfileActivity : BaseActivity(), ChoiceCallBack {
                                 ) as String
                                 val androidId = UtilsFunctions.getAndroidID()
                                 val mHashMap = HashMap<String, RequestBody>()
-                                mHashMap["first_name"] = Utils(this).createPartFromString(fname)
-                                mHashMap["last_name"] = Utils(this).createPartFromString(lname)
-                                mHashMap["user_type"] = Utils(this).createPartFromString("1")
-                                mHashMap["phone_number"] =
-                                    Utils(this).createPartFromString(phonenumber)
-                                mHashMap["country_code"] =
-                                    Utils(this).createPartFromString(countrycode)
-                                mHashMap["device_id"] = Utils(this).createPartFromString(androidId)
-                                mHashMap["device_type"] =
-                                    Utils(this).createPartFromString(GlobalConstants.PLATFORM)
+                                mHashMap["firstName"] = Utils(this).createPartFromString(fname)
+                                mHashMap["lastName"] = Utils(this).createPartFromString(lname)
+                               // mHashMap["user_type"] = Utils(this).createPartFromString("1")
+                              //  mHashMap["phone_number"] =Utils(this).createPartFromString(phonenumber)
+                               // mHashMap["country_code"] =Utils(this).createPartFromString(countrycode)
+                               // mHashMap["device_id"] = Utils(this).createPartFromString(androidId)
+                               // mHashMap["device_type"] =Utils(this).createPartFromString(GlobalConstants.PLATFORM)
                                 mHashMap["address"] = Utils(this).createPartFromString(address)
-                                mHashMap["gender"] = Utils(this).createPartFromString("1")
-                                mHashMap["notify_id"] = Utils(this).createPartFromString(
+                               // mHashMap["gender"] = Utils(this).createPartFromString("1")
+                              /*  mHashMap["notify_id"] = Utils(this).createPartFromString(
                                     SharedPrefClass().getPrefValue(
                                         MyApplication.instance,
                                         GlobalConstants.NOTIFICATION_TOKEN
                                     ) as String
-                                )
+                                )*/
                                 mHashMap["email"] = Utils(this).createPartFromString(email)
                                 //  mHashMap["password"] = Utils(this).createPartFromString(password)
                                 var userImage : MultipartBody.Part? = null
                                 if (!profileImage.isEmpty()) {
                                     val f1 = File(profileImage)
-                                    userImage = Utils(this).prepareFilePart("profile_image", f1)
+                                    userImage = Utils(this).prepareFilePart("profileImage", f1)
                                 }
                                 startProgressDialog()
                                 profieViewModel.updateProfile(mHashMap, userImage)

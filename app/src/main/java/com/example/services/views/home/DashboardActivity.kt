@@ -63,6 +63,7 @@ class DashboardActivity : BaseActivity(),
         activityDashboardBinding!!.toolbarCommon.toolbar.setImageResource(R.drawable.ic_sidebar)
         activityDashboardBinding!!.toolbarCommon.imgRight.visibility = View.VISIBLE
         activityDashboardBinding!!.toolbarCommon.imgRight.setImageResource(R.drawable.ic_notifications)
+        activityDashboardBinding!!.toolbarCommon.rlTop.setBackgroundColor(resources.getColor(R.color.trans))
         val name = SharedPrefClass().getPrefValue(
             MyApplication.instance.applicationContext,
             getString(R.string.first_name)

@@ -44,6 +44,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/toolbar_common"
                     app:tabBackground="@color/colorWhite"
+                    android:visibility="gone"
                     app:tabIndicatorColor="@color/tabSelection"
                     app:tabTextAppearance="@style/customizeTabText"
                     app:tabTextColor="@color/colorBlack">

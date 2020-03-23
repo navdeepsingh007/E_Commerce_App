@@ -24,9 +24,9 @@
     <color name="colorYellow">#dab45f</color>
     <color name="colorTransparentBlack">#99000000</color>
     <color name="list_text_color">#404040</color>
-
+    <color name="trans">#00000000 </color>
     <color name="tabSelection">#DB6589</color>
-    <color name="btnBackground">#DB6589</color>
+    <color name="btnBackground">#F75469</color>
     <color name="btnBackgroundWhite">#F8F8F8</color>
 
 </resources>

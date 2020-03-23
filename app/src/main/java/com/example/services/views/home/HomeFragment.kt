@@ -105,6 +105,7 @@ HomeFragment : BaseFragment(), SocketInterface, DialogssInterface {
         )
 
 
+        initRecyclerView()
         homeViewModel.getJobs().observe(this,
             Observer<JobsResponse> { response->
                 baseActivity.stopProgressDialog()

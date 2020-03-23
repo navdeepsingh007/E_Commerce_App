@@ -17,6 +17,7 @@
 
 
         <RelativeLayout
+                android:background="@color/colorBlack"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -24,7 +25,6 @@
                     android:id="@+id/upper_container"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:background="@drawable/splash"
                     android:gravity="center"
                     android:orientation="vertical"
                     android:visibility="gone"
@@ -67,33 +67,36 @@
                 </RelativeLayout>
 
             </LinearLayout>
-
+<LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_400"
+        android:background="@drawable/ic_services_back"
+        android:layout_alignParentBottom="true">
+    <TextView
+            android:id="@+id/tv_no_record"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_20"
+            android:layout_marginLeft="@dimen/dp_20"
+            android:textStyle="bold"
+            android:textSize="@dimen/sp_16"
+            android:textColor="@color/colorBlack"
+            android:text="@string/services"
+            app:font="@{`bold`}" />
+    <View
+            android:background="@color/btnBackground"
+            android:layout_marginLeft="@dimen/dp_20"
+            android:layout_width="@dimen/dp_30"
+            android:layout_marginTop="@dimen/dp_3"
+            android:layout_height="@dimen/dp_2"/>
             <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_jobs"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_above="@+id/tabLayout"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp" />
-            <TextView
-                    android:id="@+id/tv_no_record"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:text="@string/no_record_found"
-                    app:font="@{`regular`}" />
+                  />
 
-            <com.google.android.material.tabs.TabLayout
-                    android:id="@+id/tabLayout"
-                    style="@style/TabLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/colorBlack"
-                    android:visibility="gone"
-                    app:tabIndicatorHeight="@dimen/dp_4"
-                    app:tabMode="fixed" />
+</LinearLayout>
         </RelativeLayout>
 
 </layout>

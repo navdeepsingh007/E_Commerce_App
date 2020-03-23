@@ -8,10 +8,9 @@ import androidx.annotation.NonNull
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.services.R
-import com.example.services.databinding.JobItemBinding
+import com.example.services.databinding.CategoryItemBiniding
 import com.example.services.model.home.JobsResponse
 import com.example.services.utils.Utils
-import com.example.services.views.home.HomeFragment
 import com.example.services.views.home.JobsHistoryActivity
 
 class JobsHistoryListAdapter(
@@ -33,10 +32,10 @@ class JobsHistoryListAdapter(
     override fun onCreateViewHolder(@NonNull parent : ViewGroup, viewType : Int) : ViewHolder {
         val binding = DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
-            R.layout.job_item,
+            R.layout.category_item,
             parent,
             false
-        ) as JobItemBinding
+        ) as CategoryItemBiniding
         return ViewHolder(binding.root, viewType, binding, mContext, jobsList)
     }
 
@@ -68,7 +67,7 @@ class JobsHistoryListAdapter(
     inner class ViewHolder//This constructor would switch what to findViewBy according to the type of viewType
         (
         v : View, val viewType : Int, //These are the general elements in the RecyclerView
-        val binding : JobItemBinding?,
+        val binding : CategoryItemBiniding?,
         mContext : JobsHistoryActivity,
         addressList : ArrayList<JobsResponse.Data>?
     ) : RecyclerView.ViewHolder(v) {
