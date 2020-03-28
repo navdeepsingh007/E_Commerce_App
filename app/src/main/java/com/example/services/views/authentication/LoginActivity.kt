@@ -50,6 +50,11 @@ class LoginActivity : BaseActivity() {
                                 GlobalConstants.ACCESS_TOKEN,
                                 response.data!!.sessionToken
                             )
+                            SharedPrefClass().putObject(
+                                this,
+                                GlobalConstants.USERID,
+                                response.data!!.id
+                            )
                             /*SharedPrefClass().putObject(
                                 this,
                                 GlobalConstants.USERID,

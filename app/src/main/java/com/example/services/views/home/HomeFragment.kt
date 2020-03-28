@@ -14,41 +14,45 @@ import android.view.View
 import android.widget.Toast
 import android.provider.Settings
 import android.util.Log
+import android.widget.AdapterView
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.services.R
 import com.example.services.application.MyApplication
 import com.example.services.common.UtilsFunctions
 import com.example.services.common.UtilsFunctions.showToastError
 import com.example.services.common.UtilsFunctions.showToastSuccess
 import com.example.services.constants.GlobalConstants
-import com.example.services.database.UploadDataToServer
 import com.example.services.databinding.FragmentHomeBinding
 import com.example.services.maps.FusedLocationClass
-import com.example.services.model.CommonModel
-import com.example.services.model.home.JobsResponse
 import com.example.services.sharedpreference.SharedPrefClass
 import com.example.services.socket.SocketClass
 import com.example.services.socket.SocketInterface
-import com.example.services.socket.TrackingActivity
 import com.example.services.utils.BaseFragment
 import com.example.services.utils.DialogClass
-import com.example.services.utils.DialogssInterface
+import com.example.services.viewmodels.home.CategoriesListResponse
 import com.example.services.viewmodels.home.HomeViewModel
+import com.example.services.views.profile.ProfileActivity
+import com.example.services.views.subcategories.SubCategoriesActivity
 import com.google.android.gms.location.*
 import com.google.gson.JsonObject
-import com.uniongoods.adapters.MyJobsListAdapter
+import com.uniongoods.adapters.CategoriesGridListAdapter
+import com.uniongoods.adapters.CategoriesListAdapter
+import com.uniongoods.adapters.OffersListAdapter
+import com.uniongoods.adapters.TrendingServiceListAdapter
 import org.json.JSONObject
 
 class
-HomeFragment : BaseFragment(), SocketInterface, DialogssInterface {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          HomeFragment : BaseFragment(), SocketInterface {
     private var mFusedLocationClass : FusedLocationClass? = null
     private var socket = SocketClass.socket
-    private var jobsList = ArrayList<JobsResponse.Data>()
-    private var myJobsListAdapter : MyJobsListAdapter? = null
+    private var categoriesList = ArrayList<com.example.services.viewmodels.home.Service>()
+    private var trendingServiceList =
+        ArrayList<com.example.services.viewmodels.home.TrendingService>()
+    private var offersList =
+        ArrayList<com.example.services.viewmodels.home.Banner>()
+    private var myJobsListAdapter : CategoriesListAdapter? = null
     private lateinit var fragmentHomeBinding : FragmentHomeBinding
     private lateinit var homeViewModel : HomeViewModel
     private val mJsonObject = JsonObject()
@@ -59,7 +63,7 @@ HomeFragment : BaseFragment(), SocketInterface, DialogssInterface {
     var mJsonObjectStartJob = JsonObject()
     private var confirmationDialog : Dialog? = null
     private var mDialogClass = DialogClass()
-
+    //var categoriesList = null
     override fun getLayoutResId() : Int {
         return R.layout.fragment_home
     }
@@ -73,29 +77,12 @@ HomeFragment : BaseFragment(), SocketInterface, DialogssInterface {
         fragmentHomeBinding = viewDataBinding as FragmentHomeBinding
         homeViewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
         fragmentHomeBinding.homeViewModel = homeViewModel
-
+        // categoriesList=List<Service>()
         mFusedLocationClass = FusedLocationClass(activity)
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(activity!!)
-       // baseActivity.startProgressDialog()
-        jobsList.clear()
-       /* if (UtilsFunctions.isNetworkConnected()) {
-            fragmentHomeBinding.rvJobs.visibility = View.VISIBLE
-            homeViewModel.getMyJobs("1")
-            var jobId =
-                SharedPrefClass()!!.getPrefValue(activity!!, GlobalConstants.JOBID).toString()
-            if (!jobId.equals("null") && jobId.equals("0")) {
-                Handler().postDelayed({
-                    var upload = UploadDataToServer()
-                    upload.synchData("0", "offline")
-                }, 5000)
-            }
-
-        } else {
-            baseActivity.stopProgressDialog()
-            fragmentHomeBinding.rvJobs.visibility = View.GONE
-        }*/
-
-        getLastLocation()
+        // baseActivity.startProgressDialog()
+        categoriesList?.clear()
+        //getLastLocation()
         socket.updateSocketInterface(this)
         Log.e("Connect Socket", "Home Fragment")
         socket.onConnect()
@@ -103,85 +90,58 @@ HomeFragment : BaseFragment(), SocketInterface, DialogssInterface {
         mJsonObject.addProperty(
             "acceptStatus", "1"
         )
-
-
-        initRecyclerView()
+        // initRecyclerView()
+        if (UtilsFunctions.isNetworkConnected()) {
+             //categoriesList = homeRepository.getCategories("")
+            baseActivity.startProgressDialog()
+        }
         homeViewModel.getJobs().observe(this,
-            Observer<JobsResponse> { response->
+            Observer<CategoriesListResponse> { response->
                 baseActivity.stopProgressDialog()
                 if (response != null) {
                     val message = response.message
                     when {
                         response.code == 200 -> {
-                            jobsList.addAll(response.data!!)
+                            categoriesList?.addAll(response.body.services)
+                            trendingServiceList.addAll(response.body.trendingServices)
+                            offersList.addAll(response.body.banners)
                             fragmentHomeBinding.rvJobs.visibility = View.VISIBLE
-                            fragmentHomeBinding.tvNoRecord.visibility = View.GONE
-                          //  initRecyclerView()
-                        }
-                        else -> message?.let { showToastError(it)
-                            fragmentHomeBinding.rvJobs.visibility = View.GONE
-                            fragmentHomeBinding.tvNoRecord.visibility = View.VISIBLE
-                        }
-                    }
 
-                }
-            })
-
-        homeViewModel.startCompleteJob().observe(this,
-            Observer<CommonModel> { response->
-                baseActivity.stopProgressDialog()
-                if (response != null) {
-                    val message = response.message
-                    when {
-                        response.code == 200 -> {
-                            message?.let { showToastSuccess(message!!) }
-                            var status = mJsonObjectStartJob.get("status").toString()
-                            if (status.equals("1")) {
-                                SharedPrefClass().putObject(
-                                    MyApplication.instance.applicationContext,
-                                    GlobalConstants.JOB_STARTED,
-                                    "true"
-                                )
-                                GlobalConstants.JOB_STARTED = "true"
-                                SharedPrefClass().putObject(
-                                    MyApplication.instance.applicationContext,
-                                    GlobalConstants.JOBID,
-                                    mJsonObjectStartJob.get("jobId")
-                                )
-                                val intent = Intent(activity, TrackingActivity::class.java)
-                                intent.putExtra("data", mJsonObjectStartJob.toString())
-                                activity!!.startActivity(intent)
-                                activity!!.finish()
+                            initRecyclerView()
+                            if (trendingServiceList.size > 0){
+                                fragmentHomeBinding.trendingLayout.visibility=View.VISIBLE
+                                trendingServiceListViewPager()
+                            }else{
+                                fragmentHomeBinding.trendingLayout.visibility=View.GONE
                             }
 
+                            if (offersList.size > 0){
+                                fragmentHomeBinding.offersLayout.visibility=View.VISIBLE
+                                offerListViewPager()
+                            }else{
+                                fragmentHomeBinding.offersLayout.visibility=View.GONE
+                            }
+
+
                         }
-                        else -> message?.let { showToastError(it) }
+                        else -> message?.let {
+                            showToastError(it)
+                            fragmentHomeBinding.rvJobs.visibility = View.GONE
+                        }
                     }
 
                 }
             })
 
-        homeViewModel.acceptReject().observe(this,
-            Observer<CommonModel> { response->
-                baseActivity.stopProgressDialog()
-                if (response != null) {
-                    val message = response.message
-                    when {
-                        response.code == 200 -> {
-                            jobsList.clear()
-                            homeViewModel.getMyJobs("1")
+        fragmentHomeBinding.gridview.onItemClickListener = AdapterView.OnItemClickListener { parent, v, position, id ->
+            showToastSuccess(" Clicked Position: " + (position + 1))
+            if(categoriesList[position].isService.equals("false")){
+                val intent = Intent(activity!!, SubCategoriesActivity::class.java)
+                intent.putExtra("catId",categoriesList[position].id)
+                startActivity(intent)
+            }
+        }
 
-                            UtilsFunctions.showToastSuccess(message!!)
-                        }
-                        else -> message?.let { UtilsFunctions.showToastError(it) }
-                    }
-
-                }
-            })
-        // initRecyclerView()
-        Handler().postDelayed({
-            callSocketMethods("updateVehicleLocation")
-        }, 2000)
 
     }
 
@@ -207,96 +167,29 @@ HomeFragment : BaseFragment(), SocketInterface, DialogssInterface {
     }
 
     private fun initRecyclerView() {
-        myJobsListAdapter = MyJobsListAdapter(this@HomeFragment, jobsList, activity!!)
-        val linearLayoutManager = LinearLayoutManager(this.baseActivity)
-        linearLayoutManager.orientation = RecyclerView.VERTICAL
-        fragmentHomeBinding.rvJobs.layoutManager = linearLayoutManager
-        fragmentHomeBinding.rvJobs.adapter = myJobsListAdapter
-        fragmentHomeBinding.rvJobs.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView : RecyclerView, dx : Int, dy : Int) {
+        /* myJobsListAdapter = CategoriesListAdapter(this@HomeFragment, categoriesList, activity!!)
+         val linearLayoutManager = LinearLayoutManager(this.baseActivity)
+         linearLayoutManager.orientation = RecyclerView.VERTICAL
+         fragmentHomeBinding.rvJobs.layoutManager = linearLayoutManager
+         fragmentHomeBinding.rvJobs.adapter = myJobsListAdapter
+         fragmentHomeBinding.rvJobs.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+             override fun onScrolled(recyclerView : RecyclerView, dx : Int, dy : Int) {
 
-            }
-        })
+             }
+         })*/
+        val adapter = CategoriesGridListAdapter(this@HomeFragment, categoriesList, activity!!)
+        fragmentHomeBinding.gridview.adapter = adapter
     }
 
-    fun cancelJob(jobId : Int?, status : String) {
-        mJsonObjectStartJob.addProperty(
-            "acceptStatus", status
-        )
-        mJsonObjectStartJob.addProperty(
-            "jobId", jobId.toString()
-        )
-        mJsonObjectStartJob.addProperty(
-            "status", 0
-        )
-        confirmationDialog =mDialogClass.setDefaultDialog(
-            activity!!,
-            this,
-            "Cancel Job",
-            getString(R.string.warning_cancel_job)
-        )
-        confirmationDialog?.show()
+    private fun trendingServiceListViewPager() {
+        val adapter = TrendingServiceListAdapter(this@HomeFragment, trendingServiceList, activity!!)
+        fragmentHomeBinding.viewpager.adapter = adapter
 
     }
 
-    override fun onDialogConfirmAction(mView : View?, mKey : String) {
-        when (mKey) {
-            "Cancel Job" -> {
-                baseActivity.startProgressDialog()
-                confirmationDialog?.dismiss()
-                homeViewModel.acceptRejectJob(mJsonObjectStartJob)
-
-            }
-        }
-    }
-
-    override fun onDialogCancelAction(mView : View?, mKey : String) {
-        when (mKey) {
-            "Cancel Job" -> confirmationDialog?.dismiss()
-        }
-    }
-
-    fun startJob(
-        jobId : Int?,
-        toLat : String?,
-        toLongt : String?,
-        trackOrStart : String
-    ) {
-        mJsonObjectStartJob.addProperty(
-            "jobId", jobId
-        )
-        mJsonObjectStartJob.addProperty(
-            "dest_lat", toLat.toString()
-        )
-        mJsonObjectStartJob.addProperty(
-            "dest_long", toLongt.toString()
-        )
-        mJsonObjectStartJob.addProperty(
-            "trackOrStart", trackOrStart
-        )
-        mJsonObjectStartJob.addProperty(
-            "status", 1
-        )
-
-        SharedPrefClass().putObject(
-            MyApplication.instance.applicationContext,
-            GlobalConstants.DEST_LAT,
-            toLat
-        )
-
-        SharedPrefClass().putObject(
-            MyApplication.instance.applicationContext,
-            GlobalConstants.DEST_LONG,
-            toLongt
-        )
-        if (trackOrStart == activity?.resources?.getString(R.string.track)) {
-            val intent = Intent(activity, TrackingActivity::class.java)
-            intent.putExtra("data", mJsonObjectStartJob.toString())
-            activity!!.startActivity(intent)
-            activity!!.finish()
-        } else {
-            homeViewModel.startJob("2", jobId.toString())
-        }
+    private fun offerListViewPager() {
+        val adapter = OffersListAdapter(this@HomeFragment, offersList, activity!!)
+        fragmentHomeBinding.offersViewpager.adapter = adapter
 
     }
 

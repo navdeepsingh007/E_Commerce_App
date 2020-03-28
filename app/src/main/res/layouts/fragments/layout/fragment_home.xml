@@ -14,10 +14,11 @@
 
     </data>
 
-
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
         <RelativeLayout
-                android:background="@color/colorBlack"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -67,36 +68,115 @@
                 </RelativeLayout>
 
             </LinearLayout>
-<LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_400"
-        android:background="@drawable/ic_services_back"
-        android:layout_alignParentBottom="true">
-    <TextView
-            android:id="@+id/tv_no_record"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_20"
-            android:layout_marginLeft="@dimen/dp_20"
-            android:textStyle="bold"
-            android:textSize="@dimen/sp_16"
-            android:textColor="@color/colorBlack"
-            android:text="@string/services"
-            app:font="@{`bold`}" />
-    <View
-            android:background="@color/btnBackground"
-            android:layout_marginLeft="@dimen/dp_20"
-            android:layout_width="@dimen/dp_30"
-            android:layout_marginTop="@dimen/dp_3"
-            android:layout_height="@dimen/dp_2"/>
+
+            <GridView
+                    android:id="@+id/gridview"
+                    android:layout_width="match_parent"
+                    android:layout_height="220dp"
+                    android:horizontalSpacing="@dimen/dp_2"
+                    android:numColumns="4"
+                    android:background="@drawable/shape_round_corner"
+                    android:padding="@dimen/dp_5"
+                    android:elevation="@dimen/dp_5"
+                    android:verticalSpacing="@dimen/dp_2" />
+
             <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_jobs"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                  />
+                    android:layout_below="@+id/gridview"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:visibility="gone" />
 
-</LinearLayout>
+            <LinearLayout
+                    android:id="@+id/trending_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/gridview"
+                    android:orientation="vertical"
+                    android:elevation="@dimen/dp_5"
+                    android:background="@drawable/shape_round_corner"
+                    android:padding="@dimen/dp_5">
+
+                <TextView
+
+                        android:id="@+id/tv_trending_heading"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/dp_5"
+                        android:text="@string/trending_services"
+                        android:textAllCaps="false"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/sp_16"
+                        android:textStyle="bold"
+                        app:font="@{`bold`}" />
+
+                <TextView
+                        android:id="@+id/tv_sub_heading"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_trending_heading"
+                        android:gravity="center"
+                        android:layout_marginLeft="@dimen/dp_5"
+                        android:text="@string/most_booked_services_in_this_week"
+                        android:textAllCaps="false"
+                        android:textSize="@dimen/sp_12"
+                        app:font="@{`regular`}" />
+
+                <androidx.viewpager.widget.ViewPager
+                        android:id="@+id/viewpager"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_marginTop="@dimen/dp_5"
+                        android:layout_below="@+id/tv_sub_heading">
+
+                </androidx.viewpager.widget.ViewPager>
+            </LinearLayout>
+
+            <LinearLayout
+                    android:id="@+id/offers_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/trending_layout"
+                    android:orientation="vertical"
+                    android:elevation="@dimen/dp_5"
+                    android:background="@drawable/shape_round_corner"
+                    android:padding="@dimen/dp_5">
+
+                <TextView
+
+                        android:id="@+id/tv_offers_heading"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/dp_5"
+                        android:text="@string/offers"
+                        android:textAllCaps="false"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/sp_16"
+                        android:textStyle="bold"
+                        app:font="@{`bold`}" />
+
+                <TextView
+                        android:id="@+id/tv_offer_heading"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_offers_heading"
+                        android:gravity="center"
+                        android:layout_marginLeft="@dimen/dp_5"
+                        android:text="@string/most_booked_services_in_this_week"
+                        android:textAllCaps="false"
+                        android:textSize="@dimen/sp_12"
+                        app:font="@{`regular`}" />
+
+                <androidx.viewpager.widget.ViewPager
+                        android:id="@+id/offersViewpager"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_marginTop="@dimen/dp_5"
+                        android:layout_below="@+id/tv_offer_heading">
+
+                </androidx.viewpager.widget.ViewPager>
+            </LinearLayout>
         </RelativeLayout>
-
+    </ScrollView>
 </layout>

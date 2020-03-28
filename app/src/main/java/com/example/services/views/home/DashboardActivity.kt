@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.Intent
 import android.os.Build
 import android.os.Handler
+import android.text.TextUtils
 import android.view.Gravity
 import android.view.View
 import androidx.annotation.RequiresApi
@@ -23,11 +24,14 @@ import com.example.services.socket.TrackingActivity
 import com.example.services.utils.BaseActivity
 import com.example.services.utils.DialogClass
 import com.example.services.utils.DialogssInterface
+import com.example.services.views.address.AddAddressActivity
+import com.example.services.views.address.AddressListActivity
 import com.example.services.views.authentication.LoginActivity
 import com.example.services.views.profile.ProfileActivity
 import com.example.services.views.settings.MyAccountsActivity
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
+import kotlinx.android.synthetic.main.layout_custom_alert.view.*
 
 class DashboardActivity : BaseActivity(),
     DialogssInterface {
@@ -60,14 +64,12 @@ class DashboardActivity : BaseActivity(),
         /** Show Rating Dialog here**/
         // checkForRating(0)
         /*****************/
-        activityDashboardBinding!!.toolbarCommon.toolbar.setImageResource(R.drawable.ic_sidebar)
-        activityDashboardBinding!!.toolbarCommon.imgRight.visibility = View.VISIBLE
+        activityDashboardBinding!!.toolbarCommon.toolbar.setImageResource(R.drawable.ic_menu)
+        activityDashboardBinding!!.toolbarCommon.imgRight.visibility = View.GONE
+        activityDashboardBinding!!.toolbarCommon.imgToolbarText.setText(resources.getString(R.string.home))
         activityDashboardBinding!!.toolbarCommon.imgRight.setImageResource(R.drawable.ic_notifications)
-        activityDashboardBinding!!.toolbarCommon.rlTop.setBackgroundColor(resources.getColor(R.color.trans))
-        val name = SharedPrefClass().getPrefValue(
-            MyApplication.instance.applicationContext,
-            getString(R.string.first_name)
-        )
+//        activityDashboardBinding!!.toolbarCommon.rlTop.setBackgroundColor(resources.getColor(R.color.orange_transparent))
+
         val image = SharedPrefClass().getPrefValue(
             MyApplication.instance.applicationContext,
             GlobalConstants.USER_IAMGE
@@ -77,7 +79,16 @@ class DashboardActivity : BaseActivity(),
             .load(image)
             .placeholder(R.drawable.user)
             .into(activityDashboardBinding!!.icProfile)
-        activityDashboardBinding!!.tvName.text = name.toString()
+        val name = SharedPrefClass().getPrefValue(
+            MyApplication.instance.applicationContext,
+            getString(R.string.first_name)
+        )
+        if(TextUtils.isEmpty(name.toString()) || name.toString().equals("null")){
+            activityDashboardBinding!!.tvName.text = getString(R.string.create_profile)
+        }else{
+            activityDashboardBinding!!.tvName.text = name.toString()
+        }
+
         fragment = HomeFragment()
         callFragments(fragment, supportFragmentManager, false, "send_data", "")
         dashboardViewModel!!.isClick().observe(
@@ -92,12 +103,8 @@ class DashboardActivity : BaseActivity(),
                      /*   val intent = Intent(this, NotificationsListActivity::class.java)
                         startActivity(intent)*/
                     }
-                    "tv_nav_fuel" -> {
-                        /*val intent = Intent(this, FuelEntryList::class.java)
-                        startActivity(intent)*/
-                    }
-                    "tv_nav_history" -> {
-                        val intent = Intent(this, JobsHistoryActivity::class.java)
+                    "tv_nav_address" -> {
+                        val intent = Intent(this, AddressListActivity::class.java)
                         startActivity(intent)
                     }
                     "tv_nav_services" -> {
@@ -110,8 +117,9 @@ class DashboardActivity : BaseActivity(),
                             getDrawable(R.drawable.ic_notifications)
                         )
                         val fragment = HomeFragment()
-                        activityDashboardBinding!!.toolbarCommon.imgToolbarText.text =
-                            getString(R.string.home)
+                       // activityDashboardBinding!!.toolbarCommon.imgToolbarText.setText("")
+                     /*   activityDashboardBinding!!.toolbarCommon.imgToolbarText.text =
+                            getString(R.string.home)*/
                         activityDashboardBinding!!.drawerLayout.closeDrawers()
                         this.callFragments(
                             fragment,
@@ -167,12 +175,12 @@ class DashboardActivity : BaseActivity(),
                         }
                         val fragmentType =
                             supportFragmentManager.findFragmentById(R.id.frame_layout)
-                        when (fragmentType) {
+                        /*when (fragmentType) {
                             is HomeFragment -> {
                                 activityDashboardBinding!!.toolbarCommon.imgRight.visibility =
-                                    View.VISIBLE
+                                    View.GONE
                             }
-                        }
+                        }*/
                     }
                 }
             })
@@ -217,8 +225,8 @@ class DashboardActivity : BaseActivity(),
                 var fragment : Fragment? = null
                 //   activityDashboardBinding!!.toolbarCommon.imgRight.visibility = View.GONE
                 when (tab!!.position) {
-                    0 -> fragment = HomeFragment()
-                    1 -> fragment = JobRequestsFragment()
+                   /* 0 -> fragment = HomeFragment()
+                    1 -> fragment = JobRequestsFragment()*/
                 }
                 callFragments(fragment, supportFragmentManager, false, "send_data", "")
 
@@ -249,9 +257,9 @@ class DashboardActivity : BaseActivity(),
         val fragment = supportFragmentManager.findFragmentById(R.id.frame_layout)
         when (fragment) {
             is HomeFragment -> {
-                activityDashboardBinding!!.toolbarCommon.imgToolbarText.text =
+               /* activityDashboardBinding!!.toolbarCommon.imgToolbarText.text =
                     getString(R.string.home)
-                getString(R.string.calendar)
+                getString(R.string.calendar)*/
 
             }
         }
@@ -274,6 +282,16 @@ class DashboardActivity : BaseActivity(),
             .load(image)
             .placeholder(R.drawable.user)
             .into(activityDashboardBinding!!.icProfile)
+
+                val name = SharedPrefClass().getPrefValue(
+            MyApplication.instance.applicationContext,
+            getString(R.string.first_name)
+        )
+        if(TextUtils.isEmpty(name.toString()) || name.toString().equals("null")){
+            activityDashboardBinding!!.tvName.text = getString(R.string.create_profile)
+        }else{
+            activityDashboardBinding!!.tvName.text = name.toString()
+        }
 
     }
 

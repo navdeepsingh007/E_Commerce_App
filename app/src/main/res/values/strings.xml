@@ -292,4 +292,27 @@
     <string name="verification_code_msg">Please enter the code that has been sent to you at</string>
     <string name="otp_not_received_text">Didn\'t Received Code?</string>
     <string name="resend">Resend</string>
+
+    <string name="create_profile">Create Profile</string>
+    <string name="house_no">House No.</string>
+    <string name="city">City</string>
+    <string name="address_type">Address Type</string>
+
+    <string name="work">Work</string>
+    <string name="add_address">Add Address</string>
+    <string name="locations">Locations</string>
+    <string name="confirm_location_and_proceed">Confirm Location and Proceed</string>
+    <string name="your_address">Your Address</string>
+    <string name="select_address">Select Address</string>
+    <string name="enter_address_details">Enter address details</string>
+    <string name="warning_delete_address">Do you really want to delete this address?</string>
+    <string name="warning_default_address">Do you really want to make this to default address?</string>
+    <string name="address_management">Address Management</string>
+    <string name="search_saved_locations">Search Saved Locations</string>
+    <string name="select_location">Select Location</string>
+    <string name="saved_locations">Saved Locations</string>
+    <string name="add_a_location">Add A Location</string>
+    <string name="most_booked_services_in_this_week">Most booked services in this week</string>
+    <string name="trending_services">Trending Services</string>
+    <string name="sub_categories">Sub Categories</string>
 </resources>

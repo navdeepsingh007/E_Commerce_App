@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- <color name="colorPrimary">#0F3C75</color>-->
-    <color name="colorPrimary">#DB6589</color>
-    <color name="colorPrimaryDark">#DB6589</color>
+    <color name="colorPrimary">#FFAF10</color>
+    <color name="colorPrimaryDark">#FFAF10</color>
     <color name="colorAccent">#000000</color>
     <color name="colorWhite">#ffffff</color>
     <color name="colorWhite2">#F9F4F3</color>
-    <color name="colorGrey">#7B7C7C</color>
+    <color name="colorGrey">#9098B1</color>
     <color name="appBackgroundColor">#ffffff</color>
     <color name="colorGreyLight">#EDF0F0</color>
     <!--<color name="colorButton">#FF6871</color>-->
@@ -19,7 +19,7 @@
     <color name="colorGolden">#F1B922</color>
     <color name="colorGrey1">#D0D0D0</color>
     <color name="colorLightBlue">#1C9FEA</color>
-    <color name="orange_transparent">#98FC9A03</color>
+    <color name="orange_transparent">#00FC9A03</color>
     <color name="colorBlack">#000000</color>
     <color name="colorYellow">#dab45f</color>
     <color name="colorTransparentBlack">#99000000</color>
@@ -28,5 +28,7 @@
     <color name="tabSelection">#DB6589</color>
     <color name="btnBackground">#F75469</color>
     <color name="btnBackgroundWhite">#F8F8F8</color>
+    <color name="colorPrice">#1DBB2D</color>
+
 
 </resources>

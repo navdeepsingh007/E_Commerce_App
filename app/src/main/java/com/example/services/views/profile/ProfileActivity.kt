@@ -28,6 +28,7 @@ import com.example.services.model.LoginResponse
 import com.example.services.sharedpreference.SharedPrefClass
 import com.example.services.utils.*
 import com.example.services.viewmodels.profile.ProfileViewModel
+import com.example.services.views.address.AddAddressActivity
 import com.example.services.views.authentication.OTPVerificationActivity
 import com.google.gson.JsonObject
 import okhttp3.MultipartBody
@@ -60,16 +61,29 @@ class ProfileActivity : BaseActivity(), ChoiceCallBack {
         profileBinding.commonToolBar.imgRight.setImageResource(R.drawable.ic_nav_edit_icon)
         profileBinding.commonToolBar.imgToolbarText.text =
             resources.getString(R.string.view_profile)
+        val name = SharedPrefClass().getPrefValue(
+            MyApplication.instance.applicationContext,
+            getString(R.string.first_name)
+        )
+        if (TextUtils.isEmpty(name.toString()) || name.toString().equals("null")) {
+            makeEnableDisableViews(true)
+        } else {
+            makeEnableDisableViews(false)
+        }
 
-        makeEnableDisableViews(false)
+
         mJsonObject.addProperty(
             "id", "id"/* sharedPrefClass!!.getPrefValue(
                 MyApplication.instance,
                 GlobalConstants.USERID
             ).toString()*/
         )
-        startProgressDialog()
-        profieViewModel.getProfileDetail(mJsonObject)
+        if (UtilsFunctions.isNetworkConnected()) {
+            startProgressDialog()
+            profieViewModel.getProfileDetail(mJsonObject)
+        }
+
+
         profieViewModel.getDetail().observe(this,
             Observer<LoginResponse> { response->
                 stopProgressDialog()
@@ -78,17 +92,9 @@ class ProfileActivity : BaseActivity(), ChoiceCallBack {
                     when {
                         response.code == 200 -> {
                             profileBinding.profileModel = response.data
-                            /* val intent = Intent(this, OTPVerificationActivity::class.java)
-                             intent.putExtra("data", mJsonObject.toString())
-                             startActivity(intent)*/
-
                         }
-                        /* response.code == 204 -> {
-                             FirebaseFunctions.sendOTP("signup", mJsonObject, this)
-                         }*/
                         else -> showToastError(message)
                     }
-
                 }
             })
 
@@ -106,6 +112,12 @@ class ProfileActivity : BaseActivity(), ChoiceCallBack {
                                 GlobalConstants.USER_IAMGE,
                                 response.data!!.image
                             )
+                            SharedPrefClass().putObject(
+                                applicationContext,
+                                getString(R.string.first_name),
+                                response.data!!.firstName + " " + response.data!!.lastName
+                            )
+
                             makeEnableDisableViews(false)
                         }
                         else -> showToastError(message)
@@ -181,19 +193,19 @@ class ProfileActivity : BaseActivity(), ChoiceCallBack {
                                 val mHashMap = HashMap<String, RequestBody>()
                                 mHashMap["firstName"] = Utils(this).createPartFromString(fname)
                                 mHashMap["lastName"] = Utils(this).createPartFromString(lname)
-                               // mHashMap["user_type"] = Utils(this).createPartFromString("1")
-                              //  mHashMap["phone_number"] =Utils(this).createPartFromString(phonenumber)
-                               // mHashMap["country_code"] =Utils(this).createPartFromString(countrycode)
-                               // mHashMap["device_id"] = Utils(this).createPartFromString(androidId)
-                               // mHashMap["device_type"] =Utils(this).createPartFromString(GlobalConstants.PLATFORM)
+                                // mHashMap["user_type"] = Utils(this).createPartFromString("1")
+                                //  mHashMap["phone_number"] =Utils(this).createPartFromString(phonenumber)
+                                // mHashMap["country_code"] =Utils(this).createPartFromString(countrycode)
+                                // mHashMap["device_id"] = Utils(this).createPartFromString(androidId)
+                                // mHashMap["device_type"] =Utils(this).createPartFromString(GlobalConstants.PLATFORM)
                                 mHashMap["address"] = Utils(this).createPartFromString(address)
-                               // mHashMap["gender"] = Utils(this).createPartFromString("1")
-                              /*  mHashMap["notify_id"] = Utils(this).createPartFromString(
-                                    SharedPrefClass().getPrefValue(
-                                        MyApplication.instance,
-                                        GlobalConstants.NOTIFICATION_TOKEN
-                                    ) as String
-                                )*/
+                                // mHashMap["gender"] = Utils(this).createPartFromString("1")
+                                /*  mHashMap["notify_id"] = Utils(this).createPartFromString(
+                                      SharedPrefClass().getPrefValue(
+                                          MyApplication.instance,
+                                          GlobalConstants.NOTIFICATION_TOKEN
+                                      ) as String
+                                  )*/
                                 mHashMap["email"] = Utils(this).createPartFromString(email)
                                 //  mHashMap["password"] = Utils(this).createPartFromString(password)
                                 var userImage : MultipartBody.Part? = null
@@ -201,8 +213,11 @@ class ProfileActivity : BaseActivity(), ChoiceCallBack {
                                     val f1 = File(profileImage)
                                     userImage = Utils(this).prepareFilePart("profileImage", f1)
                                 }
-                                startProgressDialog()
-                                profieViewModel.updateProfile(mHashMap, userImage)
+                                if (UtilsFunctions.isNetworkConnected()) {
+                                    startProgressDialog()
+                                    profieViewModel.updateProfile(mHashMap, userImage)
+                                }
+
                             }
                         }
 

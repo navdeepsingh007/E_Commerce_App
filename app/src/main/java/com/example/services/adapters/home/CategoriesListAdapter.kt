@@ -7,25 +7,25 @@ import android.view.ViewGroup
 import androidx.annotation.NonNull
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.services.R
-import com.example.services.databinding.CategoryItemBiniding
-import com.example.services.model.home.JobsResponse
+import com.example.services.databinding.CategoryItemBinding
 import com.example.services.views.home.HomeFragment
 import kotlin.collections.ArrayList
 
-class MyJobsListAdapter(
+class CategoriesListAdapter(
     context : HomeFragment,
-    addressList : ArrayList<JobsResponse.Data>,
+    addressList : ArrayList<com.example.services.viewmodels.home.Service>,
     var activity : Context
 ) :
-    RecyclerView.Adapter<MyJobsListAdapter.ViewHolder>() {
+    RecyclerView.Adapter<CategoriesListAdapter.ViewHolder>() {
     private val mContext : HomeFragment
     private var viewHolder : ViewHolder? = null
-    private var jobsList : ArrayList<JobsResponse.Data>
+    private var categoriesList : ArrayList<com.example.services.viewmodels.home.Service>
 
     init {
         this.mContext = context
-        this.jobsList = addressList
+        this.categoriesList = addressList
     }
 
     @NonNull
@@ -35,18 +35,22 @@ class MyJobsListAdapter(
             R.layout.category_item,
             parent,
             false
-        ) as CategoryItemBiniding
-        return ViewHolder(binding.root, viewType, binding, mContext, jobsList)
+        ) as CategoryItemBinding
+        return ViewHolder(binding.root, viewType, binding, mContext, categoriesList)
     }
 
     override fun onBindViewHolder(@NonNull holder : ViewHolder, position : Int) {
         viewHolder = holder
-       // holder.binding!!.tvFromLocationName.text = jobsList[position].from_location
-
+       holder.binding!!.catHeader.setText(categoriesList[position].name)
+       // holder.binding!!.catDes.text(categoriesList[position].)
+        Glide.with(mContext)
+            .load(categoriesList[position].icon)
+            .placeholder(R.drawable.ic_category)
+            .into( holder.binding.catImg)
     }
 
     override fun getItemCount() : Int {
-        return 5//jobsList.count()
+        return categoriesList.count()
     }
 
     inner class ViewHolder//This constructor would switch what to findViewBy according to the type of viewType
@@ -54,7 +58,7 @@ class MyJobsListAdapter(
         v : View, val viewType : Int, //These are the general elements in the RecyclerView
         val binding : CategoryItemBinding?,
         mContext : HomeFragment,
-        addressList : ArrayList<JobsResponse.Data>?
+        addressList : ArrayList<com.example.services.viewmodels.home.Service>?
     ) : RecyclerView.ViewHolder(v) {
         /*init {
             binding.linAddress.setOnClickListener {

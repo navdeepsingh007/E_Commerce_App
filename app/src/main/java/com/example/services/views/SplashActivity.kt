@@ -10,8 +10,11 @@ import com.example.services.databinding.ActivitySplashBinding
 import com.example.services.sharedpreference.SharedPrefClass
 import com.example.services.socket.TrackingActivity
 import com.example.services.utils.BaseActivity
+import com.example.services.views.address.AddAddressActivity
 import com.example.services.views.authentication.LoginActivity
 import com.example.services.views.home.DashboardActivity
+import com.example.services.views.subcategories.ServicesListActivity
+import com.example.services.views.subcategories.SubCategoriesActivity
 import com.google.gson.JsonObject
 import java.util.*
 
@@ -83,6 +86,7 @@ class SplashActivity : BaseActivity() {
                 //startActivity(intent)
             } else {
                 Intent(this, DashboardActivity::class.java)
+               // Intent(this, SubCategoriesActivity::class.java)
             }
 
         } else {

@@ -58,14 +58,14 @@ interface ApiInterface {
     @GET("notification/driver/getList")
     fun getNotificationList() : Call<JsonObject>
 
-    @DELETE("notification/driver/clearAll")
-    fun clearAllNotification() : Call<JsonObject>
+    @DELETE("mobile/address/delete")
+    fun deleteAddress(@Query("addressId") addressId : String) : Call<JsonObject>
 
     @GET("vendor/getVendorList")
     fun getVendorList() : Call<JsonObject>
 
-    @GET("job/getDriverJob")
-    fun getJobs(@Query("acceptStatus") userId : String) : Call<JsonObject>
+    @GET("mobile/services/getcategories")
+    fun getCategories() : Call<JsonObject>
 
     @GET("job/driver/jobsHistory")
     fun getJobsHistory(@Query("progressStatus") userId : String) : Call<JsonObject>
@@ -76,6 +76,19 @@ interface ApiInterface {
     @POST("job/driver/acceptRejectJob")
     fun acceptRejectJob(@Body mJsonObject : JsonObject) : Call<JsonObject>
 
+    @POST("mobile/address/add")
+    fun addAddress(@Body mJsonObject : JsonObject) : Call<JsonObject>
+
+    @PUT("mobile/address/update")
+    fun updateAddress(@Body mJsonObject : JsonObject) : Call<JsonObject>
+
+    @GET("mobile/address/list")
+    fun getAddressList() : Call<JsonObject>
+
+
+
+//    {id}
+//service_id
     @Multipart
     @POST("fuel/addFuel")
     fun callAddFuelEntry(
@@ -89,5 +102,13 @@ interface ApiInterface {
         @PartMap mHashMap : HashMap<String,
                 RequestBody>, @Part image : MultipartBody.Part?
     ) : Call<JsonObject>
+
+    @POST("mobile/services/getsubcategories")
+    fun getSubCatList(@Body mJsonObject : JsonObject) : Call<JsonObject>
+
+    @POST("mobile/services/getservices")
+    fun getServices(@Body mJsonObject : JsonObject) : Call<JsonObject>
+    @POST("mobile/services/addToCart")
+    fun addCart(@Body mJsonObject : JsonObject) : Call<JsonObject>
 
 }

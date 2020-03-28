@@ -39,12 +39,27 @@
             android:theme="@style/AppTheme.NoActionBar"
             tools:ignore="GoogleAppIndexingWarning"
             tools:targetApi="n">
-<!--        <activity android:name=".views.notifications.NotificationsListActivity"></activity>-->
-<!--        <activity android:name=".views.home.JobsHistoryActivity" />-->
-<!--        <activity android:name=".views.services.UpdateServiceActivity" />-->
-<!--        <activity android:name=".views.services.ServicesListActivity" />-->
-<!--        <activity android:name=".views.fuel.FuelEntryList" />-->
-<!--        <activity android:name=".views.fuel.AddFuelDetailActivity" />-->
+        <activity
+                android:name=".views.subcategories.SubCategoriesActivity"
+                android:launchMode="singleTop"
+                android:screenOrientation="portrait"></activity>
+        <activity
+                android:name=".views.subcategories.ServicesListActivity"
+                android:launchMode="singleTop"
+                android:screenOrientation="portrait"></activity>
+        <activity
+                android:name=".views.address.AddressListActivity"
+                android:launchMode="singleTop"
+                android:screenOrientation="portrait"></activity>
+        <activity
+                android:name=".views.address.AddAddressActivity"
+                android:launchMode="singleTop"
+                android:screenOrientation="portrait"></activity> <!-- <activity android:name=".views.notifications.NotificationsListActivity"></activity> -->
+        <!-- <activity android:name=".views.home.JobsHistoryActivity" /> -->
+        <!-- <activity android:name=".views.services.UpdateServiceActivity" /> -->
+        <!-- <activity android:name=".views.services.ServicesListActivity" /> -->
+        <!-- <activity android:name=".views.fuel.FuelEntryList" /> -->
+        <!-- <activity android:name=".views.fuel.AddFuelDetailActivity" /> -->
         <activity android:name=".views.profile.ProfileActivity" />
 
         <provider
@@ -126,7 +141,6 @@
         <meta-data
                 android:name="com.google.android.geo.API_KEY"
                 android:value="AIzaSyA7Zj-PTZm4sDG-eoiLPA-XohvgxBe95wU" />
-        <!--AIzaSyD2-RDPo0jssFqwwTXr6NDpOFzQTcIc3dI-->
     </application>
 
 </manifest>

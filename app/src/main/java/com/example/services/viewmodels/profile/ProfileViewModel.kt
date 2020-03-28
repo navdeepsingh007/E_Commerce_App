@@ -13,23 +13,26 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 
 class ProfileViewModel : BaseViewModel() {
-    private var data : MutableLiveData<LoginResponse>? = null
+    private var data = MutableLiveData<LoginResponse>()
     private var profileDetail = MutableLiveData<LoginResponse>()
     private var profileRepository = ProfileRepository()
     private val mIsUpdating = MutableLiveData<Boolean>()
     private val btnClick = MutableLiveData<String>()
 
     init {
-        profileDetail = profileRepository.getUserProfile(null)
-        data = profileRepository.updateUserProfile(null, null)
+        if (UtilsFunctions.isNetworkConnectedWithoutToast()) {
+            profileDetail = profileRepository.getUserProfile(null)
+            data = profileRepository.updateUserProfile(null, null)
+        }
+
     }
 
     fun getDetail() : LiveData<LoginResponse> {
-        return profileDetail!!
+        return profileDetail
     }
 
     fun getUpdateDetail() : LiveData<LoginResponse> {
-        return data!!
+            return data
     }
 
     override fun isLoading() : LiveData<Boolean> {
