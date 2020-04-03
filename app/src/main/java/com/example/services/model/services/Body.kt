@@ -10,5 +10,5 @@ data class Body (
 	val thumbnail : String,
 	val type : String,
 	val rating : Int,
-	val favorite : Boolean
+	var favorite : String
 )

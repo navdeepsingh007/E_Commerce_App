@@ -138,7 +138,7 @@
                         android:textAllCaps="true"
                         android:visibility="@{resendOTP==0}"
                         android:onClick="@{(v) -> verifViewModel.clickListener(v)}"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/btnBackground"
                         android:textSize="@dimen/sp_14"
                         app:font="@{`bold`}"
                         tools:ignore="MissingConstraints"

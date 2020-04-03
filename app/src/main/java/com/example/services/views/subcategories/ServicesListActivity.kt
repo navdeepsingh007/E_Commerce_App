@@ -1,5 +1,6 @@
 package com.example.services.views.subcategories
 
+import android.content.Intent
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -8,15 +9,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.services.R
 import com.example.services.common.UtilsFunctions
-import com.example.services.constants.GlobalConstants
 import com.example.services.utils.BaseActivity
 import com.example.services.databinding.ActivitySubCategoriesBinding
 import com.example.services.model.CommonModel
-import com.example.services.model.address.AddressListResponse
-import com.example.services.model.address.AddressResponse
 import com.example.services.model.services.Body
 import com.example.services.model.services.ServicesListResponse
-import com.example.services.sharedpreference.SharedPrefClass
 import com.example.services.viewmodels.services.ServicesViewModel
 import com.google.gson.JsonObject
 import com.uniongoods.adapters.ServicesListAdapter
@@ -27,6 +24,8 @@ class ServicesListActivity : BaseActivity() {
     private var serVicesList = ArrayList<Body>()
     var catId = ""
     var subCatId = ""
+    var pos = 0
+    var servicesListAdapter : ServicesListAdapter? = null
     override fun getLayoutId() : Int {
         return R.layout.activity_sub_categories
     }
@@ -43,7 +42,7 @@ class ServicesListActivity : BaseActivity() {
         catId = intent.extras?.get("catId").toString()
         subCatId = intent.extras?.get("subCatId").toString()
         initRecyclerView()
-        var serviceObject = JsonObject()
+        val serviceObject = JsonObject()
         serviceObject.addProperty(
             "category", catId
         )
@@ -94,26 +93,37 @@ class ServicesListActivity : BaseActivity() {
                 }
             })
 
+        servicesViewModel.addRemovefavRes().observe(this,
+            Observer<CommonModel> { response->
+                stopProgressDialog()
+                if (response != null) {
+                    val message = response.message
+                    when {
+                        response.code == 200 -> {
+                            if (serVicesList[pos].favorite.equals("false")) {
+                                serVicesList[pos].favorite = "true"
+                            } else {
+                                serVicesList[pos].favorite = "false"
+                            }
+                            servicesListAdapter?.notifyDataSetChanged()
+                            // servicesViewModel.getServices(serviceObject)
+                        }
+                        else -> message?.let {
+                            UtilsFunctions.showToastError(it)
+                        }
+                    }
+
+                }
+            })
+
     }
 
     private fun initRecyclerView() {
-        val myJobsListAdapter = ServicesListAdapter(this, serVicesList, this)
-        val linearLayoutManager = LinearLayoutManager(this)
+        servicesListAdapter = ServicesListAdapter(this, serVicesList, this)
         val gridLayoutManager = GridLayoutManager(this, 2)
-        /* gridLayoutManager.setSpanSizeLookup(object : GridLayoutManager.SpanSizeLookup() {
-
-             override fun getSpanSize(position: Int): Int {
-                 return if (position == 16) { // totalRowCount : How many item you want to show
-                     2 // the item in position now takes up 4 spans
-                 } else 1
-             }
-         })*/
-
         categoriesBinding.rvSubcategories.layoutManager = gridLayoutManager
         categoriesBinding.rvSubcategories.setHasFixedSize(true)
-        //linearLayoutManager.orientation = RecyclerView.VERTICAL
-        //categoriesBinding.rvSubcategories.layoutManager = linearLayoutManager
-        categoriesBinding.rvSubcategories.adapter = myJobsListAdapter
+        categoriesBinding.rvSubcategories.adapter = servicesListAdapter
         categoriesBinding.rvSubcategories.addOnScrollListener(object :
             RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView : RecyclerView, dx : Int, dy : Int) {
@@ -123,21 +133,52 @@ class ServicesListActivity : BaseActivity() {
     }
 
     fun addRemoveToCart(position : Int, addRemove : String) {
+        var isCart = "false"
         var cartObject = JsonObject()
         cartObject.addProperty(
-            "service_id", serVicesList[position].id
+            "serviceId", serVicesList[position].id
         )
+
+        if (addRemove.equals(getString(R.string.add))) {
+            isCart = "true"
+        } else {
+            isCart = "false"
+        }
         cartObject.addProperty(
-            "price", serVicesList[position].price.toString()
-        )
-        cartObject.addProperty(
-            "user_id", SharedPrefClass()!!.getPrefValue(this, GlobalConstants.USERID).toString()
+            "status", isCart
         )
         if (UtilsFunctions.isNetworkConnected()) {
             servicesViewModel.addRemoveCart(cartObject)
             startProgressDialog()
         }
+    }
 
+    fun addRemovefav(position : Int, addRemove : String) {
+        var isCart = "false"
+        pos = position
+        var cartObject = JsonObject()
+        cartObject.addProperty(
+            "serviceId", serVicesList[position].id
+        )
+        if (serVicesList[position].favorite.equals("false")) {
+            isCart = "true"
+        } else {
+            isCart = "false"
+        }
+        cartObject.addProperty(
+            "status", isCart
+        )
+        if (UtilsFunctions.isNetworkConnected()) {
+            servicesViewModel.addRemoveFav(cartObject)
+            startProgressDialog()
+        }
+
+    }
+
+    fun callServiceDetail(serviceId : String) {
+        val intent = Intent(this, ServiceDetailActivity::class.java)
+        intent.putExtra("serviceId", serviceId)
+        startActivity(intent)
     }
 
 }

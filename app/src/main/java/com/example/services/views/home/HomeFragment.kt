@@ -34,6 +34,7 @@ import com.example.services.utils.DialogClass
 import com.example.services.viewmodels.home.CategoriesListResponse
 import com.example.services.viewmodels.home.HomeViewModel
 import com.example.services.views.profile.ProfileActivity
+import com.example.services.views.subcategories.ServicesListActivity
 import com.example.services.views.subcategories.SubCategoriesActivity
 import com.google.android.gms.location.*
 import com.google.gson.JsonObject
@@ -44,7 +45,7 @@ import com.uniongoods.adapters.TrendingServiceListAdapter
 import org.json.JSONObject
 
 class
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          HomeFragment : BaseFragment(), SocketInterface {
+HomeFragment : BaseFragment(), SocketInterface {
     private var mFusedLocationClass : FusedLocationClass? = null
     private var socket = SocketClass.socket
     private var categoriesList = ArrayList<com.example.services.viewmodels.home.Service>()
@@ -92,7 +93,7 @@ class
         )
         // initRecyclerView()
         if (UtilsFunctions.isNetworkConnected()) {
-             //categoriesList = homeRepository.getCategories("")
+            //categoriesList = homeRepository.getCategories("")
             baseActivity.startProgressDialog()
         }
         homeViewModel.getJobs().observe(this,
@@ -108,20 +109,19 @@ class
                             fragmentHomeBinding.rvJobs.visibility = View.VISIBLE
 
                             initRecyclerView()
-                            if (trendingServiceList.size > 0){
-                                fragmentHomeBinding.trendingLayout.visibility=View.VISIBLE
+                            if (trendingServiceList.size > 0) {
+                                fragmentHomeBinding.trendingLayout.visibility = View.VISIBLE
                                 trendingServiceListViewPager()
-                            }else{
-                                fragmentHomeBinding.trendingLayout.visibility=View.GONE
+                            } else {
+                                fragmentHomeBinding.trendingLayout.visibility = View.GONE
                             }
 
-                            if (offersList.size > 0){
-                                fragmentHomeBinding.offersLayout.visibility=View.VISIBLE
+                            if (offersList.size > 0) {
+                                fragmentHomeBinding.offersLayout.visibility = View.VISIBLE
                                 offerListViewPager()
-                            }else{
-                                fragmentHomeBinding.offersLayout.visibility=View.GONE
+                            } else {
+                                fragmentHomeBinding.offersLayout.visibility = View.GONE
                             }
-
 
                         }
                         else -> message?.let {
@@ -133,16 +133,19 @@ class
                 }
             })
 
-        fragmentHomeBinding.gridview.onItemClickListener = AdapterView.OnItemClickListener { parent, v, position, id ->
-            showToastSuccess(" Clicked Position: " + (position + 1))
-            if(categoriesList[position].isService.equals("false")){
-                val intent = Intent(activity!!, SubCategoriesActivity::class.java)
-                intent.putExtra("catId",categoriesList[position].id)
-                startActivity(intent)
+        fragmentHomeBinding.gridview.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, v, position, id->
+                showToastSuccess(" Clicked Position: " + (position + 1))
+                if (categoriesList[position].isService.equals("false")) {
+                    val intent = Intent(activity!!, SubCategoriesActivity::class.java)
+                    intent.putExtra("catId", categoriesList[position].id)
+                    startActivity(intent)
+                } else {
+                    val intent = Intent(activity!!, ServicesListActivity::class.java)
+                    intent.putExtra("catId", categoriesList[position].id)
+                    startActivity(intent)
+                }
             }
-        }
-
-
     }
 
     private fun callSocketMethods(methodName : String) {

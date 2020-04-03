@@ -1,6 +1,7 @@
 package com.uniongoods.adapters
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.services.R
 import com.example.services.databinding.CategoryItemBinding
 import com.example.services.views.home.HomeFragment
+import com.example.services.views.subcategories.ServiceDetailActivity
 import kotlinx.android.synthetic.main.trending_service_item.view.*
 import kotlin.collections.ArrayList
 
@@ -52,6 +54,12 @@ class TrendingServiceListAdapter(
             .apply(RequestOptions.bitmapTransform(RoundedCorners(20)))
             .placeholder(R.drawable.ic_category)
             .into(view.img_service!!)
+
+        view.trending_item.setOnClickListener {
+            val intent = Intent(activity, ServiceDetailActivity::class.java)
+            intent.putExtra("serviceId", categoriesList[position].id)
+            mContext.startActivity(intent)
+        }
         val vp = container as ViewPager
         vp.addView(view, 0)
         return view

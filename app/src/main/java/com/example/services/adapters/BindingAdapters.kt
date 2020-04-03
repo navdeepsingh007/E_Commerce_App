@@ -13,6 +13,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.example.services.R
 import com.example.services.application.MyApplication
 import com.example.services.common.UtilsFunctions
@@ -24,7 +26,7 @@ object BindingAdapters {
     @BindingAdapter("android:src")
     @JvmStatic
     fun setImageViewResource(imageView: ImageView, resource: String) {
-        var drawable1 = MyApplication.instance.resources.getDrawable(R.drawable.ic_dummy_image)
+        var drawable1 = MyApplication.instance.resources.getDrawable(R.drawable.ic_category)
 
         if (resource.contains("set_default")) {
             drawable1 = try {
@@ -34,12 +36,13 @@ object BindingAdapters {
                 MyApplication.instance.resources.getDrawable(id)
 
             } catch (e: Exception) {
-                MyApplication.instance.resources.getDrawable(R.drawable.ic_dummy_image)
+                MyApplication.instance.resources.getDrawable(R.drawable.ic_category)
             }
 
         }
         Glide.with(imageView.context)
             .load(resource)
+            .apply(RequestOptions.bitmapTransform(RoundedCorners(20)))
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .placeholder(drawable1)
             .into(imageView)

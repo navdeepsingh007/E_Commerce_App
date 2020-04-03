@@ -85,9 +85,14 @@ interface ApiInterface {
     @GET("mobile/address/list")
     fun getAddressList() : Call<JsonObject>
 
+    @GET("mobile/services/getcart")
+    fun cartList(/*@Path("id") id : String*/) : Call<JsonObject>
+
+    @GET("mobile/services/getFavorite")
+    fun favList(/*@Path("id") id : String*/) : Call<JsonObject>
 
 
-//    {id}
+    //    {id}
 //service_id
     @Multipart
     @POST("fuel/addFuel")
@@ -108,7 +113,21 @@ interface ApiInterface {
 
     @POST("mobile/services/getservices")
     fun getServices(@Body mJsonObject : JsonObject) : Call<JsonObject>
+
     @POST("mobile/services/addToCart")
     fun addCart(@Body mJsonObject : JsonObject) : Call<JsonObject>
+
+    @POST("mobile/services/addFavorite")
+    fun addFav(@Body mJsonObject : JsonObject) : Call<JsonObject>
+
+    @POST("mobile/services/getTimeSlot")
+    fun getTimeSlots(@Body mJsonObject : JsonObject) : Call<JsonObject>
+
+    @GET("mobile/services/getDates")
+    fun getDateSlots() : Call<JsonObject>
+
+
+    @GET("mobile/services/getServicesDetails/{id}")
+    fun getServiceDetail(@Path("id") id : String) : Call<JsonObject>
 
 }

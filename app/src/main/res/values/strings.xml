@@ -34,7 +34,7 @@
     <string name="reset_password">Reset Password</string>
     <string name="service">Service</string>
     <string name="welcome">Welcome</string>
-    <string name="services">Services</string>
+
     <string name="auto_checkin">Auto Checkin</string>
     <string name="booking_alert">Booking Alert</string>
     <string name="other_alert">Other Alert</string>
@@ -241,6 +241,7 @@
     <string name="select_vehicle">Select Vehicle</string>
     <string name="odometer">Odometer</string>
     <string name="price">Price</string>
+    <string name="price_colon">Price: </string>
     <string name="invoice_number">Invoice Number</string>
     <string name="partial_fuel_up">Partial Fuel Up</string>
     <string name="fuel_entry">Fuel Entry</string>
@@ -315,4 +316,25 @@
     <string name="most_booked_services_in_this_week">Most booked services in this week</string>
     <string name="trending_services">Trending Services</string>
     <string name="sub_categories">Sub Categories</string>
+    <string name="offers">Offers</string>
+    <string name="add">Add</string>
+    <string name="remove">Remove</string>
+    <string name="add_to_cart">Add To Cart</string>
+    <string name="remove_to_cart">Remove From Cart</string>
+    <string name="services">Services</string>
+    <string name="services_detail">Services details</string>
+    <string name="cart">Cart</string>
+    <string name="favorite">Favorites</string>
+    <string name="warning_remove_cart">Do you really want to remove item?</string>
+    <string name="warning_remove_fav">Do you really want to remove item?</string>
+    <string name="no_time_slots_available">No Time Slots Available</string>
+    <string name="no_date_slots_available">No Date Slots Available</string>
+    <string name="when_do_you_want_this_service">When do you want this Service</string>
+    <string name="select_time">Please Select Time</string>
+    <string name="visit_shop">Visit Shop</string>
+    <string name="at_home">At Home</string>
+    <string name="quantity">Quantity</string>
+    <string name="checkout">Checkout</string>
+    <string name="items">Item(s)</string>
+    <string name="select_quantity_msg">Please select Quantity</string>
 </resources>

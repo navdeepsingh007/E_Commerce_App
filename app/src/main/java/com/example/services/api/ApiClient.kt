@@ -50,6 +50,8 @@ object ApiClient {
                 GlobalConstants.ACCESS_TOKEN
             ).toString()
         }
+
+
         val httpClient = OkHttpClient.Builder()
         //.connectTimeout(1, TimeUnit.MINUTES)
         // .readTimeout(1, TimeUnit.MINUTES)
@@ -58,6 +60,16 @@ object ApiClient {
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
 
+        val isLogin = sharedPrefClass.getPrefValue(
+            MyApplication.instance,
+            "isLogin"
+        ).toString()
+        if (!TextUtils.isEmpty(mAuthToken) && mAuthToken.equals("session_token")) {
+            mAuthToken = ""
+        }
+        if(isLogin == "false"){
+            mAuthToken = ""
+        }
       /*  mAuthToken =
             "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZV9udW1iZXIiOiI5NTMwNjA2MDA2IiwiY291bnRyeV9jb2RlIjoiKzkxIiwidHlwZSI6MiwiaWQiOjEsImlhdCI6MTU4NDAwODAyOSwiZXhwIjoxNTg0MTgwODI5fQ.hSkvHRBHlHlwf1Drg2dtPaMamRg27aI48H4ZOgWTilY"*/
         if (!TextUtils.isEmpty(mAuthToken)) {

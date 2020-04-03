@@ -178,7 +178,7 @@
                         tools:ignore="RtlSymmetry" />
 
                 <TextView
-                        android:id="@+id/tv_nav_services"
+                        android:id="@+id/tv_nav_cart"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp_1"
@@ -188,7 +188,7 @@
                         android:paddingLeft="@dimen/dp_10"
                         android:paddingTop="@dimen/dp_12"
                         android:paddingBottom="@dimen/dp_5"
-                        android:text="@string/services"
+                        android:text="@string/cart"
                         android:textAllCaps="true"
                         android:textColor="@color/colorBlack"
                         android:textSize="@dimen/sp_18"
@@ -196,7 +196,7 @@
                         tools:ignore="RtlSymmetry" />
 
                 <TextView
-                        android:id="@+id/tv_nav_history"
+                        android:id="@+id/tv_nav_fav"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp_20"
@@ -205,7 +205,7 @@
                         android:paddingStart="@dimen/dp_10"
                         android:paddingLeft="@dimen/dp_10"
                         android:paddingBottom="@dimen/dp_5"
-                        android:text="@string/job_history"
+                        android:text="@string/favorite"
                         android:textAllCaps="true"
                         android:textColor="@color/colorBlack"
                         android:textSize="@dimen/sp_18"

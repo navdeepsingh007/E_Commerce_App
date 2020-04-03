@@ -48,7 +48,7 @@
                         android:layout_gravity="center"
                         android:layout_marginLeft="@dimen/dp_10"
                         android:layout_marginRight="@dimen/dp_10"
-                        android:src="@drawable/ic_homee"
+                        android:src="@drawable/ic_delete_address"
                         android:visibility="visible" />
 
                 <RadioButton

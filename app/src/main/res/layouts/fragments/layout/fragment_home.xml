@@ -75,7 +75,7 @@
                     android:layout_height="220dp"
                     android:horizontalSpacing="@dimen/dp_2"
                     android:numColumns="4"
-                    android:background="@drawable/shape_round_corner"
+                    android:background="@color/colorWhite"
                     android:padding="@dimen/dp_5"
                     android:elevation="@dimen/dp_5"
                     android:verticalSpacing="@dimen/dp_2" />
@@ -95,7 +95,7 @@
                     android:layout_below="@+id/gridview"
                     android:orientation="vertical"
                     android:elevation="@dimen/dp_5"
-                    android:background="@drawable/shape_round_corner"
+                    android:background="@color/colorWhite"
                     android:padding="@dimen/dp_5">
 
                 <TextView
@@ -140,11 +140,10 @@
                     android:layout_below="@+id/trending_layout"
                     android:orientation="vertical"
                     android:elevation="@dimen/dp_5"
-                    android:background="@drawable/shape_round_corner"
+                    android:background="@color/colorWhite"
                     android:padding="@dimen/dp_5">
 
                 <TextView
-
                         android:id="@+id/tv_offers_heading"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

@@ -27,6 +27,8 @@ import com.example.services.utils.DialogssInterface
 import com.example.services.views.address.AddAddressActivity
 import com.example.services.views.address.AddressListActivity
 import com.example.services.views.authentication.LoginActivity
+import com.example.services.views.cart.CartListActivity
+import com.example.services.views.favorite.FavoriteListActivity
 import com.example.services.views.profile.ProfileActivity
 import com.example.services.views.settings.MyAccountsActivity
 import com.google.android.material.navigation.NavigationView
@@ -95,9 +97,9 @@ class DashboardActivity : BaseActivity(),
             this, Observer<String>(function =
             fun(it : String?) {
                 when (it) {
-                    "img_right" -> {
-                        /*val intent = Intent(this, NotificationsListActivity::class.java)
-                        startActivity(intent)*/
+                    "tv_nav_fav" -> {
+                        val intent = Intent(this, FavoriteListActivity::class.java)
+                        startActivity(intent)
                     }
                     "tv_nav_notification" -> {
                      /*   val intent = Intent(this, NotificationsListActivity::class.java)
@@ -107,9 +109,9 @@ class DashboardActivity : BaseActivity(),
                         val intent = Intent(this, AddressListActivity::class.java)
                         startActivity(intent)
                     }
-                    "tv_nav_services" -> {
-                       /* val intent = Intent(this, ServicesListActivity::class.java)
-                        startActivity(intent)*/
+                    "tv_nav_cart" -> {
+                        val intent = Intent(this, CartListActivity::class.java)
+                        startActivity(intent)
                     }
                     "tv_nav_home" -> {
                         activityDashboardBinding!!.toolbarCommon.imgRight.visibility = View.VISIBLE

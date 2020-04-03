@@ -57,11 +57,22 @@ class ServicesListAdapter(
             .placeholder(R.drawable.ic_category)
             .into(holder.binding.imgCat)
 
-
+        if (addressList[position].favorite.equals("false")) {
+            holder.binding.imgFavourite.setImageResource(R.drawable.ic_unfavorite)
+        } else {
+            holder.binding.imgFavourite.setImageResource(R.drawable.ic_favorite)
+        }
 
         //img_cat
         holder.binding!!.tvAdd.setOnClickListener {
             mContext.addRemoveToCart(position, holder.binding!!.tvAdd.getText().toString())
+        }
+        //img_cat
+        holder.binding!!.serviceItem.setOnClickListener {
+            mContext.callServiceDetail(addressList[position].id)
+        }
+        holder.binding!!.imgFavourite.setOnClickListener {
+            mContext.addRemovefav(position, holder.binding!!.tvAdd.getText().toString())
         }
 
 

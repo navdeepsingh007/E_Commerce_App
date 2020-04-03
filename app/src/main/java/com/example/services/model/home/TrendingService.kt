@@ -1,7 +1,7 @@
 package com.example.services.viewmodels.home
 
 data class TrendingService(
-    val id: Int,
+    val id: String,
     val name: String,
     val thumbnail: String
 )
