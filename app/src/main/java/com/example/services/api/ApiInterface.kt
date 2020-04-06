@@ -126,6 +126,14 @@ interface ApiInterface {
     @GET("mobile/services/getDates")
     fun getDateSlots() : Call<JsonObject>
 
+    @GET("mobile/coupan/getPromoList")
+    fun getPromoList() : Call<JsonObject>
+
+    @POST("mobile/coupan/addCoupan")
+    fun applyCoupon(@Body mJsonObject : JsonObject) : Call<JsonObject>
+
+    @POST("mobile/coupan/removeCoupan")
+    fun removeCoupon(@Body mJsonObject : JsonObject) : Call<JsonObject>
 
     @GET("mobile/services/getServicesDetails/{id}")
     fun getServiceDetail(@Path("id") id : String) : Call<JsonObject>

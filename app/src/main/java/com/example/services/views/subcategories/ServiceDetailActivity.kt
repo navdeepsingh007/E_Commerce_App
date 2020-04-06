@@ -265,6 +265,7 @@ class ServiceDetailActivity : BaseActivity() {
                             dateList[i].selected = "false"
                             i++
                         }
+                        selectedTime = ""
                         serviceDetailBinding.tvTotalPrice.setText("0")
                         dateSlotsAdapter?.notifyDataSetChanged()
                         serviceDetailBinding.llSlots.visibility = View.VISIBLE
@@ -282,7 +283,7 @@ class ServiceDetailActivity : BaseActivity() {
                         serviceDetailBinding.AddCart.isEnabled = false
                     } else {
                         //remove from cart
-                        callAddRemoveCartApi()
+                            callAddRemoveCartApi()
                     }
 
 
@@ -318,7 +319,12 @@ class ServiceDetailActivity : BaseActivity() {
                     callGetTimeSlotsApi()
                 }
                 "btnSubmit" -> {
-                    callAddRemoveCartApi()
+                    if (TextUtils.isEmpty(selectedTime)) {
+                        showToastError(getString(R.string.select_time_slot_msg))
+                    } else {
+                        callAddRemoveCartApi()
+                    }
+
                 }
                 "img_add_favorite" -> {
                     addRemovefav()

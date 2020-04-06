@@ -154,7 +154,7 @@
     <string name="ok">OK</string>
     <string name="completed">Completed</string>
     <string name="voucher_title">You have service voucher for guest avaialble, Would you like to apply same?</string>
-    <string name="apply_voucher">Apply Voucher</string>
+
     <string name="book_for_self_guest"> Self and Guest</string>
     <string name="self">Self</string>
     <string name="booking_for">Booking For : &#160; </string>
@@ -283,8 +283,6 @@
     <string name="warning_reject_job">Do you really want to reject this job?</string>
 
 
-
-
     <string name="hello">Hello</string>
     <string name="verify">Verify</string>
     <string name="enter_your_moble_number">Enter Your Moble Number</string>
@@ -326,6 +324,7 @@
     <string name="cart">Cart</string>
     <string name="favorite">Favorites</string>
     <string name="warning_remove_cart">Do you really want to remove item?</string>
+    <string name="warning_remove_coupon">Do you really want to remove this discount coupon?</string>
     <string name="warning_remove_fav">Do you really want to remove item?</string>
     <string name="no_time_slots_available">No Time Slots Available</string>
     <string name="no_date_slots_available">No Date Slots Available</string>
@@ -337,4 +336,7 @@
     <string name="checkout">Checkout</string>
     <string name="items">Item(s)</string>
     <string name="select_quantity_msg">Please select Quantity</string>
+    <string name="apply">Apply</string>
+    <string name="promo_code">Promo Codes</string>
+    <string name="apply_coupon">Apply Coupon</string>
 </resources>

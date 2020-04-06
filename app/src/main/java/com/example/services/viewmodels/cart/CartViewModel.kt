@@ -31,7 +31,7 @@ class CartViewModel : BaseViewModel() {
     }
 
     fun getCartListRes() : LiveData<CartListResponse> {
-        return cartList!!
+        return cartList
     }
 
 
@@ -54,7 +54,7 @@ class CartViewModel : BaseViewModel() {
         }
     }*/
 
-    fun getcartList(mJsonObject : String) {
+    fun getCartList() {
         if (UtilsFunctions.isNetworkConnected()) {
             cartList = cartRepository.cartList()
             mIsUpdating.postValue(true)
