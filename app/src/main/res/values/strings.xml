@@ -325,6 +325,7 @@
     <string name="favorite">Favorites</string>
     <string name="warning_remove_cart">Do you really want to remove item?</string>
     <string name="warning_remove_coupon">Do you really want to remove this discount coupon?</string>
+    <string name="select_address_type">Please select where you want the service </string>
     <string name="warning_remove_fav">Do you really want to remove item?</string>
     <string name="no_time_slots_available">No Time Slots Available</string>
     <string name="no_date_slots_available">No Date Slots Available</string>
@@ -338,5 +339,7 @@
     <string name="select_quantity_msg">Please select Quantity</string>
     <string name="apply">Apply</string>
     <string name="promo_code">Promo Codes</string>
+    <string name="pay_now">Pay Now</string>
     <string name="apply_coupon">Apply Coupon</string>
+    <string name="add_address_msg">Please add address in Address Management Section</string>
 </resources>

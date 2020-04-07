@@ -18,6 +18,7 @@ import com.example.services.model.LoginResponse
 import com.example.services.sharedpreference.SharedPrefClass
 import com.example.services.utils.BaseActivity
 import com.example.services.viewmodels.LoginViewModel
+import com.example.services.views.home.DashboardActivity
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.gson.JsonObject
 
@@ -41,7 +42,7 @@ class LoginActivity : BaseActivity() {
                     val message = response.message
                     when {
                         response.code == 200 -> {
-                            FirebaseFunctions.sendOTP("login", mJsonObject, this)
+                           // FirebaseFunctions.sendOTP("login", mJsonObject, this)
                             mJsonObject.addProperty("phoneNumber", response.data?.phoneNumber)
                             mJsonObject.addProperty("countryCode", response.data?.countryCode)
 
@@ -55,27 +56,12 @@ class LoginActivity : BaseActivity() {
                                 GlobalConstants.USERID,
                                 response.data!!.id
                             )
-                            /*SharedPrefClass().putObject(
-                                this,
-                                GlobalConstants.USERID,
-                                response.data!!.driver_id
-                            )
                             SharedPrefClass().putObject(
-                                this,
-                                GlobalConstants.USER_IAMGE,
-                                response.data!!.profile_image
+                                    this,
+                                    GlobalConstants.IsAddressAdded,
+                                    response.data!!.isAddressAdded
                             )
 
-                            SharedPrefClass().putObject(
-                                this, GlobalConstants.USERDATA,
-                                response.data!!
-                            )
-
-                            SharedPrefClass().putObject(
-                                applicationContext,
-                                getString(R.string.first_name),
-                                response.data!!.firstName + " " + response.data!!.lastName
-                            )*/
                             SharedPrefClass().putObject(
                                 this,
                                 getString(R.string.key_phone),
@@ -91,9 +77,17 @@ class LoginActivity : BaseActivity() {
                                 getString(R.string.key_country_code),
                                 response.data!!.countryCode
                             )
-                            /*  val intent = Intent(this, OTPVerificationActivity::class.java)
-                              intent.putExtra("data", mJsonObject.toString())
-                              startActivity(intent)*/
+                            SharedPrefClass().putObject(
+                                    MyApplication.instance.applicationContext,
+                                    "isLogin",
+                                    true
+                            )
+
+                            val intent = Intent(this, DashboardActivity::class.java)
+                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            intent.putExtra("data", mJsonObject.toString())
+                            startActivity(intent)
+                            finish()
 
                         }
                         /* response.code == 204 -> {

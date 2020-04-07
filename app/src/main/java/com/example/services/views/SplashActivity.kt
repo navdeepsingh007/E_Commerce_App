@@ -12,6 +12,7 @@ import com.example.services.socket.TrackingActivity
 import com.example.services.utils.BaseActivity
 import com.example.services.views.address.AddAddressActivity
 import com.example.services.views.authentication.LoginActivity
+import com.example.services.views.cart.CheckoutAddressActivity
 import com.example.services.views.home.DashboardActivity
 import com.example.services.views.promocode.PromoCodeActivity
 import com.example.services.views.subcategories.ServicesListActivity
@@ -87,7 +88,7 @@ class SplashActivity : BaseActivity() {
                 //startActivity(intent)
             } else {
                  Intent(this, DashboardActivity::class.java)
-              //  Intent(this, PromoCodeActivity::class.java)
+                //Intent(this, CheckoutAddressActivity::class.java)
             }
 
         } else {

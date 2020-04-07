@@ -37,6 +37,7 @@ import com.example.services.viewmodels.promocode.PromoCodeViewModel
 import com.example.services.views.address.AddAddressActivity
 import com.example.services.views.home.DashboardActivity
 import com.example.services.views.promocode.PromoCodeActivity
+import com.example.services.views.subcategories.SubCategoriesActivity
 import com.google.gson.JsonObject
 import com.uniongoods.adapters.CartListAdapter
 import com.uniongoods.adapters.ServicesListAdapter
@@ -53,6 +54,8 @@ class CartListActivity : BaseActivity(), DialogssInterface {
     var cartObject = JsonObject()
     var pos = 0
     var couponCode = ""
+    var addressType = ""
+
     lateinit var promcodeViewModel: PromoCodeViewModel
     private val SECOND_ACTIVITY_REQUEST_CODE = 0
     override fun getLayoutId(): Int {
@@ -77,6 +80,10 @@ class CartListActivity : BaseActivity(), DialogssInterface {
             startProgressDialog()
             //cartViewModel.getcartList(userId)
         }
+        addressType = SharedPrefClass().getPrefValue(
+                MyApplication.instance,
+                GlobalConstants.SelectedAddressType
+        ).toString()
         cartViewModel.getCartListRes().observe(this,
                 Observer<CartListResponse> { response ->
                     stopProgressDialog()
@@ -93,15 +100,15 @@ class CartListActivity : BaseActivity(), DialogssInterface {
                                 cartBinding.rlCoupon.visibility = View.VISIBLE
                                 cartBinding.btnCheckout.visibility = View.VISIBLE
                                 initRecyclerView()
-                                cartBinding.tvOfferPrice.setText(response.coupanDetails?.payableAmount)
+                                cartBinding.tvOfferPrice.setText(cartList[0].service?.currency + "" + response.coupanDetails?.payableAmount)
                                 if (response.coupanDetails?.isCouponApplied.equals("true")) {
 
                                     if (response.coupanDetails?.isCoupanValid.equals("true")) {
                                         couponCode = response.coupanDetails?.coupanCode.toString()
                                         cartBinding.tvPromo.setText(response.coupanDetails?.coupanDiscount + "% " + "Discount coupon applied. Remove?")
                                         cartBinding.rlRealPrice.visibility = View.VISIBLE
-                                        cartBinding.tvOfferPrice.setText(response.coupanDetails?.payableAmount)
-                                        cartBinding.tvRealPrice.setText(response.coupanDetails?.totalAmount)
+                                        cartBinding.tvOfferPrice.setText(cartList[0].service?.currency + " " + response.coupanDetails?.payableAmount)
+                                        cartBinding.tvRealPrice.setText(cartList[0].service?.currency + " " + response.coupanDetails?.totalAmount)
                                     } else {
                                         couponCode = response.coupanDetails?.coupanCode.toString()
                                         cartBinding.tvPromo.setText("Invalid Coupon. Remove?")
@@ -128,6 +135,11 @@ class CartListActivity : BaseActivity(), DialogssInterface {
                                 cartBinding.rlCoupon.visibility = View.GONE
                                 cartBinding.btnCheckout.visibility = View.GONE
                                 cartBinding.tvNoRecord.visibility = View.VISIBLE
+                                SharedPrefClass().putObject(
+                                        this,
+                                        GlobalConstants.SelectedAddressType,
+                                        "null"
+                                )
                             }
                         }
 
@@ -141,8 +153,9 @@ class CartListActivity : BaseActivity(), DialogssInterface {
                         val message = response.message
                         when {
                             response.code == 200 -> {
-                                //cartViewModel.getcartList(userId)
-                                cartList.removeAt(pos)
+                                cartList.clear()
+                                cartViewModel.getCartList()
+                                /*cartList.removeAt(pos)
                                 if (cartList.size > 0) {
                                     myJobsListAdapter?.notifyDataSetChanged()
                                 } else {
@@ -152,7 +165,7 @@ class CartListActivity : BaseActivity(), DialogssInterface {
                                     cartBinding.btnCheckout.visibility = View.GONE
 
                                     cartBinding.tvNoRecord.visibility = View.VISIBLE
-                                }
+                                }*/
 
                             }
                             else -> message?.let {
@@ -181,6 +194,31 @@ class CartListActivity : BaseActivity(), DialogssInterface {
                     }
                 })
 
+        cartViewModel.getOrderPlaceRes().observe(this,
+                Observer<CommonModel> { response ->
+                    stopProgressDialog()
+                    if (response != null) {
+                        val message = response.message
+                        when {
+                            response.code == 200 -> {
+                                SharedPrefClass().putObject(
+                                        this,
+                                        GlobalConstants.SelectedAddressType,
+                                        "null"
+                                )
+                                val intent = Intent(this, DashboardActivity::class.java)
+                                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                startActivity(intent)
+                                finish()
+                            }
+                            else -> message?.let {
+                                UtilsFunctions.showToastError(it)
+                            }
+                        }
+
+                    }
+                })
+
         cartViewModel.isClick().observe(
                 this, Observer<String>(function =
         fun(it: String?) {
@@ -198,11 +236,22 @@ class CartListActivity : BaseActivity(), DialogssInterface {
                         )
                         confirmationDialog?.show()
 
-
                     }
-
-                    //  finish()
-
+                }
+                "btnCheckout" -> {
+                    if (addressType.equals(getString(R.string.home))) {
+                        val intent = Intent(this, CheckoutAddressActivity::class.java)
+                        startActivity(intent)
+                    } else {
+                        showToastSuccess("Payment Api Hit")
+                        var addressObject = JsonObject()
+                        addressObject.addProperty(
+                                "addressId", ""
+                        )
+                        cartViewModel.orderPlace(addressObject)
+                        /* val intent = Intent(this, CheckoutAddressActivity::class.java)
+                         startActivity(intent)*/
+                    }
                 }
             }
         })

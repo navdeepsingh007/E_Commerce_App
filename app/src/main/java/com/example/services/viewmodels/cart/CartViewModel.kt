@@ -17,6 +17,7 @@ class CartViewModel : BaseViewModel() {
     private var data : MutableLiveData<LoginResponse>? = null
     private var addressDetail = MutableLiveData<AddressResponse>()
     private var deleteAddress = MutableLiveData<CommonModel>()
+    private var orderPlace = MutableLiveData<CommonModel>()
 
     private var cartList = MutableLiveData<CartListResponse>()
     private var cartRepository = CartRepository()
@@ -26,6 +27,7 @@ class CartViewModel : BaseViewModel() {
     init {
         if (UtilsFunctions.isNetworkConnectedWithoutToast()) {
             cartList = cartRepository.cartList()
+            orderPlace = cartRepository.orderPlace(null)
         }
 
     }
@@ -34,6 +36,9 @@ class CartViewModel : BaseViewModel() {
         return cartList
     }
 
+    fun getOrderPlaceRes() : LiveData<CommonModel> {
+        return orderPlace
+    }
 
     override fun isLoading() : LiveData<Boolean> {
         return mIsUpdating
@@ -47,12 +52,12 @@ class CartViewModel : BaseViewModel() {
         btnClick.value = v.resources.getResourceName(v.id).split("/")[1]
     }
 
-   /* fun addRemoveCart(mJsonObject : JsonObject) {
+    fun orderPlace(mJsonObject : JsonObject) {
         if (UtilsFunctions.isNetworkConnected()) {
-            addressDetail = cartRepository.addAddress(mJsonObject)
+            orderPlace = cartRepository.orderPlace(mJsonObject)
             mIsUpdating.postValue(true)
         }
-    }*/
+    }
 
     fun getCartList() {
         if (UtilsFunctions.isNetworkConnected()) {

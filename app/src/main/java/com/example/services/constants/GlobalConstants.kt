@@ -22,6 +22,10 @@ object GlobalConstants {
     @JvmStatic
     val USERDATA = "USERDATA"
     @JvmStatic
+    val IsAddressAdded = "address"
+    @JvmStatic
+    val SelectedAddressType = "addressType"
+    @JvmStatic
     val USERID = "USERID"
     @JvmStatic
     val JOBID = "JOBID"

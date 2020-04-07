@@ -19,6 +19,10 @@ class LoginResponse {
         @SerializedName("id")
         @Expose
         var id : String? = null
+        @SerializedName("isAddressAdded")
+        @Expose
+        var isAddressAdded : String? = null
+
         @SerializedName("firstName")
         @Expose
         var firstName : String? = null

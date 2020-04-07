@@ -35,6 +35,7 @@
                 android:paddingRight="@dimen/dp_10">
 
             <RelativeLayout
+                android:id="@+id/address_item"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">

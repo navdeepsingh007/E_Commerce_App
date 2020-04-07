@@ -135,6 +135,9 @@ interface ApiInterface {
     @POST("mobile/coupan/removeCoupan")
     fun removeCoupon(@Body mJsonObject : JsonObject) : Call<JsonObject>
 
+    @POST("mobile/order/createOrder")
+    fun ordePlace(@Body mJsonObject : JsonObject) : Call<JsonObject>
+
     @GET("mobile/services/getServicesDetails/{id}")
     fun getServiceDetail(@Path("id") id : String) : Call<JsonObject>
 

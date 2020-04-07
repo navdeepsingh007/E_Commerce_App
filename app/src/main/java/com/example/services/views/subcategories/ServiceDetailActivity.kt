@@ -1,5 +1,6 @@
 package com.example.services.views.subcategories
 
+import android.app.Dialog
 import android.content.Intent
 import android.content.IntentFilter
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +20,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.services.R
+import com.example.services.application.MyApplication
 import com.example.services.common.UtilsFunctions
 import com.example.services.constants.GlobalConstants
 import com.example.services.utils.BaseActivity
@@ -30,6 +32,8 @@ import com.example.services.model.services.ServicesDetailResponse
 import com.example.services.model.services.ServicesListResponse
 import com.example.services.model.services.TimeSlotsResponse
 import com.example.services.sharedpreference.SharedPrefClass
+import com.example.services.utils.DialogClass
+import com.example.services.utils.DialogssInterface
 import com.example.services.views.cart.CartListActivity
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.gson.JsonObject
@@ -38,7 +42,7 @@ import com.uniongoods.adapters.DateListAdapter
 import com.uniongoods.adapters.ServicesListAdapter
 import com.uniongoods.adapters.TimeSlotsListAdapter
 
-class ServiceDetailActivity : BaseActivity() {
+class ServiceDetailActivity : BaseActivity(), DialogssInterface {
     lateinit var serviceDetailBinding: ActivityServiceDetailBinding
     lateinit var servicesViewModel: ServicesViewModel
     var serviceId = ""
@@ -50,11 +54,15 @@ class ServiceDetailActivity : BaseActivity() {
     var quantityCount = 0
     var selectedAddressType = "1"
     var price = 0
+    private var confirmationDialog: Dialog? = null
+    private var mDialogClass = DialogClass()
     var timeSlotsAdapter: TimeSlotsListAdapter? = null
     var dateSlotsAdapter: DateListAdapter? = null
     var slotsList = ArrayList<TimeSlotsResponse.Body>()
     var dateList = ArrayList<DateSlotsResponse.Body>()
     var isfav = "false"
+    var addressType = "false"
+    // public var addressType = ""
     override fun onResume() {
         super.onResume()
         if (UtilsFunctions.isNetworkConnected()) {
@@ -82,7 +90,10 @@ class ServiceDetailActivity : BaseActivity() {
                 "serviceId", serviceId
         )
 
-
+        addressType = SharedPrefClass().getPrefValue(
+                MyApplication.instance,
+                GlobalConstants.SelectedAddressType
+        ).toString()
         serviceDetailBinding.radioGroup.setOnCheckedChangeListener(
                 RadioGroup.OnCheckedChangeListener { group, checkedId ->
                     val radio: RadioButton = findViewById(checkedId)
@@ -257,36 +268,23 @@ class ServiceDetailActivity : BaseActivity() {
         fun(it: String?) {
             when (it) {
                 "AddCart" -> {
-
                     if (isCart.equals("false")) {
-                        var i = 0
-                        for (item in dateList) {
-
-                            dateList[i].selected = "false"
-                            i++
+                        if (TextUtils.isEmpty(addressType) || addressType.equals("null")) {
+                            confirmationDialog = mDialogClass.setDefaultDialog(
+                                    this,
+                                    this,
+                                    "Address Type",
+                                    getString(R.string.select_address_type)
+                            )
+                            confirmationDialog?.show()
+                        } else {
+                            showCartInfoLayout()
                         }
-                        selectedTime = ""
-                        serviceDetailBinding.tvTotalPrice.setText("0")
-                        dateSlotsAdapter?.notifyDataSetChanged()
-                        serviceDetailBinding.llSlots.visibility = View.VISIBLE
-                        serviceDetailBinding.btnSubmit.visibility = View.GONE
-                        serviceDetailBinding.rvSlots.visibility = View.GONE
-                        serviceDetailBinding.tvTimeSlots.visibility = View.GONE
-                        var animation = AnimationUtils.loadAnimation(this, R.anim.anim)
-                        animation.setDuration(500)
-                        serviceDetailBinding.llSlots.setAnimation(animation)
-                        serviceDetailBinding.llSlots.animate()
-                        animation.start()
-                        quantityCount = 0
-                        selectedDate = ""
-                        serviceDetailBinding.tvQuantity.setText(quantityCount.toString())
-                        serviceDetailBinding.AddCart.isEnabled = false
+
                     } else {
                         //remove from cart
-                            callAddRemoveCartApi()
+                        callAddRemoveCartApi()
                     }
-
-
                 }
                 "img_cross" -> {
                     serviceDetailBinding.AddCart.isEnabled = true
@@ -295,14 +293,7 @@ class ServiceDetailActivity : BaseActivity() {
                 "imgMinus" -> {
                     if (quantityCount > 0) {
                         quantityCount--
-                        /* var cartObject = JsonObject()
-                         cartObject.addProperty(
-                                 "serviceId", serviceId
-                         )
-                         cartObject.addProperty(
-                                 "quantity", quantityCount
-                         )
-                         servicesViewModel.getTimeSlot(cartObject)*/
+
                         callGetTimeSlotsApi()
                     }
                     if (quantityCount == 0) {
@@ -333,6 +324,43 @@ class ServiceDetailActivity : BaseActivity() {
 
         })
         )
+
+    }
+
+    private fun showCartInfoLayout() {
+        var i = 0
+        for (item in dateList) {
+
+            dateList[i].selected = "false"
+            i++
+        }
+        if (addressType.equals(getString(R.string.home))) {
+            serviceDetailBinding.radioGroup.check(R.id.rd_home)
+        } else {
+            serviceDetailBinding.radioGroup.check(R.id.rd_shop)
+        }
+
+        serviceDetailBinding.radioGroup.isEnabled = false
+      //  servCaticeDetailBinding.radioGroup.rdHome.isEnabled = false
+        serviceDetailBinding.radioGroup.getChildAt(0).isEnabled = false
+        serviceDetailBinding.radioGroup.getChildAt(1).isEnabled = false
+
+        selectedTime = ""
+        serviceDetailBinding.tvTotalPrice.setText("0")
+        dateSlotsAdapter?.notifyDataSetChanged()
+        serviceDetailBinding.llSlots.visibility = View.VISIBLE
+        serviceDetailBinding.btnSubmit.visibility = View.GONE
+        serviceDetailBinding.rvSlots.visibility = View.GONE
+        serviceDetailBinding.tvTimeSlots.visibility = View.GONE
+        var animation = AnimationUtils.loadAnimation(this, R.anim.anim)
+        animation.setDuration(500)
+        serviceDetailBinding.llSlots.setAnimation(animation)
+        serviceDetailBinding.llSlots.animate()
+        animation.start()
+        quantityCount = 0
+        selectedDate = ""
+        serviceDetailBinding.tvQuantity.setText(quantityCount.toString())
+        serviceDetailBinding.AddCart.isEnabled = false
 
     }
 
@@ -465,6 +493,71 @@ class ServiceDetailActivity : BaseActivity() {
             dateSlotsAdapter?.notifyDataSetChanged()
             selectedDate = dateList[position].date!!
             callGetTimeSlotsApi()
+        }
+    }
+
+    override fun onDialogConfirmAction(mView: View?, mKey: String) {
+        when (mKey) {
+            "Address Type" -> {
+                confirmationDialog?.dismiss()
+
+                addressType = SharedPrefClass().getPrefValue(
+                        MyApplication.instance,
+                        GlobalConstants.SelectedAddressType
+                ).toString()
+
+                var isAddressAdded = SharedPrefClass().getPrefValue(
+                        MyApplication.instance,
+                        GlobalConstants.IsAddressAdded
+                ).toString()
+
+                if (addressType.equals("home")) {
+                    if (isAddressAdded.equals("true")) {
+                        showCartInfoLayout()
+                    } else {
+                        showToastError(getString(R.string.add_address_msg))
+                    }
+                } else {
+                    showCartInfoLayout()
+                }
+
+                /* if (isAddressAdded.equals("true")) {
+                     if (GlobalConstants.IsAddressAdded.equals("true")) {
+                         SharedPrefClass().putObject(
+                                 this,
+                                 GlobalConstants.SelectedAddressType,
+                                 "home"
+                         )
+                         addressType = "home"
+                         showCartInfoLayout()
+                     } else {
+                         SharedPrefClass().putObject(
+                                 this,
+                                 GlobalConstants.SelectedAddressType,
+                                 "null"
+                         )
+                         // GlobalConstants.SelectedAddresssType = ""
+                         showToastError("Please add address in Address Management Section")
+                     }
+                 } else {
+                     SharedPrefClass().putObject(
+                             this,
+                             GlobalConstants.SelectedAddressType,
+                             "shop"
+                     )
+                     addressType = "shop"
+                     showCartInfoLayout()
+                 }*/
+
+            }
+
+        }
+    }
+
+    override fun onDialogCancelAction(mView: View?, mKey: String) {
+        when (mKey) {
+            "Address Type" -> confirmationDialog?.dismiss()
+
         }
     }
 

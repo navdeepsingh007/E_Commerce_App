@@ -17,11 +17,14 @@ import com.google.gson.JsonObject
 import retrofit2.Response
 
 class CartRepository {
+
+    private var data2 : MutableLiveData<CommonModel>? = null
     private var data1 : MutableLiveData<CartListResponse>? = null
     private val gson = GsonBuilder().serializeNulls().create()
 
     init {
         data1 = MutableLiveData()
+        data2 = MutableLiveData()
     }
 
     fun cartList(/*mJsonObject : String*/) : MutableLiveData<CartListResponse> {
@@ -54,6 +57,39 @@ class CartRepository {
 
         //}
         return data1!!
+
+    }
+
+    fun orderPlace(mJsonObject : JsonObject?) : MutableLiveData<CommonModel> {
+        if (mJsonObject!=null) {
+        val mApiService = ApiService<JsonObject>()
+        mApiService.get(
+                object : ApiResponse<JsonObject> {
+                    override fun onResponse(mResponse : Response<JsonObject>) {
+                        val loginResponse = if (mResponse.body() != null)
+                            gson.fromJson<CommonModel>(
+                                    "" + mResponse.body(),
+                                    CommonModel::class.java
+                            )
+                        else {
+                            gson.fromJson<CommonModel>(
+                                    mResponse.errorBody()!!.charStream(),
+                                    CommonModel::class.java
+                            )
+                        }
+                        data2!!.postValue(loginResponse)
+                    }
+
+                    override fun onError(mKey : String) {
+                        UtilsFunctions.showToastError(MyApplication.instance.getString(R.string.internal_server_error))
+                        data2!!.postValue(null)
+                    }
+
+                }, ApiClient.getApiInterface().ordePlace(mJsonObject)
+        )
+
+        }
+        return data2!!
 
     }
 
