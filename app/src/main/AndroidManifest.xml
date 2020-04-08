@@ -39,11 +39,34 @@
         android:theme="@style/AppTheme.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning"
         tools:targetApi="n">
-        <activity android:name=".views.promocode.PromoCodeActivity"></activity>
-        <activity android:name=".views.favorite.FavoriteListActivity" />
-        <activity android:name=".views.cart.CartListActivity" />
-        <activity android:name=".views.cart.CheckoutAddressActivity" />
-        <activity android:name=".views.subcategories.ServiceDetailActivity" />
+        <activity
+            android:name=".views.promocode.PromoCodeActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".views.favorite.FavoriteListActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".views.cart.CartListActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".views.cart.CheckoutAddressActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".views.subcategories.ServiceDetailActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".views.orders.OrdersListActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".views.orders.OrdersHistoryListActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".views.subcategories.SubCategoriesActivity"
             android:launchMode="singleTop"

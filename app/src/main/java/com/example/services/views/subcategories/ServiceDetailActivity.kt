@@ -341,7 +341,7 @@ class ServiceDetailActivity : BaseActivity(), DialogssInterface {
         }
 
         serviceDetailBinding.radioGroup.isEnabled = false
-      //  servCaticeDetailBinding.radioGroup.rdHome.isEnabled = false
+        //  servCaticeDetailBinding.radioGroup.rdHome.isEnabled = false
         serviceDetailBinding.radioGroup.getChildAt(0).isEnabled = false
         serviceDetailBinding.radioGroup.getChildAt(1).isEnabled = false
 
@@ -511,10 +511,16 @@ class ServiceDetailActivity : BaseActivity(), DialogssInterface {
                         GlobalConstants.IsAddressAdded
                 ).toString()
 
-                if (addressType.equals("home")) {
+                if (addressType.equals("Home")) {
                     if (isAddressAdded.equals("true")) {
                         showCartInfoLayout()
                     } else {
+                        addressType = ""
+                        SharedPrefClass().putObject(
+                                this,
+                                GlobalConstants.SelectedAddressType,
+                                "null"
+                        )
                         showToastError(getString(R.string.add_address_msg))
                     }
                 } else {

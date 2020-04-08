@@ -30,10 +30,10 @@
 
 
         <RelativeLayout
-
+            android:elevation="@dimen/dp_5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_5"
+            android:background="@color/colorWhite"
             android:layout_marginBottom="@dimen/dp_5">
 
             <EditText
@@ -72,7 +72,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/dp_5"
+            android:layout_marginTop="@dimen/dp_2"
             android:paddingBottom="@dimen/dp_5">
 
             <TextView

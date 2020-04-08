@@ -45,7 +45,7 @@ object GlobalConstants {
     /* @JvmStatic
      val BASE_URL = "http://10.8.23.202:9062/"*/
     @JvmStatic
-    val BASE_URL = "http://camonher.infinitywebtechnologies.com:9065/api/"
+    val BASE_URL = "http://camonher.infinitywebtechnologies.com:9066/api/"
     @JvmStatic
     val BASE_SERVER = "http://infinitywebtechnologies.com:9062"
     /* @JvmStatic

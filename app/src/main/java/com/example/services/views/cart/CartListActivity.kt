@@ -148,27 +148,17 @@ class CartListActivity : BaseActivity(), DialogssInterface {
 //
         servicesViewModel.addRemoveCartRes().observe(this,
                 Observer<CommonModel> { response ->
-                    stopProgressDialog()
+
                     if (response != null) {
                         val message = response.message
                         when {
                             response.code == 200 -> {
                                 cartList.clear()
                                 cartViewModel.getCartList()
-                                /*cartList.removeAt(pos)
-                                if (cartList.size > 0) {
-                                    myJobsListAdapter?.notifyDataSetChanged()
-                                } else {
-                                    cartBinding.rvCart.visibility = View.GONE
-                                    cartBinding.totalItemsLay1.visibility = View.GONE
-                                    cartBinding.rlCoupon.visibility = View.GONE
-                                    cartBinding.btnCheckout.visibility = View.GONE
-
-                                    cartBinding.tvNoRecord.visibility = View.VISIBLE
-                                }*/
 
                             }
                             else -> message?.let {
+                                stopProgressDialog()
                                 UtilsFunctions.showToastError(it)
                             }
                         }
@@ -321,6 +311,7 @@ class CartListActivity : BaseActivity(), DialogssInterface {
             "Remove Coupon" -> {
                 confirmationDialog?.dismiss()
                 if (UtilsFunctions.isNetworkConnected()) {
+                    startProgressDialog()
                     promcodeViewModel.removePromoCode(couponCode)
                 }
 

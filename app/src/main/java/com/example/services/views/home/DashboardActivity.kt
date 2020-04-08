@@ -29,6 +29,8 @@ import com.example.services.views.address.AddressListActivity
 import com.example.services.views.authentication.LoginActivity
 import com.example.services.views.cart.CartListActivity
 import com.example.services.views.favorite.FavoriteListActivity
+import com.example.services.views.orders.OrdersHistoryListActivity
+import com.example.services.views.orders.OrdersListActivity
 import com.example.services.views.profile.ProfileActivity
 import com.example.services.views.settings.MyAccountsActivity
 import com.google.android.material.navigation.NavigationView
@@ -36,16 +38,16 @@ import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.layout_custom_alert.view.*
 
 class DashboardActivity : BaseActivity(),
-    DialogssInterface {
-    var activityDashboardBinding : ActivityDashboardBinding? = null
-    private var navigationView : NavigationView? = null
-    private var drawer : DrawerLayout? = null
-    private var confirmationDialog : Dialog? = null
-    private var ratingDialog : Dialog? = null
+        DialogssInterface {
+    var activityDashboardBinding: ActivityDashboardBinding? = null
+    private var navigationView: NavigationView? = null
+    private var drawer: DrawerLayout? = null
+    private var confirmationDialog: Dialog? = null
+    private var ratingDialog: Dialog? = null
     private var mDialogClass = DialogClass()
-    private var dashboardViewModel : DashboardViewModel? = null
-    private var removedFrag : String = ""
-    var fragment : Fragment? = null
+    private var dashboardViewModel: DashboardViewModel? = null
+    private var removedFrag: String = ""
+    var fragment: Fragment? = null
     //    companion object {
 //        @get:Synchronized
 //        lateinit var toolBarText : TextView
@@ -53,6 +55,10 @@ class DashboardActivity : BaseActivity(),
 //        var removedFrag : String = ""
 //
 //    }
+    override fun getLayoutId(): Int {
+        return R.layout.activity_dashboard
+    }
+
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun initViews() {
         activityDashboardBinding = viewDataBinding as ActivityDashboardBinding
@@ -73,147 +79,165 @@ class DashboardActivity : BaseActivity(),
 //        activityDashboardBinding!!.toolbarCommon.rlTop.setBackgroundColor(resources.getColor(R.color.orange_transparent))
 
         val image = SharedPrefClass().getPrefValue(
-            MyApplication.instance.applicationContext,
-            GlobalConstants.USER_IAMGE
+                MyApplication.instance.applicationContext,
+                GlobalConstants.USER_IAMGE
         )
         // ic_profile
         Glide.with(this)
-            .load(image)
-            .placeholder(R.drawable.user)
-            .into(activityDashboardBinding!!.icProfile)
+                .load(image)
+                .placeholder(R.drawable.user)
+                .into(activityDashboardBinding!!.icProfile)
         val name = SharedPrefClass().getPrefValue(
-            MyApplication.instance.applicationContext,
-            getString(R.string.first_name)
+                MyApplication.instance.applicationContext,
+                getString(R.string.first_name)
         )
-        if(TextUtils.isEmpty(name.toString()) || name.toString().equals("null")){
+        if (TextUtils.isEmpty(name.toString()) || name.toString().equals("null")) {
             activityDashboardBinding!!.tvName.text = getString(R.string.create_profile)
-        }else{
+        } else {
             activityDashboardBinding!!.tvName.text = name.toString()
         }
 
         fragment = HomeFragment()
         callFragments(fragment, supportFragmentManager, false, "send_data", "")
         dashboardViewModel!!.isClick().observe(
-            this, Observer<String>(function =
-            fun(it : String?) {
-                when (it) {
-                    "tv_nav_fav" -> {
-                        val intent = Intent(this, FavoriteListActivity::class.java)
-                        startActivity(intent)
-                    }
-                    "tv_nav_notification" -> {
-                     /*   val intent = Intent(this, NotificationsListActivity::class.java)
-                        startActivity(intent)*/
-                    }
-                    "tv_nav_address" -> {
-                        val intent = Intent(this, AddressListActivity::class.java)
-                        startActivity(intent)
-                    }
-                    "tv_nav_cart" -> {
-                        val intent = Intent(this, CartListActivity::class.java)
-                        startActivity(intent)
-                    }
-                    "tv_nav_home" -> {
-                        activityDashboardBinding!!.toolbarCommon.imgRight.visibility = View.VISIBLE
-                        activityDashboardBinding!!.toolbarCommon.imgRight.setImageDrawable(
+                this, Observer<String>(function =
+        fun(it: String?) {
+            when (it) {
+                "tv_nav_fav" -> {
+                    val intent = Intent(this, FavoriteListActivity::class.java)
+                    startActivity(intent)
+                }
+                "tv_nav_notification" -> {
+                    /*   val intent = Intent(this, NotificationsListActivity::class.java)
+                       startActivity(intent)*/
+                }
+                "tv_nav_address" -> {
+                    val intent = Intent(this, AddressListActivity::class.java)
+                    startActivity(intent)
+                }
+                "tv_nav_cart" -> {
+                    val intent = Intent(this, CartListActivity::class.java)
+                    startActivity(intent)
+                }
+                "tv_nav_home" -> {
+                    activityDashboardBinding!!.toolbarCommon.imgRight.visibility = View.VISIBLE
+                    activityDashboardBinding!!.toolbarCommon.imgRight.setImageDrawable(
                             getDrawable(R.drawable.ic_notifications)
-                        )
-                        val fragment = HomeFragment()
-                       // activityDashboardBinding!!.toolbarCommon.imgToolbarText.setText("")
-                     /*   activityDashboardBinding!!.toolbarCommon.imgToolbarText.text =
-                            getString(R.string.home)*/
-                        activityDashboardBinding!!.drawerLayout.closeDrawers()
-                        this.callFragments(
+                    )
+                    val fragment = HomeFragment()
+                    // activityDashboardBinding!!.toolbarCommon.imgToolbarText.setText("")
+                    /*   activityDashboardBinding!!.toolbarCommon.imgToolbarText.text =
+                           getString(R.string.home)*/
+                    activityDashboardBinding!!.drawerLayout.closeDrawers()
+                    this.callFragments(
                             fragment,
                             supportFragmentManager,
                             false,
                             "send_data",
                             ""
-                        )
-                        activityDashboardBinding!!.tablayout.getTabAt(0)?.select()
-                        activityDashboardBinding!!.drawerLayout.closeDrawers()
+                    )
+                    activityDashboardBinding!!.tablayout.getTabAt(0)?.select()
+                    activityDashboardBinding!!.drawerLayout.closeDrawers()
 
-                    }
-                    "tv_nav_contact" -> {
-                        /* val intent = Intent(this, TrackingActivity::class.java)
-                         startActivity(intent)*/
-                    }
-                    "ic_profile" -> {
-                        val intent = Intent(this, ProfileActivity::class.java)
-                        startActivity(intent)
-                    }
-                    "tv_nav_account" -> {
-                        val intent = Intent(this, MyAccountsActivity::class.java)
-                        startActivity(intent)
-                    }
-                    "img_nav_cancel" -> {
-                        activityDashboardBinding!!.drawerLayout.closeDrawers()
-                    }
-                    "tv_nav_logout" -> {
-                        confirmationDialog =mDialogClass.setDefaultDialog(
+                }
+                "tv_nav_order" -> {
+                    val intent = Intent(this, OrdersListActivity::class.java)
+                    startActivity(intent)
+                }
+                "tv_nav_order_history" -> {
+                    val intent = Intent(this, OrdersHistoryListActivity::class.java)
+                    startActivity(intent)
+                }
+                "tv_nav_terms" -> {
+                    /* val intent = Intent(this, OrdersHistoryListActivity::class.java)
+                     startActivity(intent)*/
+                }
+
+                "ic_profile" -> {
+                    val intent = Intent(this, ProfileActivity::class.java)
+                    startActivity(intent)
+                }
+                "tv_nav_account" -> {
+                    val intent = Intent(this, MyAccountsActivity::class.java)
+                    startActivity(intent)
+                }
+                "img_nav_cancel" -> {
+                    activityDashboardBinding!!.drawerLayout.closeDrawers()
+                }
+                "tv_nav_logout" -> {
+                    confirmationDialog = mDialogClass.setDefaultDialog(
                             this,
                             this,
                             "logout",
                             "Do you really want to logout?"
-                        )
-                        confirmationDialog?.show()
+                    )
+                    confirmationDialog?.show()
 
-                    }
-                    "toolbar" -> {
-                        val image = SharedPrefClass().getPrefValue(
+                }
+                "toolbar" -> {
+                    val image = SharedPrefClass().getPrefValue(
                             MyApplication.instance.applicationContext,
                             GlobalConstants.USER_IAMGE
-                        )
-                        // ic_profile
-                        Glide.with(this)
+                    )
+                    // ic_profile
+                    Glide.with(this)
                             .load(image)
                             .placeholder(R.drawable.user)
                             .into(activityDashboardBinding!!.icProfile)
 
-                        if (drawer!!.isDrawerOpen(GravityCompat.START)) {
-                            drawer!!.closeDrawer(Gravity.LEFT) //CLOSE Nav Drawer!
-                        } else {
-                            drawer!!.openDrawer(Gravity.LEFT)
-                        }
-                        val fragmentType =
-                            supportFragmentManager.findFragmentById(R.id.frame_layout)
-                        /*when (fragmentType) {
-                            is HomeFragment -> {
-                                activityDashboardBinding!!.toolbarCommon.imgRight.visibility =
-                                    View.GONE
-                            }
-                        }*/
+                    if (drawer!!.isDrawerOpen(GravityCompat.START)) {
+                        drawer!!.closeDrawer(Gravity.LEFT) //CLOSE Nav Drawer!
+                    } else {
+                        drawer!!.openDrawer(Gravity.LEFT)
                     }
+                    val fragmentType =
+                            supportFragmentManager.findFragmentById(R.id.frame_layout)
+                    /*when (fragmentType) {
+                        is HomeFragment -> {
+                            activityDashboardBinding!!.toolbarCommon.imgRight.visibility =
+                                View.GONE
+                        }
+                    }*/
                 }
-            })
+            }
+        })
         )
 
         dashboardViewModel!!.getLogoutReposne.observe(this,
-            Observer<CommonModel> { logoutResponse->
-                this.stopProgressDialog()
+                Observer<CommonModel> { logoutResponse ->
+                    this.stopProgressDialog()
 
-                if (logoutResponse != null) {
-                    val message = logoutResponse.message
+                    if (logoutResponse != null) {
+                        val message = logoutResponse.message
 
-                    if (logoutResponse.code == 200) {
-                        SharedPrefClass().putObject(
-                            this,
-                            "isLogin",
-                            false
-                        )
+                        if (logoutResponse.code == 200) {
+                            SharedPrefClass().putObject(
+                                    this,
+                                    "isLogin",
+                                    false
+                            )
+                            SharedPrefClass().putObject(
+                                    this,
+                                    GlobalConstants.SelectedAddressType,
+                                    "null"
+                            )
+                            SharedPrefClass().putObject(
+                                    this,
+                                    GlobalConstants.USER_IAMGE,
+                                    "null"
+                            )
+                            showToastSuccess(getString(R.string.logout_msg))
+                            val intent1 = Intent(this, LoginActivity::class.java)
+                            startActivity(intent1)
+                            finish()
 
-                        showToastSuccess(getString(R.string.logout_msg))
-                        val intent1 = Intent(this, LoginActivity::class.java)
-                        startActivity(intent1)
-                        finish()
-
-                    } else {
-                        showToastError(message)
+                        } else {
+                            showToastError(message)
+                        }
                     }
-                }
-            })
+                })
 
-        dashboardViewModel!!.isLoading().observe(this, Observer<Boolean> { aBoolean->
+        dashboardViewModel!!.isLoading().observe(this, Observer<Boolean> { aBoolean ->
             if (aBoolean!!) {
                 this.startProgressDialog()
             } else {
@@ -222,13 +246,13 @@ class DashboardActivity : BaseActivity(),
         })
 
         activityDashboardBinding!!.tablayout.addOnTabSelectedListener(object :
-            TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab : TabLayout.Tab?) {
-                var fragment : Fragment? = null
+                TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                var fragment: Fragment? = null
                 //   activityDashboardBinding!!.toolbarCommon.imgRight.visibility = View.GONE
                 when (tab!!.position) {
-                   /* 0 -> fragment = HomeFragment()
-                    1 -> fragment = JobRequestsFragment()*/
+                    /* 0 -> fragment = HomeFragment()
+                     1 -> fragment = JobRequestsFragment()*/
                 }
                 callFragments(fragment, supportFragmentManager, false, "send_data", "")
 
@@ -238,11 +262,11 @@ class DashboardActivity : BaseActivity(),
 
             }
 
-            override fun onTabUnselected(tab : TabLayout.Tab?) {
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
 
             }
 
-            override fun onTabReselected(tab : TabLayout.Tab?) {
+            override fun onTabReselected(tab: TabLayout.Tab?) {
                 //var fragment : Fragment? = null
                 //Not In use
             }
@@ -250,18 +274,15 @@ class DashboardActivity : BaseActivity(),
 
     }
 
-    override fun getLayoutId() : Int {
-        return R.layout.activity_dashboard
-    }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     fun setHeadings() {
         val fragment = supportFragmentManager.findFragmentById(R.id.frame_layout)
         when (fragment) {
             is HomeFragment -> {
-               /* activityDashboardBinding!!.toolbarCommon.imgToolbarText.text =
-                    getString(R.string.home)
-                getString(R.string.calendar)*/
+                /* activityDashboardBinding!!.toolbarCommon.imgToolbarText.text =
+                     getString(R.string.home)
+                 getString(R.string.calendar)*/
 
             }
         }
@@ -276,28 +297,28 @@ class DashboardActivity : BaseActivity(),
               GlobalConstants.selectedCheckedFragment = 0
           }*/
         val image = SharedPrefClass().getPrefValue(
-            MyApplication.instance.applicationContext,
-            GlobalConstants.USER_IAMGE
+                MyApplication.instance.applicationContext,
+                GlobalConstants.USER_IAMGE
         )
         // ic_profile
         Glide.with(this)
-            .load(image)
-            .placeholder(R.drawable.user)
-            .into(activityDashboardBinding!!.icProfile)
+                .load(image)
+                .placeholder(R.drawable.user)
+                .into(activityDashboardBinding!!.icProfile)
 
-                val name = SharedPrefClass().getPrefValue(
-            MyApplication.instance.applicationContext,
-            getString(R.string.first_name)
+        val name = SharedPrefClass().getPrefValue(
+                MyApplication.instance.applicationContext,
+                getString(R.string.first_name)
         )
-        if(TextUtils.isEmpty(name.toString()) || name.toString().equals("null")){
+        if (TextUtils.isEmpty(name.toString().trim()) || name.toString().trim().equals("null")) {
             activityDashboardBinding!!.tvName.text = getString(R.string.create_profile)
-        }else{
+        } else {
             activityDashboardBinding!!.tvName.text = name.toString()
         }
 
     }
 
-    override fun onDialogConfirmAction(mView : View?, mKey : String) {
+    override fun onDialogConfirmAction(mView: View?, mKey: String) {
         when (mKey) {
             "logout" -> {
                 confirmationDialog?.dismiss()
@@ -311,7 +332,7 @@ class DashboardActivity : BaseActivity(),
         }
     }
 
-    override fun onDialogCancelAction(mView : View?, mKey : String) {
+    override fun onDialogCancelAction(mView: View?, mKey: String) {
         when (mKey) {
             "logout" -> confirmationDialog?.dismiss()
             "rating" -> ratingDialog?.dismiss()
