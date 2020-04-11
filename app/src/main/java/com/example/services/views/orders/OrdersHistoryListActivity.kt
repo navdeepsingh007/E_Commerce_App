@@ -57,7 +57,7 @@ class OrdersHistoryListActivity : BaseActivity(), DialogssInterface {
                 GlobalConstants.SelectedAddressType
         ).toString()
 
-        ordersViewModel.getOrdersListRes().observe(this,
+        ordersViewModel.getOrdersHistoryListRes().observe(this,
                 Observer<OrdersListResponse> { response ->
                     stopProgressDialog()
                     if (response != null) {

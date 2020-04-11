@@ -8,64 +8,93 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.services.R
+import com.example.services.application.MyApplication
 import com.example.services.common.UtilsFunctions
+import com.example.services.constants.GlobalConstants
 import com.example.services.utils.BaseActivity
 import com.example.services.databinding.ActivitySubCategoriesBinding
 import com.example.services.model.subcategories.SubCategoriesRespnse
+import com.example.services.sharedpreference.SharedPrefClass
 import com.example.services.viewmodels.subcategories.SubCategoriesViewModel
+import com.example.services.views.cart.CartListActivity
 import com.google.gson.JsonObject
 import com.uniongoods.adapters.SubCategoriesListAdapter
+
 //import com.example.services.model.subcategories.SubCategories
 
 class SubCategoriesActivity : BaseActivity() {
-    lateinit var categoriesBinding : ActivitySubCategoriesBinding
-    lateinit var categoriesViewModel : SubCategoriesViewModel
+    lateinit var categoriesBinding: ActivitySubCategoriesBinding
+    lateinit var categoriesViewModel: SubCategoriesViewModel
     private var subCatsList = ArrayList<com.example.services.model.subcategories.Subcategories>()
     var catId = ""
-    override fun getLayoutId() : Int {
+    var isCart = ""
+    override fun getLayoutId(): Int {
         return R.layout.activity_sub_categories
     }
-
+    override fun onResume() {
+        super.onResume()
+        isCart = SharedPrefClass().getPrefValue(
+                MyApplication.instance,
+                GlobalConstants.isCartAdded
+        ).toString()
+        if (isCart.equals("true")) {
+            categoriesBinding.commonToolBar.imgRight.visibility = View.VISIBLE
+        } else {
+            categoriesBinding.commonToolBar.imgRight.visibility = View.GONE
+        }
+    }
     override fun initViews() {
         categoriesBinding = viewDataBinding as ActivitySubCategoriesBinding
         categoriesViewModel = ViewModelProviders.of(this).get(SubCategoriesViewModel::class.java)
-
+        categoriesBinding.subCategoriesViewModel = categoriesViewModel
         categoriesBinding.commonToolBar.imgRight.visibility = View.GONE
         categoriesBinding.commonToolBar.imgRight.setImageResource(R.drawable.ic_nav_edit_icon)
         categoriesBinding.commonToolBar.imgToolbarText.text =
-            resources.getString(R.string.sub_categories)
+                resources.getString(R.string.sub_categories)
         catId = intent.extras?.get("catId").toString()
-       // initRecyclerView()
+        // initRecyclerView()
         val mJsonObject = JsonObject()
         mJsonObject.addProperty(
-            "category_id", catId
+                "category_id", catId
         )
         if (UtilsFunctions.isNetworkConnected()) {
             categoriesViewModel.getSubcategories(mJsonObject)
             startProgressDialog()
         }
 
-         categoriesViewModel.getSubcategoriesRes().observe(this,
-             Observer<SubCategoriesRespnse> { response->
-                 stopProgressDialog()
-                 if (response != null) {
-                     val message = response.message
-                     when {
-                         response.code == 200 -> {
-                             subCatsList.addAll(response.body.subcategories)
-                             categoriesBinding.rvSubcategories.visibility = View.VISIBLE
-                             categoriesBinding.tvNoRecord.visibility = View.GONE
-                             initRecyclerView()
-                         }
-                         else -> message?.let {
-                             UtilsFunctions.showToastError(it)
-                             categoriesBinding.rvSubcategories.visibility = View.GONE
-                             categoriesBinding.tvNoRecord.visibility = View.VISIBLE
-                         }
-                     }
+        categoriesViewModel.getSubcategoriesRes().observe(this,
+                Observer<SubCategoriesRespnse> { response ->
+                    stopProgressDialog()
+                    if (response != null) {
+                        val message = response.message
+                        when {
+                            response.code == 200 -> {
+                                subCatsList.addAll(response.body.subcategories)
+                                categoriesBinding.rvSubcategories.visibility = View.VISIBLE
+                                categoriesBinding.tvNoRecord.visibility = View.GONE
+                                initRecyclerView()
+                            }
+                            else -> message?.let {
+                                UtilsFunctions.showToastError(it)
+                                categoriesBinding.rvSubcategories.visibility = View.GONE
+                                categoriesBinding.tvNoRecord.visibility = View.VISIBLE
+                            }
+                        }
 
-                 }
-             })
+                    }
+                })
+
+        categoriesViewModel.isClick().observe(
+                this, Observer<String>(function =
+        fun(it: String?) {
+            when (it) {
+                "img_right" -> {
+                    val intent = Intent(this, CartListActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+        })
+        )
 
     }
 
@@ -88,18 +117,18 @@ class SubCategoriesActivity : BaseActivity() {
         categoriesBinding.rvSubcategories.setHasFixedSize(true)
         categoriesBinding.rvSubcategories.adapter = myJobsListAdapter
         categoriesBinding.rvSubcategories.addOnScrollListener(object :
-            RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView : RecyclerView, dx : Int, dy : Int) {
+                RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
 
             }
         })
     }
 
-    fun callServicesActivity(position : Int) {
+    fun callServicesActivity(position: Int) {
 
         val intent = Intent(this, ServicesListActivity::class.java)
-        intent.putExtra("catId",catId)
-        intent.putExtra("subCatId",subCatsList[position].id)
+        intent.putExtra("catId", catId)
+        intent.putExtra("subCatId", subCatsList[position].id)
         startActivity(intent)
     }
 

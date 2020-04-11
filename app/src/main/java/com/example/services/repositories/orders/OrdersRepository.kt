@@ -21,10 +21,12 @@ class OrdersRepository {
 
     private var data2: MutableLiveData<CommonModel>? = null
     private var data1: MutableLiveData<OrdersListResponse>? = null
+    private var data3: MutableLiveData<OrdersListResponse>? = null
     private val gson = GsonBuilder().serializeNulls().create()
 
     init {
         data1 = MutableLiveData()
+        data3 = MutableLiveData()
         data2 = MutableLiveData()
     }
 
@@ -58,6 +60,39 @@ class OrdersRepository {
 
         //}
         return data1!!
+
+    }
+
+    fun orderHistoryList(/*mJsonObject : String*/): MutableLiveData<OrdersListResponse> {
+        //if (!TextUtils.isEmpty(mJsonObject)) {
+        val mApiService = ApiService<JsonObject>()
+        mApiService.get(
+                object : ApiResponse<JsonObject> {
+                    override fun onResponse(mResponse: Response<JsonObject>) {
+                        val loginResponse = if (mResponse.body() != null)
+                            gson.fromJson<OrdersListResponse>(
+                                    "" + mResponse.body(),
+                                    OrdersListResponse::class.java
+                            )
+                        else {
+                            gson.fromJson<OrdersListResponse>(
+                                    mResponse.errorBody()!!.charStream(),
+                                    OrdersListResponse::class.java
+                            )
+                        }
+                        data3!!.postValue(loginResponse)
+                    }
+
+                    override fun onError(mKey: String) {
+                        UtilsFunctions.showToastError(MyApplication.instance.getString(R.string.internal_server_error))
+                        data3!!.postValue(null)
+                    }
+
+                }, ApiClient.getApiInterface().orderHistroyList(/*mJsonObject*/)
+        )
+
+        //}
+        return data3!!
 
     }
 

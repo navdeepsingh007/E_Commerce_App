@@ -146,4 +146,6 @@ interface ApiInterface {
 
     @GET("mobile/order/orderList")
     fun orderList(): Call<JsonObject>
+    @GET("mobile/order/orderList")
+    fun orderHistroyList(): Call<JsonObject>
 }

@@ -97,7 +97,7 @@ class CartListActivity : BaseActivity(), DialogssInterface {
                                 cartBinding.tvTotalItems.setText(cartList.size.toString())
                                 cartBinding.rvCart.visibility = View.VISIBLE
                                 cartBinding.totalItemsLay1.visibility = View.VISIBLE
-                                cartBinding.rlCoupon.visibility = View.VISIBLE
+                               // cartBinding.rlCoupon.visibility = View.VISIBLE
                                 cartBinding.btnCheckout.visibility = View.VISIBLE
                                 initRecyclerView()
                                 cartBinding.tvOfferPrice.setText(cartList[0].service?.currency + "" + response.coupanDetails?.payableAmount)
@@ -132,13 +132,18 @@ class CartListActivity : BaseActivity(), DialogssInterface {
                                 UtilsFunctions.showToastError(it)
                                 cartBinding.rvCart.visibility = View.GONE
                                 cartBinding.totalItemsLay1.visibility = View.GONE
-                                cartBinding.rlCoupon.visibility = View.GONE
+                              //  cartBinding.rlCoupon.visibility = View.GONE
                                 cartBinding.btnCheckout.visibility = View.GONE
                                 cartBinding.tvNoRecord.visibility = View.VISIBLE
                                 SharedPrefClass().putObject(
                                         this,
                                         GlobalConstants.SelectedAddressType,
                                         "null"
+                                )
+                                SharedPrefClass().putObject(
+                                        this,
+                                        GlobalConstants.isCartAdded,
+                                        "false"
                                 )
                             }
                         }
@@ -213,35 +218,35 @@ class CartListActivity : BaseActivity(), DialogssInterface {
                 this, Observer<String>(function =
         fun(it: String?) {
             when (it) {
-                "tvPromo" -> {
-                    if (cartBinding.tvPromo.getText().toString().equals(getString(R.string.apply_coupon))) {
-                        val intent = Intent(this, PromoCodeActivity::class.java)
-                        startActivityForResult(intent, SECOND_ACTIVITY_REQUEST_CODE)
-                    } else {
-                        confirmationDialog = mDialogClass.setDefaultDialog(
-                                this,
-                                this,
-                                "Remove Coupon",
-                                getString(R.string.warning_remove_coupon)
-                        )
-                        confirmationDialog?.show()
+                /* "tvPromo" -> {
+                     if (cartBinding.tvPromo.getText().toString().equals(getString(R.string.apply_coupon))) {
+                         val intent = Intent(this, PromoCodeActivity::class.java)
+                         startActivityForResult(intent, SECOND_ACTIVITY_REQUEST_CODE)
+                     } else {
+                         confirmationDialog = mDialogClass.setDefaultDialog(
+                                 this,
+                                 this,
+                                 "Remove Coupon",
+                                 getString(R.string.warning_remove_coupon)
+                         )
+                         confirmationDialog?.show()
 
-                    }
-                }
+                     }
+                 }*/
                 "btnCheckout" -> {
-                    if (addressType.equals(getString(R.string.home))) {
-                        val intent = Intent(this, CheckoutAddressActivity::class.java)
-                        startActivity(intent)
-                    } else {
+                    // if (addressType.equals(getString(R.string.home))) {
+                    val intent = Intent(this, CheckoutAddressActivity::class.java)
+                    startActivity(intent)
+                    /*} else {
                         showToastSuccess("Payment Api Hit")
                         var addressObject = JsonObject()
                         addressObject.addProperty(
                                 "addressId", ""
                         )
                         cartViewModel.orderPlace(addressObject)
-                        /* val intent = Intent(this, CheckoutAddressActivity::class.java)
-                         startActivity(intent)*/
-                    }
+                        *//* val intent = Intent(this, CheckoutAddressActivity::class.java)
+                         startActivity(intent)*//*
+                    }*/
                 }
             }
         })

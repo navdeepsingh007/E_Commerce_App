@@ -45,8 +45,8 @@ class OffersListAdapter(
         // view.imageView_slide.setImageResource(images[position])
         view.tv_service_name!!.text = offersList[position].name
         Glide.with(mContext)
-            .load(offersList[position].url)
-            .apply(RequestOptions.bitmapTransform(RoundedCorners(20)))
+            .load(offersList[position].icon)
+           // .apply(RequestOptions.bitmapTransform(RoundedCorners(20)))
             .placeholder(R.drawable.ic_category)
             .into(view.img_service!!)
         val vp = container as ViewPager

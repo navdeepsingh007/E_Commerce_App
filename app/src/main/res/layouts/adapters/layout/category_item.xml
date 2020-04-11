@@ -50,9 +50,10 @@
 
                     <ImageView
                         android:id="@+id/cat_img"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
                         android:layout_gravity="center"
+                        android:scaleType="fitXY"
                         android:src="@drawable/ic_category"
                         android:visibility="visible" />
 
@@ -61,6 +62,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/dp_2"
                         android:gravity="center"
                         android:text="Facial"
                         android:textAllCaps="false"

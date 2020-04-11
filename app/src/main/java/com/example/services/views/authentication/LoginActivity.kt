@@ -61,7 +61,11 @@ class LoginActivity : BaseActivity() {
                                         getString(R.string.first_name),
                                         response.data!!.firstName + " " + response.data!!.lastName
                                 )
-
+                                SharedPrefClass().putObject(
+                                        this,
+                                        GlobalConstants.isCartAdded,
+                                        "false"
+                                )
 
                                 SharedPrefClass().putObject(
                                         this,

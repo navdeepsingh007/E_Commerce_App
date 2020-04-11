@@ -30,7 +30,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/dp_5">
+            android:layout_margin="@dimen/dp_5">
 
             <TextView
                 android:id="@+id/tv_no_record"
@@ -239,8 +239,8 @@
                 android:layout_alignParentBottom="true"
                 android:background="@color/colorPrimary"
                 android:elevation="@dimen/dp_5"
-                android:text="@string/checkout"
                 android:onClick="@{(v) -> cartViewModel.clickListener(v)}"
+                android:text="@string/continues"
                 android:textColor="@color/colorWhite"
                 android:visibility="gone" />
 

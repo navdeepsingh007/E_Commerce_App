@@ -69,7 +69,17 @@ class ServiceDetailActivity : BaseActivity(), DialogssInterface {
             servicesViewModel.getServiceDetail(serviceId)
             startProgressDialog()
         }
+        isCart = SharedPrefClass().getPrefValue(
+                MyApplication.instance,
+                GlobalConstants.isCartAdded
+        ).toString()
+        if (isCart.equals("true")) {
+            serviceDetailBinding.commonToolBar.imgRight.visibility = View.VISIBLE
+        } else {
+            serviceDetailBinding.commonToolBar.imgRight.visibility = View.GONE
+        }
     }
+
 
     override fun getLayoutId(): Int {
         return R.layout.activity_service_detail
@@ -161,9 +171,15 @@ class ServiceDetailActivity : BaseActivity(), DialogssInterface {
                                 if (isCart.equals("false")) {
                                     serviceDetailBinding.AddCart.setText(getString(R.string.add_to_cart))
                                 } else {
+                                    serviceDetailBinding.commonToolBar.imgRight.visibility = View.VISIBLE
                                     serviceDetailBinding.AddCart.setText(getString(R.string.remove_to_cart))
-                                    val intent = Intent(this, CartListActivity::class.java)
-                                    startActivity(intent)
+                                    SharedPrefClass().putObject(
+                                            this,
+                                            GlobalConstants.isCartAdded,
+                                            "true"
+                                    )
+                                    /* val intent = Intent(this, CartListActivity::class.java)
+                                     startActivity(intent)*/
                                     serviceDetailBinding.llSlots.visibility = View.GONE
                                 }
 
@@ -208,26 +224,25 @@ class ServiceDetailActivity : BaseActivity(), DialogssInterface {
                         when {
                             response.code == 200 -> {
                                 if (quantityCount != 0) {
-                                    slotsList.clear()
-                                    slotsList.addAll(response.data!!)
-                                    serviceDetailBinding.rvSlots.visibility = View.VISIBLE
-                                    serviceDetailBinding.tvNoRecord.visibility = View.GONE
-                                    serviceDetailBinding.tvTimeSlots.visibility = View.VISIBLE
-                                    serviceDetailBinding.btnSubmit.visibility = View.VISIBLE
-                                    initRecyclerView()
-                                    initDateRecyclerView()
+                                    /* slotsList.clear()
+                                     slotsList.addAll(response.data!!)
+                                     serviceDetailBinding.rvSlots.visibility = View.VISIBLE
+                                     serviceDetailBinding.tvNoRecord.visibility = View.GONE
+                                     serviceDetailBinding.tvTimeSlots.visibility = View.VISIBLE
+                                     serviceDetailBinding.btnSubmit.visibility = View.VISIBLE
+                                     initRecyclerView()*/
                                 }
 
                             }
                             else -> {
-                                message?.let {
+                                /*message?.let {
                                     UtilsFunctions.showToastError(it)
                                     serviceDetailBinding.tvNoRecord.setText(message)
                                 }
                                 serviceDetailBinding.btnSubmit.visibility = View.GONE
                                 serviceDetailBinding.rvSlots.visibility = View.GONE
                                 serviceDetailBinding.tvTimeSlots.visibility = View.GONE
-                                serviceDetailBinding.tvNoRecord.visibility = View.VISIBLE
+                                serviceDetailBinding.tvNoRecord.visibility = View.VISIBLE*/
 
                             }
                         }
@@ -243,19 +258,19 @@ class ServiceDetailActivity : BaseActivity(), DialogssInterface {
                             response.code == 200 -> {
                                 dateList.clear()
                                 dateList.addAll(response.data!!)
-                                serviceDetailBinding.rvDate.visibility = View.VISIBLE
-                                serviceDetailBinding.tvDateRecord.visibility = View.GONE
-                                // serviceDetailBinding.btnSubmit.visibility = View.VISIBLE
-                                initDateRecyclerView()
+                                /* serviceDetailBinding.rvDate.visibility = View.VISIBLE
+                                 serviceDetailBinding.tvDateRecord.visibility = View.GONE
+                                 // serviceDetailBinding.btnSubmit.visibility = View.VISIBLE
+                                 initDateRecyclerView()*/
                             }
                             else -> {
-                                message?.let {
+                                /*message?.let {
                                     UtilsFunctions.showToastError(it)
                                     //  serviceDetailBinding.tvNoRecord.setText(message)
-                                }
+                                }*/
                                 //serviceDetailBinding.rvDate.visibility = View.GONE
                                 serviceDetailBinding.tvSelectdateMsg.visibility = View.GONE
-                                serviceDetailBinding.tvDateRecord.visibility = View.VISIBLE
+                                // serviceDetailBinding.tvDateRecord.visibility = View.VISIBLE
 
                             }
                         }
@@ -267,6 +282,10 @@ class ServiceDetailActivity : BaseActivity(), DialogssInterface {
                 this, Observer<String>(function =
         fun(it: String?) {
             when (it) {
+                "img_right" -> {
+                    val intent = Intent(this, CartListActivity::class.java)
+                    startActivity(intent)
+                }
                 "AddCart" -> {
                     if (isCart.equals("false")) {
                         if (TextUtils.isEmpty(addressType) || addressType.equals("null")) {
@@ -293,25 +312,35 @@ class ServiceDetailActivity : BaseActivity(), DialogssInterface {
                 "imgMinus" -> {
                     if (quantityCount > 0) {
                         quantityCount--
-
-                        callGetTimeSlotsApi()
+                        price = quantityCount * priceAmount.toInt()
+                        serviceDetailBinding.tvTotalPrice.setText(currency + price.toString())
+                        //callGetTimeSlotsApi()
                     }
                     if (quantityCount == 0) {
                         serviceDetailBinding.tvTotalPrice.setText("0")
                         serviceDetailBinding.tvTimeSlots.visibility = View.GONE
-                        serviceDetailBinding.btnSubmit.visibility = View.GONE
+                        // serviceDetailBinding.btnSubmit.isEnabled = false
+                        // serviceDetailBinding.btnSubmit.visibility = View.GONE
                         serviceDetailBinding.rvSlots.visibility = View.GONE
                     }
                     serviceDetailBinding.tvQuantity.setText(quantityCount.toString())
                 }
                 "imgPlus" -> {
-                    quantityCount++
-                    serviceDetailBinding.tvQuantity.setText(quantityCount.toString())
-                    callGetTimeSlotsApi()
+                    if (quantityCount <= 5) {
+                        quantityCount++
+                        // serviceDetailBinding.btnSubmit.isEnabled = false
+                        serviceDetailBinding.tvQuantity.setText(quantityCount.toString())
+                        //   serviceDetailBinding.btnSubmit.visibility = View.VISIBLE
+                        //callGetTimeSlotsApi()
+                        price = quantityCount * priceAmount.toInt()
+                        serviceDetailBinding.tvTotalPrice.setText(currency + price.toString())
+                    }
+
+
                 }
                 "btnSubmit" -> {
-                    if (TextUtils.isEmpty(selectedTime)) {
-                        showToastError(getString(R.string.select_time_slot_msg))
+                    if (quantityCount == 0) {
+                        showToastError(getString(R.string.select_quantity_msg))
                     } else {
                         callAddRemoveCartApi()
                     }
@@ -349,7 +378,7 @@ class ServiceDetailActivity : BaseActivity(), DialogssInterface {
         serviceDetailBinding.tvTotalPrice.setText("0")
         dateSlotsAdapter?.notifyDataSetChanged()
         serviceDetailBinding.llSlots.visibility = View.VISIBLE
-        serviceDetailBinding.btnSubmit.visibility = View.GONE
+        //serviceDetailBinding.btnSubmit.visibility = View.GONE
         serviceDetailBinding.rvSlots.visibility = View.GONE
         serviceDetailBinding.tvTimeSlots.visibility = View.GONE
         var animation = AnimationUtils.loadAnimation(this, R.anim.anim)
@@ -436,7 +465,7 @@ class ServiceDetailActivity : BaseActivity(), DialogssInterface {
         }
     }
 
-    private fun initRecyclerView() {
+    /*private fun initRecyclerView() {
         timeSlotsAdapter = TimeSlotsListAdapter(this, slotsList, this)
         val linearLayoutManager = LinearLayoutManager(this)
         linearLayoutManager.orientation = RecyclerView.HORIZONTAL
@@ -463,7 +492,7 @@ class ServiceDetailActivity : BaseActivity(), DialogssInterface {
 
             }
         })
-    }
+    }*/
 
     fun selectTimeSlot(position: Int) {
         var i = 0

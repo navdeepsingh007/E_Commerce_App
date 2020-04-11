@@ -11,27 +11,29 @@ import androidx.annotation.NonNull
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.example.services.R
 import com.example.services.databinding.CategoryItemBinding
 import com.example.services.views.home.HomeFragment
 import kotlin.collections.ArrayList
 
 class CategoriesGridListAdapter(
-    context : HomeFragment,
-    addressList : ArrayList<com.example.services.viewmodels.home.Service>,
-    var activity : Context
+        context: HomeFragment,
+        addressList: ArrayList<com.example.services.viewmodels.home.Service>,
+        var activity: Context
 ) :
-    ArrayAdapter<CategoriesGridListAdapter.ItemHolder>(activity,R.layout.category_item) {
-    private val mContext : HomeFragment
-    private var viewHolder : ItemHolder? = null
-    private var categoriesList : ArrayList<com.example.services.viewmodels.home.Service>
+        ArrayAdapter<CategoriesGridListAdapter.ItemHolder>(activity, R.layout.category_item) {
+    private val mContext: HomeFragment
+    private var viewHolder: ItemHolder? = null
+    private var categoriesList: ArrayList<com.example.services.viewmodels.home.Service>
 
     init {
         this.mContext = context
         this.categoriesList = addressList
     }
 
-        override fun getCount(): Int {
+    override fun getCount(): Int {
         return if (this.categoriesList != null) this.categoriesList.size else 0
     }
 
@@ -50,10 +52,13 @@ class CategoriesGridListAdapter(
         }
 
         holder.name!!.text = categoriesList[position].name
+
         Glide.with(mContext)
-            .load(categoriesList[position].icon)
-            .placeholder(R.drawable.ic_category)
-            .into( holder.icon!!)
+                .load(categoriesList[position].icon)
+                .apply(RequestOptions.bitmapTransform(RoundedCorners(20)))
+                .placeholder(R.drawable.ic_category)
+                .into(holder.icon!!)
+
         return convertView
     }
 

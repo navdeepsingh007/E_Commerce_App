@@ -10,15 +10,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.services.R
 import com.example.services.databinding.TimeItemBinding
 import com.example.services.model.services.DateSlotsResponse
+import com.example.services.views.cart.CheckoutAddressActivity
 import com.example.services.views.subcategories.ServiceDetailActivity
 
 class DateListAdapter(
-        context : ServiceDetailActivity,
+        context : CheckoutAddressActivity,
         addressList : ArrayList<DateSlotsResponse.Body>,
         var activity : Context
 ) :
     RecyclerView.Adapter<DateListAdapter.ViewHolder>() {
-    private val mContext : ServiceDetailActivity
+    private val mContext : CheckoutAddressActivity
     private var viewHolder : ViewHolder? = null
     private var dateList : ArrayList<DateSlotsResponse.Body>
 
@@ -71,10 +72,10 @@ class DateListAdapter(
 
     inner class ViewHolder//This constructor would switch what to findViewBy according to the type of viewType
         (
-        v : View, val viewType : Int, //These are the general elements in the RecyclerView
-        val binding : TimeItemBinding?,
-        mContext : ServiceDetailActivity,
-        addressList : ArrayList<DateSlotsResponse.Body>?
+                v : View, val viewType : Int, //These are the general elements in the RecyclerView
+                val binding : TimeItemBinding?,
+                mContext : CheckoutAddressActivity,
+                addressList : ArrayList<DateSlotsResponse.Body>?
     ) : RecyclerView.ViewHolder(v) {
         /*init {
             binding.linAddress.setOnClickListener {

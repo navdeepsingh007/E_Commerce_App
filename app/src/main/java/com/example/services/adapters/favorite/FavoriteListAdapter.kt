@@ -1,12 +1,9 @@
 package com.uniongoods.adapters
 
 import android.content.Context
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RadioButton
-import android.widget.RadioGroup
 import androidx.annotation.NonNull
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -15,12 +12,8 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.services.R
 import com.example.services.databinding.FavoriteItemBinding
-import com.example.services.model.address.AddressListResponse
 import com.example.services.model.cart.CartListResponse
-import com.example.services.model.services.Body
-import com.example.services.views.cart.CartListActivity
 import com.example.services.views.favorite.FavoriteListActivity
-import com.example.services.views.subcategories.ServicesListActivity
 
 class FavoriteListAdapter(
     context : FavoriteListActivity,

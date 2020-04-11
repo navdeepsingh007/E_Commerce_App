@@ -5,6 +5,41 @@ package com.example.services.constants
  */
 
 object GlobalConstants {
+
+    /*
+         public static final String MONEY_HASH = "https://debajyotibasak.000webhostapp.com/PayUMoneyHash.php";
+        public static final String SURL = "https://www.payumoney.com/mobileapp/payumoney/success.php";
+        public static final String FURL = "https://www.payumoney.com/mobileapp/payumoney/failure.php";
+        public static final String MERCHANT_KEY = "rjQUPktU";
+        public static final String MERCHANT_ID = "4934580";
+        public static final boolean DEBUG = true;
+
+        public static final String FIRST_NAME = "Debajyoti";
+        public static final String MOBILE = "7204342561";
+        public static final String EMAIL = "d.basak.db@gmail.com";
+        */
+    @JvmStatic
+    var MONEY_HASH = "https://debajyotibasak.000webhostapp.com/PayUMoneyHash.php"
+    @JvmStatic
+    var SURL = "https://www.payumoney.com/mobileapp/payumoney/success.php"/*"https://www.payumoney.com/mobileapp/payumoney/success.php"*/
+    @JvmStatic
+    var FURL = "https://www.payumoney.com/mobileapp/payumoney/failure.php"/*"https://www.payumoney.com/mobileapp/payumoney/failure.php"*/
+    @JvmStatic
+    var MERCHANT_KEY = "n01WMWPL"
+    @JvmStatic
+    var MERCHANT_ID = "7001862"
+    @JvmStatic
+    var SALT = "cBQg9So9fV"
+    @JvmStatic
+    var FIRST_NAME = "Tushal"
+    @JvmStatic
+    var MOBILE = "8872227506"
+    @JvmStatic
+    var EMAIL = "shikhakochar14@gmail.com"
+    @JvmStatic
+    var DEBUG = true
+/*gNuXeqdFaUOsjP80Piwy8bEZ7t2xIxginKxqFDYPdyE=*/
+
     @JvmStatic
     val SEND_DATA = "DEMO_APP"
     @JvmStatic
@@ -25,6 +60,8 @@ object GlobalConstants {
     val IsAddressAdded = "address"
     @JvmStatic
     val SelectedAddressType = "addressType"
+    @JvmStatic
+    val isCartAdded = "isCartAdded"
     @JvmStatic
     val USERID = "USERID"
     @JvmStatic

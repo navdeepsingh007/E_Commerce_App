@@ -6,7 +6,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.example.services"
-        minSdkVersion 16
+        minSdkVersion 20
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -111,5 +111,9 @@ dependencies {
 
     // Testing
     androidTestImplementation "androidx.arch.core:core-testing:$rootProject.coreTestingVersion"
+    //PayUMoney
+    implementation 'com.payumoney.sdkui:plug-n-play:1.6.0'
+    //Volley
+    implementation 'com.android.volley:volley:1.1.1'
 }
 apply plugin: 'com.google.gms.google-services'

@@ -1,29 +1,24 @@
 package com.uniongoods.adapters
 
 import android.content.Context
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RadioButton
-import android.widget.RadioGroup
 import androidx.annotation.NonNull
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.services.R
 import com.example.services.databinding.TimeItemBinding
-import com.example.services.model.services.Body
 import com.example.services.model.services.TimeSlotsResponse
-import com.example.services.views.subcategories.ServiceDetailActivity
-import com.example.services.views.subcategories.ServicesListActivity
+import com.example.services.views.cart.CheckoutAddressActivity
 
 class TimeSlotsListAdapter(
-    context : ServiceDetailActivity,
-    addressList : ArrayList<TimeSlotsResponse.Body>,
-    var activity : Context
+        context : CheckoutAddressActivity,
+        addressList : ArrayList<TimeSlotsResponse.Body>,
+        var activity : Context
 ) :
     RecyclerView.Adapter<TimeSlotsListAdapter.ViewHolder>() {
-    private val mContext : ServiceDetailActivity
+    private val mContext : CheckoutAddressActivity
     private var viewHolder : ViewHolder? = null
     private var addressList : ArrayList<TimeSlotsResponse.Body>
 
@@ -68,7 +63,7 @@ class TimeSlotsListAdapter(
         (
         v : View, val viewType : Int, //These are the general elements in the RecyclerView
         val binding : TimeItemBinding?,
-        mContext : ServiceDetailActivity,
+        mContext : CheckoutAddressActivity,
         addressList : ArrayList<TimeSlotsResponse.Body>?
     ) : RecyclerView.ViewHolder(v) {
         /*init {

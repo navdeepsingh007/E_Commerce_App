@@ -52,7 +52,7 @@ class SubCategoriesListAdapter(
        // holder.binding!!.rBar.setRating(addressList[position].)
         Glide.with(mContext)
             .load(addressList[position].thumbnail)
-            .apply(RequestOptions.bitmapTransform(RoundedCorners(20)))
+            //.apply(RequestOptions.bitmapTransform(RoundedCorners(20)))
             .placeholder(R.drawable.ic_category)
             .into(holder.binding.imgCat)
         holder.binding!!.catItem.setOnClickListener {

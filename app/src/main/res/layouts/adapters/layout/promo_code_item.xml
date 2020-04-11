@@ -17,10 +17,10 @@
         android:layout_marginLeft="@dimen/dp_3"
         android:layout_marginTop="@dimen/dp_5"
         android:layout_marginRight="@dimen/dp_3"
-        app:hideKeyBoardOnClick="@{`back`}"
         android:background="@drawable/round_back_transparent"
         android:elevation="@dimen/dp_20"
-        android:padding="@dimen/dp_5">
+        android:padding="@dimen/dp_5"
+        app:hideKeyBoardOnClick="@{`back`}">
         <!---->
         <androidx.cardview.widget.CardView
             android:id="@+id/card_view"
@@ -44,12 +44,13 @@
 
                     <ImageView
                         android:id="@+id/img_promo"
-                        android:layout_width="@dimen/dp_60"
-                        android:layout_height="@dimen/dp_60"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/dp_10"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/ic_category" />
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_category"
+                        android:visibility="gone" />
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -74,7 +75,6 @@
                             android:layout_below="@+id/tvPromo"
                             android:layout_marginLeft="@dimen/dp_10"
                             android:layout_marginRight="@dimen/dp_5"
-                            android:layout_toLeftOf="@+id/btnApply"
                             android:text="On Order of Rs.499 and above."
                             android:textAppearance="@style/TextAppearance.AppCompat.Small"
                             android:textSize="@dimen/sp_12"
@@ -101,6 +101,7 @@
                             android:id="@+id/btnApply"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_below="@+id/tvPromoDesc"
                             android:layout_alignBottom="@+id/tvPromoCode"
                             android:layout_alignParentRight="true"
                             android:layout_margin="@dimen/dp_10"

@@ -9,8 +9,8 @@
         <import type="com.example.services.common.BindingUtils" />
 
         <variable
-                name="addressViewModel"
-                type="com.example.services.viewmodels.address.AddressViewModel" />
+                name="subCategoriesViewModel"
+                type="com.example.services.viewmodels.subcategories.SubCategoriesViewModel" />
 
     </data>
 
@@ -25,12 +25,12 @@
                 layout="@layout/common_toolbar_back"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:onClick="@{(v) -> addressViewModel.clickListener(v)}" />
+                android:onClick="@{(v) -> subCategoriesViewModel.clickListener(v)}" />
 
         <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/dp_5">
+                android:layout_margin="@dimen/dp_5">
 
             <TextView
                     android:id="@+id/tv_no_record"

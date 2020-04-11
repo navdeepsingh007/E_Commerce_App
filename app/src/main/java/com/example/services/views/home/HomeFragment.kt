@@ -46,26 +46,26 @@ import org.json.JSONObject
 
 class
 HomeFragment : BaseFragment(), SocketInterface {
-    private var mFusedLocationClass : FusedLocationClass? = null
+    private var mFusedLocationClass: FusedLocationClass? = null
     private var socket = SocketClass.socket
     private var categoriesList = ArrayList<com.example.services.viewmodels.home.Service>()
     private var trendingServiceList =
-        ArrayList<com.example.services.viewmodels.home.TrendingService>()
+            ArrayList<com.example.services.viewmodels.home.TrendingService>()
     private var offersList =
-        ArrayList<com.example.services.viewmodels.home.Banner>()
-    private var myJobsListAdapter : CategoriesListAdapter? = null
-    private lateinit var fragmentHomeBinding : FragmentHomeBinding
-    private lateinit var homeViewModel : HomeViewModel
+            ArrayList<com.example.services.viewmodels.home.Banner>()
+    private var myJobsListAdapter: CategoriesListAdapter? = null
+    private lateinit var fragmentHomeBinding: FragmentHomeBinding
+    private lateinit var homeViewModel: HomeViewModel
     private val mJsonObject = JsonObject()
     val PERMISSION_ID = 42
-    lateinit var mFusedLocationClient : FusedLocationProviderClient
+    lateinit var mFusedLocationClient: FusedLocationProviderClient
     var currentLat = ""
     var currentLong = ""
     var mJsonObjectStartJob = JsonObject()
-    private var confirmationDialog : Dialog? = null
+    private var confirmationDialog: Dialog? = null
     private var mDialogClass = DialogClass()
     //var categoriesList = null
-    override fun getLayoutResId() : Int {
+    override fun getLayoutResId(): Int {
         return R.layout.fragment_home
     }
 
@@ -84,12 +84,12 @@ HomeFragment : BaseFragment(), SocketInterface {
         // baseActivity.startProgressDialog()
         categoriesList?.clear()
         //getLastLocation()
-        socket.updateSocketInterface(this)
+        /*socket.updateSocketInterface(this)
         Log.e("Connect Socket", "Home Fragment")
-        socket.onConnect()
+        socket.onConnect()*/
         //acceptStatus
         mJsonObject.addProperty(
-            "acceptStatus", "1"
+                "acceptStatus", "1"
         )
         // initRecyclerView()
         if (UtilsFunctions.isNetworkConnected()) {
@@ -97,58 +97,58 @@ HomeFragment : BaseFragment(), SocketInterface {
             baseActivity.startProgressDialog()
         }
         homeViewModel.getJobs().observe(this,
-            Observer<CategoriesListResponse> { response->
-                baseActivity.stopProgressDialog()
-                if (response != null) {
-                    val message = response.message
-                    when {
-                        response.code == 200 -> {
-                            categoriesList?.addAll(response.body.services)
-                            trendingServiceList.addAll(response.body.trendingServices)
-                            offersList.addAll(response.body.banners)
-                            fragmentHomeBinding.rvJobs.visibility = View.VISIBLE
+                Observer<CategoriesListResponse> { response ->
+                    baseActivity.stopProgressDialog()
+                    if (response != null) {
+                        val message = response.message
+                        when {
+                            response.code == 200 -> {
+                                categoriesList?.addAll(response.body.services)
+                                trendingServiceList.addAll(response.body.trendingServices)
+                                offersList.addAll(response.body.banners)
+                                fragmentHomeBinding.rvJobs.visibility = View.VISIBLE
 
-                            initRecyclerView()
-                            if (trendingServiceList.size > 0) {
-                                fragmentHomeBinding.trendingLayout.visibility = View.VISIBLE
-                                trendingServiceListViewPager()
-                            } else {
-                                fragmentHomeBinding.trendingLayout.visibility = View.GONE
+                                initRecyclerView()
+                                if (trendingServiceList.size > 0) {
+                                    fragmentHomeBinding.trendingLayout.visibility = View.VISIBLE
+                                    trendingServiceListViewPager()
+                                } else {
+                                    fragmentHomeBinding.trendingLayout.visibility = View.GONE
+                                }
+
+                                if (offersList.size > 0) {
+                                    fragmentHomeBinding.offersLayout.visibility = View.VISIBLE
+                                    offerListViewPager()
+                                } else {
+                                    fragmentHomeBinding.offersLayout.visibility = View.GONE
+                                }
+
                             }
-
-                            if (offersList.size > 0) {
-                                fragmentHomeBinding.offersLayout.visibility = View.VISIBLE
-                                offerListViewPager()
-                            } else {
-                                fragmentHomeBinding.offersLayout.visibility = View.GONE
+                            else -> message?.let {
+                                showToastError(it)
+                                fragmentHomeBinding.rvJobs.visibility = View.GONE
                             }
+                        }
 
-                        }
-                        else -> message?.let {
-                            showToastError(it)
-                            fragmentHomeBinding.rvJobs.visibility = View.GONE
-                        }
                     }
-
-                }
-            })
+                })
 
         fragmentHomeBinding.gridview.onItemClickListener =
-            AdapterView.OnItemClickListener { parent, v, position, id->
-                showToastSuccess(" Clicked Position: " + (position + 1))
-                if (categoriesList[position].isService.equals("false")) {
-                    val intent = Intent(activity!!, SubCategoriesActivity::class.java)
-                    intent.putExtra("catId", categoriesList[position].id)
-                    startActivity(intent)
-                } else {
-                    val intent = Intent(activity!!, ServicesListActivity::class.java)
-                    intent.putExtra("catId", categoriesList[position].id)
-                    startActivity(intent)
+                AdapterView.OnItemClickListener { parent, v, position, id ->
+                    //showToastSuccess(" Clicked Position: " + (position + 1))
+                    if (categoriesList[position].isService.equals("false")) {
+                        val intent = Intent(activity!!, ServicesListActivity::class.java)
+                        intent.putExtra("catId", categoriesList[position].id)
+                        startActivity(intent)
+                    } else {
+                        val intent = Intent(activity!!, ServicesListActivity::class.java)
+                        intent.putExtra("catId", categoriesList[position].id)
+                        startActivity(intent)
+                    }
                 }
-            }
     }
 
-    private fun callSocketMethods(methodName : String) {
+    private fun callSocketMethods(methodName: String) {
         val object5 = JSONObject()
         when (methodName) {
             "updateVehicleLocation" -> try {
@@ -156,13 +156,13 @@ HomeFragment : BaseFragment(), SocketInterface {
                 object5.put("latitude", currentLat)
                 object5.put("longitude", currentLong)
                 object5.put(
-                    "driver_id", SharedPrefClass().getPrefValue(
+                        "driver_id", SharedPrefClass().getPrefValue(
                         MyApplication.instance,
                         GlobalConstants.USERID
-                    ).toString()
+                ).toString()
                 )
                 socket.sendDataToServer(methodName, object5)
-            } catch (e : Exception) {
+            } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
@@ -196,25 +196,25 @@ HomeFragment : BaseFragment(), SocketInterface {
 
     }
 
-    override fun onSocketCall(onMethadCall : String, vararg args : Any) {
+    override fun onSocketCall(onMethadCall: String, vararg args: Any) {
         try {
             when (onMethadCall) {
                 "updateVehicleLocation" -> try {
                     mFusedLocationClient.removeLocationUpdates(mLocationCallback)
-                } catch (e1 : Exception) {
+                } catch (e1: Exception) {
                     e1.printStackTrace()
                 }
             }
-        } catch (e1 : Exception) {
+        } catch (e1: Exception) {
             e1.printStackTrace()
         }
     }
 
-    override fun onSocketConnect(vararg args : Any) {
+    override fun onSocketConnect(vararg args: Any) {
         //OnSocket Connect Call It
     }
 
-    override fun onSocketDisconnect(vararg args : Any) {
+    override fun onSocketDisconnect(vararg args: Any) {
         // //OnSocket Disconnect Call It
     }
 
@@ -222,8 +222,8 @@ HomeFragment : BaseFragment(), SocketInterface {
     private fun getLastLocation() {
         if (checkPermissions()) {
             if (isLocationEnabled()) {
-                mFusedLocationClient.lastLocation.addOnCompleteListener(activity!!) { task->
-                    var location : Location? = task.result
+                mFusedLocationClient.lastLocation.addOnCompleteListener(activity!!) { task ->
+                    var location: Location? = task.result
                     if (location == null) {
                         requestNewLocationData()
                     } else {
@@ -245,15 +245,15 @@ HomeFragment : BaseFragment(), SocketInterface {
         }
     }
 
-    private fun checkPermissions() : Boolean {
+    private fun checkPermissions(): Boolean {
         if (ActivityCompat.checkSelfPermission(
-                activity!!,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(
-                activity!!,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
+                        activity!!,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(
+                        activity!!,
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
         ) {
             return true
         }
@@ -262,20 +262,20 @@ HomeFragment : BaseFragment(), SocketInterface {
 
     private fun requestPermissions() {
         ActivityCompat.requestPermissions(
-            activity!!,
-            arrayOf(
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ),
-            PERMISSION_ID
+                activity!!,
+                arrayOf(
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                ),
+                PERMISSION_ID
         )
     }
 
-    private fun isLocationEnabled() : Boolean {
-        var locationManager : LocationManager =
-            activity!!.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    private fun isLocationEnabled(): Boolean {
+        var locationManager: LocationManager =
+                activity!!.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
-            LocationManager.NETWORK_PROVIDER
+                LocationManager.NETWORK_PROVIDER
         )
     }
 
@@ -289,15 +289,15 @@ HomeFragment : BaseFragment(), SocketInterface {
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(activity!!)
         mFusedLocationClient!!.requestLocationUpdates(
-            mLocationRequest, mLocationCallback,
-            Looper.myLooper()
+                mLocationRequest, mLocationCallback,
+                Looper.myLooper()
         )
 
     }
 
     private val mLocationCallback = object : LocationCallback() {
-        override fun onLocationResult(locationResult : LocationResult) {
-            var mLastLocation : Location = locationResult.lastLocation
+        override fun onLocationResult(locationResult: LocationResult) {
+            var mLastLocation: Location = locationResult.lastLocation
             currentLat = mLastLocation.latitude.toString()
             currentLong = mLastLocation.longitude.toString()
             Handler().postDelayed({

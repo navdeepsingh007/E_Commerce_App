@@ -48,6 +48,7 @@ class DashboardActivity : BaseActivity(),
     private var dashboardViewModel: DashboardViewModel? = null
     private var removedFrag: String = ""
     var fragment: Fragment? = null
+    var isCart = ""
     //    companion object {
 //        @get:Synchronized
 //        lateinit var toolBarText : TextView
@@ -58,6 +59,7 @@ class DashboardActivity : BaseActivity(),
     override fun getLayoutId(): Int {
         return R.layout.activity_dashboard
     }
+
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun initViews() {
@@ -116,6 +118,10 @@ class DashboardActivity : BaseActivity(),
                     startActivity(intent)
                 }
                 "tv_nav_cart" -> {
+                    val intent = Intent(this, CartListActivity::class.java)
+                    startActivity(intent)
+                }
+                "img_right" -> {
                     val intent = Intent(this, CartListActivity::class.java)
                     startActivity(intent)
                 }
@@ -296,6 +302,16 @@ class DashboardActivity : BaseActivity(),
               activityDashboardBinding!!.tablayout.getTabAt(GlobalConstants.selectedFragment)!!.select()
               GlobalConstants.selectedCheckedFragment = 0
           }*/
+        isCart = SharedPrefClass().getPrefValue(
+                MyApplication.instance,
+                GlobalConstants.isCartAdded
+        ).toString()
+        if (isCart.equals("true")) {
+            activityDashboardBinding!!.toolbarCommon.imgRight.visibility = View.VISIBLE
+        } else {
+            activityDashboardBinding!!.toolbarCommon.imgRight.visibility = View.GONE
+        }
+
         val image = SharedPrefClass().getPrefValue(
                 MyApplication.instance.applicationContext,
                 GlobalConstants.USER_IAMGE

@@ -45,7 +45,7 @@ class OrderListAdapter(
 
     override fun onBindViewHolder(@NonNull holder: ViewHolder, position: Int) {
         viewHolder = holder
-        holder.binding!!.tvOrderOn.text =  Utils(mContext).getDate(
+        holder.binding!!.tvOrderOn.text = Utils(mContext).getDate(
                 "MM/dd/yyyy HH:mm:ss",
                 addressList[position].created_at,
                 "HH:mm yyyy-MM-dd"

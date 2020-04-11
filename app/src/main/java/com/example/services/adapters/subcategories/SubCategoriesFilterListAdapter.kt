@@ -7,21 +7,20 @@ import android.view.ViewGroup
 import androidx.annotation.NonNull
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.services.R
-import com.example.services.databinding.ServicesItemBinding
-import com.example.services.model.services.Services
+import com.example.services.databinding.ServiceSubcatItemBinding
+import com.example.services.model.services.SubCategory
 import com.example.services.views.subcategories.ServicesListActivity
 
-class ServicesListAdapter(
+class SubCategoriesFilterListAdapter(
         context: ServicesListActivity,
-        addressList: ArrayList<Services>,
+        addressList: ArrayList<SubCategory>,
         var activity: Context
 ) :
-        RecyclerView.Adapter<ServicesListAdapter.ViewHolder>() {
+        RecyclerView.Adapter<SubCategoriesFilterListAdapter.ViewHolder>() {
     private val mContext: ServicesListActivity
     private var viewHolder: ViewHolder? = null
-    private var addressList: ArrayList<Services>
+    private var addressList: ArrayList<SubCategory>
 
     init {
         this.mContext = context
@@ -32,44 +31,29 @@ class ServicesListAdapter(
     override fun onCreateViewHolder(@NonNull parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = DataBindingUtil.inflate(
                 LayoutInflater.from(parent.context),
-                R.layout.services_item,
+                R.layout.service_subcat_item,
                 parent,
                 false
-        ) as ServicesItemBinding
+        ) as ServiceSubcatItemBinding
         return ViewHolder(binding.root, viewType, binding, mContext, addressList)
     }
 
     override fun onBindViewHolder(@NonNull holder: ViewHolder, position: Int) {
         viewHolder = holder
         holder.binding!!.tvCatName.text = addressList[position].name
-        holder.binding!!.tvOfferPrice.text = "Rs. " + addressList[position].price.toString()
 
-        holder.binding!!.rBar.setRating(addressList[position].rating.toFloat())
-        Glide.with(mContext)
-                .load(addressList[position].thumbnail)
-               // .apply(RequestOptions.bitmapTransform(RoundedCorners(20)))
-                .placeholder(R.drawable.ic_category)
-                .into(holder.binding.imgCat)
-
-        if (addressList[position].favorite.equals("false")) {
-            holder.binding.imgFavourite.setImageResource(R.drawable.ic_unfavorite)
+        if (addressList[position].subCategorySelect.equals("true")) {
+            //holder.binding.topLay.setBackgroundDrawable(mContext.resources.getDrawable(R.drawable.btn_bg_shape_colored))
+            holder.binding.tvCatName.setBackgroundColor(mContext.resources.getColor(R.color.btnBackground))
+            holder.binding.tvCatName.setTextColor(mContext.resources.getColor(R.color.colorWhite))
         } else {
-            holder.binding.imgFavourite.setImageResource(R.drawable.ic_favorite)
+            // holder.binding.topLay.setBackgroundResource(R.drawable.shape_round_corner)
+            holder.binding.tvCatName.setTextColor(mContext.resources.getColor(R.color.colorBlack))
+            holder.binding.tvCatName.setBackgroundColor(mContext.resources.getColor(R.color.btnBackgroundWhite))
         }
-
-        //img_cat
-        holder.binding!!.tvAdd.setOnClickListener {
-            mContext.addRemoveToCart(position, holder.binding!!.tvAdd.getText().toString())
+        holder.binding!!.tvCatName.setOnClickListener {
+            mContext.selectSubCat(addressList[position].id,position)
         }
-        //img_cat
-        holder.binding!!.serviceItem.setOnClickListener {
-            mContext.callServiceDetail(addressList[position].id)
-        }
-        holder.binding!!.imgFavourite.setOnClickListener {
-            mContext.addRemovefav(position, holder.binding!!.tvAdd.getText().toString())
-        }
-
-
     }
 
     override fun getItemCount(): Int {
@@ -79,9 +63,9 @@ class ServicesListAdapter(
     inner class ViewHolder//This constructor would switch what to findViewBy according to the type of viewType
     (
             v: View, val viewType: Int, //These are the general elements in the RecyclerView
-            val binding: ServicesItemBinding?,
+            val binding: ServiceSubcatItemBinding?,
             mContext: ServicesListActivity,
-            addressList: ArrayList<Services>?
+            addressList: ArrayList<SubCategory>?
     ) : RecyclerView.ViewHolder(v) {
         /*init {
             binding.linAddress.setOnClickListener {

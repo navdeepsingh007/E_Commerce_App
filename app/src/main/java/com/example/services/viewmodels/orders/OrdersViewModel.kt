@@ -19,6 +19,7 @@ class OrdersViewModel : BaseViewModel() {
     private var cancelOrder = MutableLiveData<CommonModel>()
 
     private var ordersList = MutableLiveData<OrdersListResponse>()
+    private var ordersHistoryList = MutableLiveData<OrdersListResponse>()
     private var ordersRepository = OrdersRepository()
     private val mIsUpdating = MutableLiveData<Boolean>()
     private val btnClick = MutableLiveData<String>()
@@ -26,6 +27,7 @@ class OrdersViewModel : BaseViewModel() {
     init {
         if (UtilsFunctions.isNetworkConnectedWithoutToast()) {
             ordersList = ordersRepository.orderList()
+            ordersHistoryList = ordersRepository.orderHistoryList()
             cancelOrder = ordersRepository.cancelOrder(null)
         }
 
@@ -33,6 +35,10 @@ class OrdersViewModel : BaseViewModel() {
 
     fun getOrdersListRes(): LiveData<OrdersListResponse> {
         return ordersList
+    }
+
+    fun getOrdersHistoryListRes(): LiveData<OrdersListResponse> {
+        return ordersHistoryList
     }
 
     fun getCancelOrderRes(): LiveData<CommonModel> {

@@ -38,6 +38,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning"
+        tools:replace="android:allowBackup"
+        android:allowBackup="true"
         tools:targetApi="n">
         <activity
             android:name=".views.promocode.PromoCodeActivity"
@@ -82,7 +84,14 @@
         <activity
             android:name=".views.address.AddAddressActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait" /> <!-- <activity android:name=".views.notifications.NotificationsListActivity"></activity> -->
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".views.payment.PaymentActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+
+        <!-- <activity android:name=".views.notifications.NotificationsListActivity"></activity> -->
         <!-- <activity android:name=".views.home.JobsHistoryActivity" /> -->
         <!-- <activity android:name=".views.services.UpdateServiceActivity" /> -->
         <!-- <activity android:name=".views.services.ServicesListActivity" /> -->

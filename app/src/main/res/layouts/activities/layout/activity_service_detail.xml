@@ -55,7 +55,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/dp_200"
                             android:elevation="@dimen/dp_5"
-                            android:scaleType="fitXY"
+                            android:background="@drawable/round_back_transparent"
+                            android:scaleType="centerCrop"
                             android:src="@drawable/ic_category" />
                         <!--android:src="@{serviceDetail.icon!=null ?  serviceDetail.icon.toString():@string/todo,default=@drawable/ic_category}" />-->
                         <RelativeLayout
@@ -212,7 +213,6 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginTop="-10dp"
-
                         android:orientation="horizontal">
 
                         <RadioButton
@@ -327,16 +327,17 @@
                         android:layout_marginTop="@dimen/dp_20"
                         android:text="@string/when_do_you_want_this_service"
                         android:textAllCaps="false"
+                        android:visibility="gone"
                         android:textColor="@color/colorBlack"
                         app:font="@{`bold`}"
                         tools:ignore="AllCaps" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_date"
+                        android:visibility="gone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp_10"
-                        android:visibility="visible" />
+                        android:layout_marginTop="@dimen/dp_10" />
 
                     <TextView
                         android:id="@+id/tvDateRecord"
@@ -361,6 +362,7 @@
                         android:layout_marginTop="@dimen/dp_20"
                         android:text="@string/select_time"
                         android:textAllCaps="false"
+                        android:visibility="gone"
                         android:textColor="@color/colorBlack"
                         app:font="@{`bold`}"
                         tools:ignore="AllCaps" />
@@ -370,7 +372,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp_10"
-                        android:visibility="visible" />
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/tvNoRecord"
@@ -398,7 +400,7 @@
                         android:onClick="@{(v) -> servicesViewModel.clickListener(v)}"
                         android:text="@string/proceed"
                         android:textColor="@color/colorWhite"
-                        android:visibility="gone"
+                        android:visibility="visible"
                         app:font="@{`bold`}" />
                 </LinearLayout>
 

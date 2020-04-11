@@ -1,11 +1,13 @@
 package com.example.services.views.cart
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import android.text.SpannableStringBuilder
+import android.text.TextUtils
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.view.LayoutInflater
@@ -29,14 +31,21 @@ import com.example.services.databinding.ActivityCheckoutAddressBinding
 import com.example.services.model.CommonModel
 import com.example.services.model.address.AddressListResponse
 import com.example.services.model.cart.CartListResponse
+import com.example.services.model.services.DateSlotsResponse
+import com.example.services.model.services.TimeSlotsResponse
 import com.example.services.sharedpreference.SharedPrefClass
 import com.example.services.utils.DialogClass
 import com.example.services.utils.DialogssInterface
 import com.example.services.viewmodels.address.AddressViewModel
+import com.example.services.viewmodels.promocode.PromoCodeViewModel
+import com.example.services.viewmodels.services.ServicesViewModel
 import com.example.services.views.home.DashboardActivity
+import com.example.services.views.promocode.PromoCodeActivity
 import com.google.gson.JsonObject
 import com.uniongoods.adapters.CartListAdapter
 import com.uniongoods.adapters.CheckoutAddressListAdapter
+import com.uniongoods.adapters.DateListAdapter
+import com.uniongoods.adapters.TimeSlotsListAdapter
 
 class CheckoutAddressActivity : BaseActivity(), DialogssInterface {
     lateinit var cartBinding: ActivityCheckoutAddressBinding
@@ -45,11 +54,22 @@ class CheckoutAddressActivity : BaseActivity(), DialogssInterface {
     var addressListAdapter: CheckoutAddressListAdapter? = null
     private var confirmationDialog: Dialog? = null
     private var mDialogClass = DialogClass()
-
+    var timeSlotsAdapter: TimeSlotsListAdapter? = null
+    var dateSlotsAdapter: DateListAdapter? = null
+    var slotsList = ArrayList<TimeSlotsResponse.Body>()
+    var dateList = ArrayList<DateSlotsResponse.Body>()
     var pos = 0
+    var selectedDate = ""
+    var selectedTime = ""
+    var quantityCount = 0
+    var selectedAddressType = "1"
+    var couponCode = ""
+    var price = 0
     lateinit var addressViewModel: AddressViewModel
     private var addressesList = ArrayList<AddressListResponse.Body>()
     var addressId = ""
+    lateinit var servicesViewModel: ServicesViewModel
+    lateinit var promcodeViewModel: PromoCodeViewModel
     private val SECOND_ACTIVITY_REQUEST_CODE = 0
     override fun getLayoutId(): Int {
         return R.layout.activity_checkout_address
@@ -59,7 +79,8 @@ class CheckoutAddressActivity : BaseActivity(), DialogssInterface {
         cartBinding = viewDataBinding as ActivityCheckoutAddressBinding
         cartViewModel = ViewModelProviders.of(this).get(CartViewModel::class.java)
         addressViewModel = ViewModelProviders.of(this).get(AddressViewModel::class.java)
-
+        servicesViewModel = ViewModelProviders.of(this).get(ServicesViewModel::class.java)
+        promcodeViewModel = ViewModelProviders.of(this).get(PromoCodeViewModel::class.java)
         cartBinding.commonToolBar.imgRight.visibility = View.GONE
         cartBinding.commonToolBar.imgRight.setImageResource(R.drawable.ic_nav_edit_icon)
         cartBinding.commonToolBar.imgToolbarText.text =
@@ -83,12 +104,39 @@ class CheckoutAddressActivity : BaseActivity(), DialogssInterface {
                                 cartList.addAll(response.data!!)
                                 cartBinding.tvTotalItems.setText(cartList.size.toString())
                                 cartBinding.tvOfferPrice.setText(cartList[0].service?.currency + " " + response.coupanDetails?.payableAmount)
-                                if (response.coupanDetails?.isCouponApplied.equals("true")) {
+                                /*if (response.coupanDetails?.isCouponApplied.equals("true")) {
                                     if (response.coupanDetails?.isCoupanValid.equals("true")) {
                                         cartBinding.rlRealPrice.visibility = View.VISIBLE
                                         cartBinding.tvOfferPrice.setText(cartList[0].service?.currency + " " + response.coupanDetails?.payableAmount)
                                         cartBinding.tvRealPrice.setText(cartList[0].service?.currency + " " + response.coupanDetails?.totalAmount)
                                     }
+                                }*/
+
+
+                                if (response.coupanDetails?.isCouponApplied.equals("true")) {
+
+                                    if (response.coupanDetails?.isCoupanValid.equals("true")) {
+                                        couponCode = response.coupanDetails?.coupanCode.toString()
+                                        cartBinding.tvPromo.setText(response.coupanDetails?.coupanDiscount + "% " + "Discount coupon applied. Remove?")
+                                        cartBinding.rlRealPrice.visibility = View.VISIBLE
+                                        cartBinding.tvOfferPrice.setText(cartList[0].service?.currency + " " + response.coupanDetails?.payableAmount)
+                                        cartBinding.tvRealPrice.setText(cartList[0].service?.currency + " " + response.coupanDetails?.totalAmount)
+                                    } else {
+                                        couponCode = response.coupanDetails?.coupanCode.toString()
+                                        cartBinding.tvPromo.setText("Invalid Coupon. Remove?")
+                                    }
+                                    val str = cartBinding.tvPromo.getText().toString()
+                                    var span = str.split(".")
+                                    val rr = span[1]
+                                    val styledString = SpannableStringBuilder(cartBinding.tvPromo.getText().toString())
+                                    var length = cartBinding.tvPromo.getText().toString().length
+                                    val startPos = length - 7
+                                    styledString.setSpan(StyleSpan(Typeface.BOLD), startPos, styledString.length, 0)
+                                    styledString.setSpan(ForegroundColorSpan(Color.RED), startPos, styledString.length, 0)
+                                    cartBinding.tvPromo.setText(/*span[0] + ". " +*/ styledString)
+                                } else {
+                                    cartBinding.rlRealPrice.visibility = View.GONE
+                                    cartBinding.tvPromo.setText(getString(R.string.apply_coupon))
                                 }
                             }
                             else -> message?.let {
@@ -96,6 +144,70 @@ class CheckoutAddressActivity : BaseActivity(), DialogssInterface {
 
                             }
                         }
+                    }
+                })
+
+
+        servicesViewModel.getTimeSlotsRes().observe(this,
+                Observer<TimeSlotsResponse> { response ->
+                    stopProgressDialog()
+                    if (response != null) {
+                        val message = response.message
+                        when {
+                            response.code == 200 -> {
+                                if (quantityCount != 0) {
+                                    slotsList.clear()
+                                    slotsList.addAll(response.data!!)
+                                    cartBinding.rvSlots.visibility = View.VISIBLE
+                                    cartBinding.tvNoRecord.visibility = View.GONE
+                                    cartBinding.tvTimeSlots.visibility = View.VISIBLE
+                                    //cartBinding.btnSubmit.visibility = View.VISIBLE
+                                    initRecyclerView()
+                                }
+
+                            }
+                            else -> {
+                                message?.let {
+                                    UtilsFunctions.showToastError(it)
+                                    cartBinding.tvNoRecord.setText(message)
+                                }
+                                // cartBinding.btnSubmit.visibility = View.GONE
+                                cartBinding.rvSlots.visibility = View.GONE
+                                cartBinding.tvTimeSlots.visibility = View.GONE
+                                cartBinding.tvNoRecord.visibility = View.VISIBLE
+
+                            }
+                        }
+
+                    }
+                })
+
+        servicesViewModel.getDateSlotsRes().observe(this,
+                Observer<DateSlotsResponse> { response ->
+                    stopProgressDialog()
+                    if (response != null) {
+                        val message = response.message
+                        when {
+                            response.code == 200 -> {
+                                dateList.clear()
+                                dateList.addAll(response.data!!)
+                                cartBinding.rvDate.visibility = View.VISIBLE
+                                cartBinding.tvDateRecord.visibility = View.GONE
+                                // cartBinding.btnSubmit.visibility = View.VISIBLE
+                                initDateRecyclerView()
+                            }
+                            else -> {
+                                message?.let {
+                                    UtilsFunctions.showToastError(it)
+                                    //  cartBinding.tvNoRecord.setText(message)
+                                }
+                                cartBinding.rvDate.visibility = View.GONE
+                                cartBinding.tvSelectdateMsg.visibility = View.GONE
+                                // cartBinding.tvDateRecord.visibility = View.VISIBLE
+
+                            }
+                        }
+
                     }
                 })
 
@@ -164,10 +276,43 @@ class CheckoutAddressActivity : BaseActivity(), DialogssInterface {
                     }
                 })
 
+        promcodeViewModel.getRemovePromoRes().observe(this,
+                Observer<CommonModel> { response ->
+                    stopProgressDialog()
+                    if (response != null) {
+                        val message = response.message
+                        when {
+                            response.code == 200 -> {
+                                cartList.clear()
+                                cartViewModel.getCartList()
+                            }
+                            else -> message?.let {
+                                UtilsFunctions.showToastError(it)
+                            }
+                        }
+
+                    }
+                })
+
         cartViewModel.isClick().observe(
                 this, Observer<String>(function =
         fun(it: String?) {
             when (it) {
+                "tvPromo" -> {
+                    if (cartBinding.tvPromo.getText().toString().equals(getString(R.string.apply_coupon))) {
+                        val intent = Intent(this, PromoCodeActivity::class.java)
+                        startActivityForResult(intent, SECOND_ACTIVITY_REQUEST_CODE)
+                    } else {
+                        confirmationDialog = mDialogClass.setDefaultDialog(
+                                this,
+                                this,
+                                "Remove Coupon",
+                                getString(R.string.warning_remove_coupon)
+                        )
+                        confirmationDialog?.show()
+
+                    }
+                }
                 "tvChange" -> {
                     addressDialog()
                 }
@@ -189,6 +334,14 @@ class CheckoutAddressActivity : BaseActivity(), DialogssInterface {
                 confirmationDialog?.dismiss()
                 if (UtilsFunctions.isNetworkConnected()) {
 
+                }
+
+            }
+            "Remove Coupon" -> {
+                confirmationDialog?.dismiss()
+                if (UtilsFunctions.isNetworkConnected()) {
+                    startProgressDialog()
+                    promcodeViewModel.removePromoCode(couponCode)
                 }
 
             }
@@ -265,4 +418,90 @@ class CheckoutAddressActivity : BaseActivity(), DialogssInterface {
         }
     }
 
+    private fun initRecyclerView() {
+        timeSlotsAdapter = TimeSlotsListAdapter(this, slotsList, this)
+        val linearLayoutManager = LinearLayoutManager(this)
+        linearLayoutManager.orientation = RecyclerView.HORIZONTAL
+        cartBinding.rvSlots.layoutManager = linearLayoutManager
+        cartBinding.rvSlots.adapter = timeSlotsAdapter
+        cartBinding.rvSlots.addOnScrollListener(object :
+                RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+
+            }
+        })
+    }
+
+    private fun initDateRecyclerView() {
+        // cartBinding.rvDate.visibility=View.GONE
+        dateSlotsAdapter = DateListAdapter(this, dateList, this)
+        val linearLayoutManager = LinearLayoutManager(this)
+        linearLayoutManager.orientation = RecyclerView.HORIZONTAL
+        cartBinding.rvDate.layoutManager = linearLayoutManager
+        cartBinding.rvDate.adapter = dateSlotsAdapter
+        cartBinding.rvDate.addOnScrollListener(object :
+                RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+
+            }
+        })
+    }
+
+    fun selectTimeSlot(position: Int) {
+        var i = 0
+        for (item in slotsList) {
+
+            slotsList[i].selected = "false"
+            i++
+        }
+        slotsList[position].selected = "true"
+        //selectedTime = slotsList[position].timing!!
+        selectedTime = slotsList[position].id!!
+        timeSlotsAdapter?.notifyDataSetChanged()
+
+    }
+
+    fun selectDatelot(position: Int) {
+
+        var i = 0
+        for (item in dateList) {
+
+            dateList[i].selected = "false"
+            i++
+        }
+        dateList[position].selected = "true"
+        dateSlotsAdapter?.notifyDataSetChanged()
+        selectedDate = dateList[position].date!!
+        callGetTimeSlotsApi()
+    }
+
+    private fun callGetTimeSlotsApi() {
+        /*price = quantityCount * priceAmount.toInt()
+        serviceDetailBinding.tvTotalPrice.setText(currency + price.toString())*/
+        if (!TextUtils.isEmpty(selectedDate)) {
+            var cartObject = JsonObject()
+            cartObject.addProperty(
+                    "serviceId", cartList[0].id
+            )
+            cartObject.addProperty(
+                    "quantity", 1
+            )
+            servicesViewModel.getTimeSlot(cartObject)
+        }
+    }
+
+    // This method is called when the second activity finishes
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        // Check that it is the SecondActivity with an OK result
+        if (requestCode == SECOND_ACTIVITY_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                cartList.clear()
+                cartViewModel.getCartList()
+
+            }
+        }
+    }
 }
+
+
