@@ -20,13 +20,13 @@ import kotlin.collections.ArrayList
 
 class CategoriesGridListAdapter(
         context: HomeFragment,
-        addressList: ArrayList<com.example.services.viewmodels.home.Service>,
+        addressList: ArrayList<com.example.services.viewmodels.home.Subcat>,
         var activity: Context
 ) :
         ArrayAdapter<CategoriesGridListAdapter.ItemHolder>(activity, R.layout.category_item) {
     private val mContext: HomeFragment
     private var viewHolder: ItemHolder? = null
-    private var categoriesList: ArrayList<com.example.services.viewmodels.home.Service>
+    private var categoriesList: ArrayList<com.example.services.viewmodels.home.Subcat>
 
     init {
         this.mContext = context

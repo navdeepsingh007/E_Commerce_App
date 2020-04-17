@@ -65,6 +65,7 @@
                         android:layout_marginStart="@dimen/dp_10"
                         android:layout_marginLeft="@dimen/dp_10"
                         android:layout_marginTop="@dimen/dp_5"
+                    android:padding="@dimen/dp_5"
                         android:layout_toLeftOf="@+id/img_address"
                         android:layout_toRightOf="@+id/rd_default"
                         android:orientation="horizontal">
@@ -115,6 +116,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:text="Facial and Clean up"
+                        android:padding="@dimen/dp_5"
                             android:layout_marginLeft="@dimen/dp_2"
                             android:textAllCaps="false"
                             android:textColor="@color/colorGrey"

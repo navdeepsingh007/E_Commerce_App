@@ -5,14 +5,9 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.NonNull
-import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestOptions
 import com.example.services.R
 import com.example.services.databinding.CategoryItemBinding
 import com.example.services.views.home.HomeFragment
@@ -22,14 +17,14 @@ import kotlin.collections.ArrayList
 
 class TrendingServiceListAdapter(
         context: HomeFragment,
-        addressList: ArrayList<com.example.services.viewmodels.home.TrendingService>,
+        addressList: ArrayList<com.example.services.viewmodels.home.Trending>,
         var activity: Context
 ) : PagerAdapter() {
     private var inflater: LayoutInflater? = null
     // private val images = arrayOf(R.drawable.anton, R.drawable.frankjpg, R.drawable.redcharlie, R.drawable.westboundary)
     private val mContext: HomeFragment
     private var viewHolder: CategoriesGridListAdapter.ItemHolder? = null
-    private var categoriesList: ArrayList<com.example.services.viewmodels.home.TrendingService>
+    private var categoriesList: ArrayList<com.example.services.viewmodels.home.Trending>
 
     init {
         this.mContext = context

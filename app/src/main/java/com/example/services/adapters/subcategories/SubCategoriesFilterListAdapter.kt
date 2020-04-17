@@ -9,18 +9,19 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.services.R
 import com.example.services.databinding.ServiceSubcatItemBinding
+import com.example.services.model.services.Headers
 import com.example.services.model.services.SubCategory
 import com.example.services.views.subcategories.ServicesListActivity
 
 class SubCategoriesFilterListAdapter(
         context: ServicesListActivity,
-        addressList: ArrayList<SubCategory>,
+        addressList: ArrayList<Headers>,
         var activity: Context
 ) :
         RecyclerView.Adapter<SubCategoriesFilterListAdapter.ViewHolder>() {
     private val mContext: ServicesListActivity
     private var viewHolder: ViewHolder? = null
-    private var addressList: ArrayList<SubCategory>
+    private var addressList: ArrayList<Headers>
 
     init {
         this.mContext = context
@@ -42,7 +43,7 @@ class SubCategoriesFilterListAdapter(
         viewHolder = holder
         holder.binding!!.tvCatName.text = addressList[position].name
 
-        if (addressList[position].subCategorySelect.equals("true")) {
+        if (addressList[position].isSelected.equals("true")) {
             //holder.binding.topLay.setBackgroundDrawable(mContext.resources.getDrawable(R.drawable.btn_bg_shape_colored))
             holder.binding.tvCatName.setBackgroundColor(mContext.resources.getColor(R.color.btnBackground))
             holder.binding.tvCatName.setTextColor(mContext.resources.getColor(R.color.colorWhite))
@@ -65,7 +66,7 @@ class SubCategoriesFilterListAdapter(
             v: View, val viewType: Int, //These are the general elements in the RecyclerView
             val binding: ServiceSubcatItemBinding?,
             mContext: ServicesListActivity,
-            addressList: ArrayList<SubCategory>?
+            addressList: ArrayList<Headers>?
     ) : RecyclerView.ViewHolder(v) {
         /*init {
             binding.linAddress.setOnClickListener {

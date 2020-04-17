@@ -29,7 +29,7 @@ class FavoriteListActivity : BaseActivity(), DialogssInterface {
     lateinit var favoriteBinding : ActivityFavoriteListBinding
     lateinit var favoriteViewModel : FavoriteViewModel
     lateinit var servicesViewModel : ServicesViewModel
-    var cartList = ArrayList<CartListResponse.Body>()
+    var cartList = ArrayList<CartListResponse.Data>()
     var favoriteListAdapter : FavoriteListAdapter?=null
     private var confirmationDialog : Dialog? = null
     private var mDialogClass = DialogClass()
@@ -65,7 +65,7 @@ class FavoriteListActivity : BaseActivity(), DialogssInterface {
                     val message = response.message
                     when {
                         response.code == 200 -> {
-                            cartList.addAll(response.data!!)
+                            cartList.addAll(response.body!!.data!!)
                             favoriteBinding.rvFavorite.visibility = View.VISIBLE
                             favoriteBinding.tvNoRecord.visibility = View.GONE
                             initRecyclerView()

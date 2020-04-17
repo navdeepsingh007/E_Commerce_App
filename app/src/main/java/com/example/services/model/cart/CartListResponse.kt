@@ -10,15 +10,29 @@ class CartListResponse {
     @SerializedName("message")
     @Expose
     var message: String? = null
-    @SerializedName("data")
+    @SerializedName("body")
     @Expose
-    var data: ArrayList<Body>? = null
+    var body: Body? = null
+
     @SerializedName("coupanDetails")
     @Expose
     var coupanDetails: CoupanDetails? = null
 
 
     inner class Body {
+        @SerializedName("data")
+        @Expose
+        var data: ArrayList<Data>? = null
+
+        @SerializedName("sum")
+        @Expose
+        var sum: String? = null
+
+
+    }
+
+    inner class Data {
+
         @SerializedName("service")
         @Expose
         var service: Service? = null
@@ -31,7 +45,7 @@ class CartListResponse {
         @SerializedName("userId")
         @Expose
         var userId: String? = null
-        @SerializedName("price")
+        @SerializedName("orderTotalPrice")
         @Expose
         var price: String? = null
         @SerializedName("quantity")
@@ -43,8 +57,6 @@ class CartListResponse {
         @SerializedName("updated_at")
         @Expose
         var updated_at: String? = null
-
-
     }
 
     inner class Service {

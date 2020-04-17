@@ -1,11 +1,14 @@
 package com.example.services.views.payment;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,6 +40,7 @@ import java.util.Map;
 public class PaymentActivity extends BaseActivity {
 
     private TextView mTxvProductPrice, mTxvBuy;
+    String amount, currency;
 
     @Override
     protected int getLayoutId() {
@@ -46,8 +50,28 @@ public class PaymentActivity extends BaseActivity {
 
     protected void initViews() {
         //  setContentView(R.layout.activity_payment);
-        mTxvProductPrice = findViewById(R.id.txv_product_price);
+         mTxvProductPrice = findViewById(R.id.txv_product_price);
         mTxvBuy = findViewById(R.id.txt_buy_product);
+        amount = getIntent().getStringExtra("amount");
+        currency = getIntent().getStringExtra("currency");
+        String totalItems = getIntent().getStringExtra("totalItems");
+        // Toolbar commonToolBar = findViewById(R.id.common_tool_bar);
+        TextView tvTotalItems = findViewById(R.id.tvTotalItems);
+        TextView tvOfferPrice = findViewById(R.id.tv_offer_price);
+        TextView img_toolbar_text = findViewById(R.id.img_toolbar_text);
+        ImageView toolbar = findViewById(R.id.toolbar);
+
+        img_toolbar_text.setText("Payment Screen");
+        tvOfferPrice.setText(currency + " " + amount);
+        tvTotalItems.setText(totalItems);
+
+        toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        //launchPaymentFlow(amount, currency);
     }
 
     @Override
@@ -55,27 +79,28 @@ public class PaymentActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         initViews();
 
-        String priceNo = getString(R.string.txt_product_price);
-        String price = getResources().getString(R.string.Rupees) + priceNo;
+        String priceNo = amount;//getString(R.string.txt_product_price);
+        String price = currency + " " + priceNo/*getResources().getString(R.string.Rupees)*/;
         mTxvProductPrice.setText(price);
 
         mTxvBuy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mTxvBuy.setEnabled(false);
-                launchPaymentFlow();
+                launchPaymentFlow(amount, currency);
+                // launchPaymentFlow();
             }
         });
     }
 
-    private void launchPaymentFlow() {
+    private void launchPaymentFlow(String amount, String currency) {
         PayUmoneyConfig payUmoneyConfig = PayUmoneyConfig.getInstance();
-        payUmoneyConfig.setPayUmoneyActivityTitle("Buy" + getResources().getString(R.string.nike_power_run));
-        payUmoneyConfig.setDoneButtonText("Pay " + getResources().getString(R.string.Rupees) + getResources().getString(R.string.txt_product_price));
+        payUmoneyConfig.setPayUmoneyActivityTitle(getResources().getString(R.string.book) + " " + getResources().getString(R.string.service));
+        payUmoneyConfig.setDoneButtonText("Pay " + currency + " " + amount/*getResources().getString(R.string.Rupees) + getResources().getString(R.string.txt_product_price)*/);
 
         PayUmoneySdkInitializer.PaymentParam.Builder builder = new PayUmoneySdkInitializer.PaymentParam.Builder();
-        builder.setAmount(String.valueOf(convertStringToDouble(getResources().getString(R.string.txt_product_price))))
-                .setTxnId(/*System.currentTimeMillis() + ""*/"545154845")
+        builder.setAmount(String.valueOf(convertStringToDouble(amount)))
+                .setTxnId(System.currentTimeMillis() + "")
                 .setPhone(GlobalConstants.getMOBILE())
                 .setProductName(getResources().getString(R.string.nike_power_run))
                 .setFirstName(GlobalConstants.getFIRST_NAME())
@@ -145,74 +170,24 @@ public class PaymentActivity extends BaseActivity {
         return hexString.toString();
     }
 
-    private void calculateHashInServer(final PayUmoneySdkInitializer.PaymentParam mPaymentParams) {
-        //ProgressUtils.showLoadingDialog(this);
-        startProgressDialog();
-        String url = GlobalConstants.getMONEY_HASH();
-        StringRequest request = new StringRequest(Request.Method.POST, url,
-
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        mTxvBuy.setEnabled(true);
-                        String merchantHash = "";
-
-                        try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            merchantHash = jsonObject.getString("result");
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        //ProgressUtils.cancelLoading();
-                        stopProgressDialog();
-
-                        if (merchantHash.isEmpty() || merchantHash.equals("")) {
-                            Toast.makeText(PaymentActivity.this, "Could not generate hash", Toast.LENGTH_SHORT).show();
-                        } else {
-                            mPaymentParams.setMerchantHash(merchantHash);
-                            PayUmoneyFlowManager.startPayUMoneyFlow(mPaymentParams, PaymentActivity.this, R.style.PayUMoney, true);
-                        }
-                    }
-                },
-
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        mTxvBuy.setEnabled(true);
-                        if (error instanceof NoConnectionError) {
-                            Toast.makeText(PaymentActivity.this, "Connect to internet Volley", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(PaymentActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                        stopProgressDialog();
-                        //ProgressUtils.cancelLoading();
-                    }
-                }) {
-            @Override
-            protected Map<String, String> getParams() {
-                return mPaymentParams.getParams();
-            }
-        };
-        Volley.newRequestQueue(this).add(request);
-    }
-
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         mTxvBuy.setEnabled(true);
-
+        Intent intent = new Intent();
         if (requestCode == PayUmoneyFlowManager.REQUEST_CODE_PAYMENT && resultCode == RESULT_OK && data != null) {
 
             TransactionResponse transactionResponse = data.getParcelableExtra(PayUmoneyFlowManager.INTENT_EXTRA_TRANSACTION_RESPONSE);
             ResultModel resultModel = data.getParcelableExtra(PayUmoneyFlowManager.ARG_RESULT);
 
+
             if (transactionResponse != null && transactionResponse.getPayuResponse() != null) {
 
                 if (transactionResponse.getTransactionStatus().equals(TransactionResponse.TransactionStatus.SUCCESSFUL)) {
-                    showAlert("Payment Successful");
+                    // showAlert("Payment Successful");
                     String res = transactionResponse.getPayuResponse();
                     try {
                         JSONObject jsonObject = new JSONObject(res);
+                        intent.putExtra("status", "success");
                         /*String result = jsonObject.getString("result");
                         jsonObject = new JSONObject(result);
                         String id = jsonObject.getString("payuMoneyId");*/
@@ -221,18 +196,27 @@ public class PaymentActivity extends BaseActivity {
                     }
                     // merchantHash = jsonObject.getString("result");
                 } else if (transactionResponse.getTransactionStatus().equals(TransactionResponse.TransactionStatus.CANCELLED)) {
-                    showAlert("Payment Cancelled");
+                    //  showAlert("Payment Cancelled");
+                    intent.putExtra("status", "Payment Cancelled");
                 } else if (transactionResponse.getTransactionStatus().equals(TransactionResponse.TransactionStatus.FAILED)) {
-                    showAlert("Payment Failed");
+                    //showAlert("Payment Failed");
+                    intent.putExtra("status", "Payment Failed");
                 }
 
             } else if (resultModel != null && resultModel.getError() != null) {
                 Toast.makeText(this, "Error check log", Toast.LENGTH_SHORT).show();
+                intent.putExtra("status", "SomethingWent wrong");
             } else {
                 Toast.makeText(this, "Both objects are null", Toast.LENGTH_SHORT).show();
+                intent.putExtra("status", "SomethingWent wrong");
             }
+            setResult(RESULT_OK, intent);
+            finish();
         } else if (requestCode == PayUmoneyFlowManager.REQUEST_CODE_PAYMENT && resultCode == RESULT_CANCELED) {
-            showAlert("Payment Cancelled");
+            //   showAlert("Payment Cancelled");
+            intent.putExtra("status", "Payment Cancelled");
+            setResult(RESULT_OK, intent);
+            finish();
         }
     }
 

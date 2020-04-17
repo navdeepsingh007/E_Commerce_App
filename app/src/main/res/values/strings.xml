@@ -69,7 +69,6 @@
     <string name="thu">Thu</string>
     <string name="fri">Fri</string>
     <string name="sat">Sat</string>
-    <string name="book">Book</string>
     <string name="dummy_pass">******</string>
     <string name="dummy_email">androidseasia@mailinator.com</string>
     <string name="dummy_visa">Visa ending in 2019</string>
@@ -354,4 +353,13 @@
     <string name="Rupees">₹</string>
     <string name="nike_power_run">Nike Power-Run</string>
     <string name="txt_product_price">8000</string>
+
+
+
+
+
+    <string name="book">Book</string>
+    <string name="current_location">Current Location</string>
+    <string name="duration">Duration</string>
+    <string name="service_date">Service Date</string>
 </resources>

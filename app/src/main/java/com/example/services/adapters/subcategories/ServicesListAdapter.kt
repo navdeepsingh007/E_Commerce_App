@@ -1,6 +1,7 @@
 package com.uniongoods.adapters
 
 import android.content.Context
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,24 +44,27 @@ class ServicesListAdapter(
         viewHolder = holder
         holder.binding!!.tvCatName.text = addressList[position].name
         holder.binding!!.tvOfferPrice.text = "Rs. " + addressList[position].price.toString()
-
-        holder.binding!!.rBar.setRating(addressList[position].rating.toFloat())
+        holder.binding!!.tvDuration.setText(mContext.resources.getString(R.string.duration) + ": " + addressList[position].duration)
+       // holder.binding!!.rBar.setRating(addressList[position].rating.toFloat())
         Glide.with(mContext)
                 .load(addressList[position].thumbnail)
-               // .apply(RequestOptions.bitmapTransform(RoundedCorners(20)))
+                // .apply(RequestOptions.bitmapTransform(RoundedCorners(20)))
                 .placeholder(R.drawable.ic_category)
                 .into(holder.binding.imgCat)
 
-        if (addressList[position].favorite.equals("false")) {
-            holder.binding.imgFavourite.setImageResource(R.drawable.ic_unfavorite)
-        } else {
-            holder.binding.imgFavourite.setImageResource(R.drawable.ic_favorite)
+        if (!TextUtils.isEmpty(addressList[position].favourite)) {
+            if (addressList[position].favourite.equals("false")) {
+                holder.binding.imgFavourite.setImageResource(R.drawable.ic_unfavorite)
+            } else {
+                holder.binding.imgFavourite.setImageResource(R.drawable.ic_favorite)
+            }
         }
 
+
         //img_cat
-        holder.binding!!.tvAdd.setOnClickListener {
-            mContext.addRemoveToCart(position, holder.binding!!.tvAdd.getText().toString())
-        }
+        /* holder.binding!!.tvAdd.setOnClickListener {
+             mContext.addRemoveToCart(position, holder.binding!!.tvAdd.getText().toString())
+         }*/
         //img_cat
         holder.binding!!.serviceItem.setOnClickListener {
             mContext.callServiceDetail(addressList[position].id)

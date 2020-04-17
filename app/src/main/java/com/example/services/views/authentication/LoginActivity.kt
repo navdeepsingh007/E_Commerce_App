@@ -19,6 +19,7 @@ import com.example.services.sharedpreference.SharedPrefClass
 import com.example.services.utils.BaseActivity
 import com.example.services.viewmodels.LoginViewModel
 import com.example.services.views.home.DashboardActivity
+import com.example.services.views.home.LandingMainActivity
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.gson.JsonObject
 
@@ -67,11 +68,11 @@ class LoginActivity : BaseActivity() {
                                         "false"
                                 )
 
-                                SharedPrefClass().putObject(
+                               /* SharedPrefClass().putObject(
                                         this,
                                         GlobalConstants.IsAddressAdded,
                                         response.data!!.isAddressAdded
-                                )
+                                )*/
 
                                 SharedPrefClass().putObject(
                                         this,
@@ -89,12 +90,17 @@ class LoginActivity : BaseActivity() {
                                         response.data!!.countryCode
                                 )
                                 SharedPrefClass().putObject(
+                                        this,
+                                        GlobalConstants.USER_IAMGE,
+                                        response.data!!.image
+                                )
+                                SharedPrefClass().putObject(
                                         MyApplication.instance.applicationContext,
                                         "isLogin",
                                         true
                                 )
 
-                                val intent = Intent(this, DashboardActivity::class.java)
+                                val intent = Intent(this, LandingMainActivity::class.java)
                                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                 intent.putExtra("data", mJsonObject.toString())
                                 startActivity(intent)
@@ -144,7 +150,7 @@ class LoginActivity : BaseActivity() {
                                     "countryCode",
                                     "+" + activityLoginbinding.btnCcp.selectedCountryCode
                             )
-                            mJsonObject.addProperty("companyId", "0bedb416-7988-11ea-b201-005056078928")
+                            mJsonObject.addProperty("companyId", "25cbf58b-46ba-4ba2-b25d-8f8f653e9f11")
                             mJsonObject.addProperty("device_id", androidId)
                             mJsonObject.addProperty("app-version", versionName)
                             loginViewModel.checkPhoneExistence(mJsonObject)

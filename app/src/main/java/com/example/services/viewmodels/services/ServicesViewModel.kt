@@ -6,7 +6,6 @@ import android.view.View
 import com.example.services.common.UtilsFunctions
 import com.example.services.model.CommonModel
 import com.example.services.model.LoginResponse
-import com.example.services.model.address.AddressResponse
 import com.example.services.model.services.DateSlotsResponse
 import com.example.services.model.services.ServicesDetailResponse
 import com.example.services.model.services.ServicesListResponse
@@ -29,12 +28,12 @@ class ServicesViewModel : BaseViewModel() {
 
     init {
         if (UtilsFunctions.isNetworkConnectedWithoutToast()) {
-            servicesList = servicesRepository.getServicesList(null)
+            servicesList = servicesRepository.getServicesList("")
             servicesDetail = servicesRepository.getServiceDetail("")
-            carRes = servicesRepository.addRemoveCart(null)
+            carRes = servicesRepository.addCart(null)
             favRes = servicesRepository.addRemoveFav(null)
-            timeSlotsList = servicesRepository.getTimeSlots(null)
-             dateSlots= servicesRepository.getDateSlots()
+            timeSlotsList = servicesRepository.getTimeSlots("")
+           // dateSlots = servicesRepository.getDateSlots()
         }
 
     }
@@ -51,9 +50,9 @@ class ServicesViewModel : BaseViewModel() {
         return timeSlotsList
     }
 
-    fun getDateSlotsRes(): LiveData<DateSlotsResponse> {
+   /* fun getDateSlotsRes(): LiveData<DateSlotsResponse> {
         return dateSlots
-    }
+    }*/
 
     fun getServiceDetailRes(): LiveData<ServicesDetailResponse> {
         return servicesDetail
@@ -75,20 +74,25 @@ class ServicesViewModel : BaseViewModel() {
         btnClick.value = v.resources.getResourceName(v.id).split("/")[1]
     }
 
-    fun getServices(mJsonObject: JsonObject) {
+    fun getServices(mJsonObject: String) {
         if (UtilsFunctions.isNetworkConnected()) {
             servicesList = servicesRepository.getServicesList(mJsonObject)
             mIsUpdating.postValue(true)
         }
     }
 
-    fun addRemoveCart(mJsonObject: JsonObject) {
+    fun addCart(mJsonObject: JsonObject) {
         if (UtilsFunctions.isNetworkConnected()) {
-            carRes = servicesRepository.addRemoveCart(mJsonObject)
+            carRes = servicesRepository.addCart(mJsonObject)
             mIsUpdating.postValue(true)
         }
     }
-
+    fun removeCart(mJsonObject: String) {
+        if (UtilsFunctions.isNetworkConnected()) {
+            carRes = servicesRepository.removeCart(mJsonObject)
+            mIsUpdating.postValue(true)
+        }
+    }
     fun addRemoveFav(mJsonObject: JsonObject) {
         if (UtilsFunctions.isNetworkConnected()) {
             favRes = servicesRepository.addRemoveFav(mJsonObject)
@@ -103,18 +107,18 @@ class ServicesViewModel : BaseViewModel() {
         }
     }
 
-    fun getTimeSlot(mJsonObject: JsonObject) {
+    fun getTimeSlot(mJsonObject: String) {
         if (UtilsFunctions.isNetworkConnected()) {
             timeSlotsList = servicesRepository.getTimeSlots(mJsonObject)
             mIsUpdating.postValue(true)
         }
     }
 
-    fun getDateSlots() {
+    /*fun getDateSlots() {
         if (UtilsFunctions.isNetworkConnected()) {
             dateSlots = servicesRepository.getDateSlots()
             mIsUpdating.postValue(true)
         }
-    }
+    }*/
 
 }

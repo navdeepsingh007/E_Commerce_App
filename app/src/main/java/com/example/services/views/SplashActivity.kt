@@ -14,6 +14,7 @@ import com.example.services.views.address.AddAddressActivity
 import com.example.services.views.authentication.LoginActivity
 import com.example.services.views.cart.CheckoutAddressActivity
 import com.example.services.views.home.DashboardActivity
+import com.example.services.views.home.LandingMainActivity
 import com.example.services.views.orders.OrdersListActivity
 import com.example.services.views.payment.PaymentActivity
 import com.example.services.views.promocode.PromoCodeActivity
@@ -89,8 +90,8 @@ class SplashActivity : BaseActivity() {
                 intent.putExtra("data", mJsonObjectStartJob.toString())
                 //startActivity(intent)
             } else {
-                Intent(this, DashboardActivity::class.java)
-               // Intent(this, CheckoutAddressActivity::class.java)
+                Intent(this, LandingMainActivity::class.java)
+                // Intent(this, CheckoutAddressActivity::class.java)
             }
 
         } else {

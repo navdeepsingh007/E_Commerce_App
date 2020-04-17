@@ -12,6 +12,7 @@ import com.example.services.model.CommonModel
 import com.example.services.model.address.AddressListResponse
 import com.example.services.model.address.AddressResponse
 import com.example.services.model.cart.CartListResponse
+import com.example.services.model.promocode.ApplyPromoCodeResponse
 import com.example.services.model.promocode.PromoCodeListResponse
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
@@ -20,7 +21,7 @@ import retrofit2.Response
 class PromoCodeRepository {
     private var data1: MutableLiveData<PromoCodeListResponse>? = null
     private var data2: MutableLiveData<CommonModel>? = null
-    private var data3: MutableLiveData<CommonModel>? = null
+    private var data3: MutableLiveData<ApplyPromoCodeResponse>? = null
     private val gson = GsonBuilder().serializeNulls().create()
 
     init {
@@ -95,21 +96,21 @@ class PromoCodeRepository {
 
     }
 
-    fun applyPromoCode(mJsonObject: JsonObject?): MutableLiveData<CommonModel> {
+    fun applyPromoCode(mJsonObject: JsonObject?): MutableLiveData<ApplyPromoCodeResponse> {
         if (mJsonObject!=null) {
             val mApiService = ApiService<JsonObject>()
             mApiService.get(
                     object : ApiResponse<JsonObject> {
                         override fun onResponse(mResponse: Response<JsonObject>) {
                             val loginResponse = if (mResponse.body() != null)
-                                gson.fromJson<CommonModel>(
+                                gson.fromJson<ApplyPromoCodeResponse>(
                                         "" + mResponse.body(),
-                                        CommonModel::class.java
+                                        ApplyPromoCodeResponse::class.java
                                 )
                             else {
-                                gson.fromJson<CommonModel>(
+                                gson.fromJson<ApplyPromoCodeResponse>(
                                         mResponse.errorBody()!!.charStream(),
-                                        CartListResponse::class.java
+                                        ApplyPromoCodeResponse::class.java
                                 )
                             }
                             data3!!.postValue(loginResponse)

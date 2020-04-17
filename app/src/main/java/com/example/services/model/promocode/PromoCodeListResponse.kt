@@ -10,7 +10,7 @@ class PromoCodeListResponse {
     @SerializedName("message")
     @Expose
     var message : String? = null
-    @SerializedName("data")
+    @SerializedName("body")
     @Expose
     var data : ArrayList<Body>? = null
 

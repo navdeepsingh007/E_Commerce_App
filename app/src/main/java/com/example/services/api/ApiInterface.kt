@@ -43,7 +43,7 @@ interface ApiInterface {
     @POST("users/changepassword/")
     fun chnagePassword(@Body mJsonObject: JsonObject): Call<JsonObject>
 
-    @GET("mobile/profile/getProfile")
+    @GET("mobile/profile/getprofile")
     fun getProfile(): Call<JsonObject>
 
     @GET("driver/vehicle/latLongList")
@@ -64,17 +64,18 @@ interface ApiInterface {
     @GET("vendor/getVendorList")
     fun getVendorList(): Call<JsonObject>
 
-    @GET("mobile/services/getcategories")
+    @GET("mobile/services/getCategories")
     fun getCategories(): Call<JsonObject>
 
-    @GET("job/driver/jobsHistory")
-    fun getJobsHistory(@Query("progressStatus") userId: String): Call<JsonObject>
+    @GET("mobile/services/getSubcat/{id}")
+    fun getSubServices(@Path("id") id: String): Call<JsonObject>
+
+    @GET("mobile/services/getServices/{id}")
+    fun getServices(@Path("id") id: String): Call<JsonObject>
 
     @POST("job/driver/changeJobStatus")
     fun startCompleteJob(@Body mJsonObject: JsonObject): Call<JsonObject>
 
-    @POST("job/driver/acceptRejectJob")
-    fun acceptRejectJob(@Body mJsonObject: JsonObject): Call<JsonObject>
 
     @POST("mobile/address/add")
     fun addAddress(@Body mJsonObject: JsonObject): Call<JsonObject>
@@ -85,7 +86,7 @@ interface ApiInterface {
     @GET("mobile/address/list")
     fun getAddressList(): Call<JsonObject>
 
-    @GET("mobile/services/getcart")
+    @GET("mobile/cart/list")
     fun cartList(/*@Path("id") id : String*/): Call<JsonObject>
 
     @GET("mobile/services/getFavorite")
@@ -111,17 +112,18 @@ interface ApiInterface {
     @POST("mobile/services/getsubcategories")
     fun getSubCatList(@Body mJsonObject: JsonObject): Call<JsonObject>
 
-    @POST("mobile/services/getservices")
-    fun getServices(@Body mJsonObject: JsonObject): Call<JsonObject>
 
-    @POST("mobile/services/addToCart")
+    @POST("mobile/cart/add")
     fun addCart(@Body mJsonObject: JsonObject): Call<JsonObject>
+
+    @DELETE("mobile/cart/remove")
+    fun removeCart(@Query("cartId") cartId: String): Call<JsonObject>
 
     @POST("mobile/services/addFavorite")
     fun addFav(@Body mJsonObject: JsonObject): Call<JsonObject>
 
-    @POST("mobile/services/getTimeSlot")
-    fun getTimeSlots(@Body mJsonObject: JsonObject): Call<JsonObject>
+    @GET("mobile/schedule/getSchedule")
+    fun getTimeSlots(@Query("serviceDate") serviceDate: String): Call<JsonObject>
 
     @GET("mobile/services/getDates")
     fun getDateSlots(): Call<JsonObject>
@@ -129,23 +131,25 @@ interface ApiInterface {
     @GET("mobile/coupan/getPromoList")
     fun getPromoList(): Call<JsonObject>
 
-    @POST("mobile/coupan/addCoupan")
+    @POST("mobile/coupan/applyCoupan")
     fun applyCoupon(@Body mJsonObject: JsonObject): Call<JsonObject>
 
     @POST("mobile/coupan/removeCoupan")
     fun removeCoupon(@Body mJsonObject: JsonObject): Call<JsonObject>
 
-    @POST("mobile/order/createOrder")
+    @POST("mobile/orders/create")
     fun ordePlace(@Body mJsonObject: JsonObject): Call<JsonObject>
 
     @POST("mobile/order/cancelOrder")
     fun cancelOrder(@Body mJsonObject: JsonObject): Call<JsonObject>
 
-    @GET("mobile/services/getServicesDetails/{id}")
-    fun getServiceDetail(@Path("id") id: String): Call<JsonObject>
+    @GET("mobile/services/detail")
+    fun getServiceDetail(@Query("serviceId") addressId: String): Call<JsonObject>
 
-    @GET("mobile/order/orderList")
-    fun orderList(): Call<JsonObject>
-    @GET("mobile/order/orderList")
-    fun orderHistroyList(): Call<JsonObject>
+    @GET("mobile/orders/list")
+    fun orderList(@Query("progressStatus") progressStatus: String): Call<JsonObject>
+
+    @GET("mobile/orders/list")
+    fun orderHistroyList(@Query("progressStatus") progressStatus: String): Call<JsonObject>
+
 }

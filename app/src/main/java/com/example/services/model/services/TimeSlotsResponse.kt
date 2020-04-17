@@ -6,25 +6,56 @@ import com.google.gson.annotations.SerializedName
 class TimeSlotsResponse {
     @SerializedName("code")
     @Expose
-    var code : Int? = null
+    var code: Int? = null
     @SerializedName("message")
     @Expose
-    var message : String? = null
-    @SerializedName("data")
+    var message: String? = null
+    @SerializedName("body")
     @Expose
-    var data : ArrayList<Body>? = null
+    var data: Body? = null
 
     inner class Body {
 
-        @SerializedName("id")
+        @SerializedName("slots")
         @Expose
-        var id : String? = null
-        @SerializedName("timing")
+        var slots: ArrayList<Slots>? = null
+
+        /*@SerializedName("slots") val slots: List<Slots>,
+                @SerializedName("leaves") val leaves: List<String>,
+                @SerializedName("id") val id: String,
+                @SerializedName("fromDate") val fromDate: String,
+                @SerializedName("toDate") val toDate: String,
+                @SerializedName("startTime") val startTime: String,
+                @SerializedName("endTime") val endTime: String,
+                @SerializedName("companyId") val companyId: String,
+                @SerializedName("status") val status: Int,
+                @SerializedName("createdAt") val createdAt: Int*/
+
+
+        /* @SerializedName("id")
+                 @Expose
+                 var id : String? = null
+                 @SerializedName("timing")
+                 @Expose
+                 var timing : String? = null
+                 @SerializedName("selected")
+                 @Expose
+                 var selected : String? = null*/
+
+
+    }
+
+    inner class Slots {
+
+        @SerializedName("slot")
         @Expose
-        var timing : String? = null
+        var slot: String? = null
+        @SerializedName("bookings")
+        @Expose
+        var bookings: String? = null
         @SerializedName("selected")
         @Expose
-        var selected : String? = null
+        var selected: String? = null
 
 
     }

@@ -26,7 +26,7 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent">
 
-            <include
+            <!--<include
                 android:id="@+id/toolbar_common"
                 layout="@layout/common_toolbar"
                 android:layout_width="match_parent"
@@ -35,6 +35,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:onClick="@{(v) -> dashboardViewModel.clickListener(v)}" />
+-->
+            <include
+                android:id="@+id/common_tool_bar"
+                layout="@layout/common_toolbar_back"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{(v) -> dashboardViewModel.clickListener(v)}" />
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tablayout"
@@ -43,7 +50,7 @@
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/toolbar_common"
+                app:layout_constraintTop_toBottomOf="@+id/common_tool_bar"
                 app:tabBackground="@color/colorWhite"
                 app:tabIndicatorColor="@color/tabSelection"
                 app:tabTextAppearance="@style/customizeTabText"
@@ -69,7 +76,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/toolbar_common"></FrameLayout>
+                app:layout_constraintTop_toBottomOf="@+id/common_tool_bar"></FrameLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

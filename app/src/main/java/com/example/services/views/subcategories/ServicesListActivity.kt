@@ -14,9 +14,9 @@ import com.example.services.constants.GlobalConstants
 import com.example.services.utils.BaseActivity
 import com.example.services.databinding.ActivityServicesBinding
 import com.example.services.model.CommonModel
+import com.example.services.model.services.Headers
 import com.example.services.model.services.Services
 import com.example.services.model.services.ServicesListResponse
-import com.example.services.model.services.SubCategory
 import com.example.services.sharedpreference.SharedPrefClass
 import com.example.services.viewmodels.services.ServicesViewModel
 import com.example.services.views.cart.CartListActivity
@@ -28,7 +28,7 @@ class ServicesListActivity : BaseActivity() {
     lateinit var servicesBinding: ActivityServicesBinding
     lateinit var servicesViewModel: ServicesViewModel
     private var serVicesList = ArrayList<Services>()
-    private var subCategoryList = ArrayList<SubCategory>()
+    private var subCategoryList = ArrayList<Headers>()
     var selectedPos = 0
     var catId = ""
     var subCatId = ""
@@ -54,6 +54,7 @@ class ServicesListActivity : BaseActivity() {
     }
 
     override fun initViews() {
+        // setTheme(R.style.ThemeSalon)
         servicesBinding = viewDataBinding as ActivityServicesBinding
         servicesViewModel = ViewModelProviders.of(this).get(ServicesViewModel::class.java)
 
@@ -64,9 +65,9 @@ class ServicesListActivity : BaseActivity() {
         catId = intent.extras?.get("catId").toString()
         subCatId = intent.extras?.get("subCatId").toString()
         //initRecyclerView()
-        val subcat = SubCategory("0", "", "All", "true")
+
         //subcat.name="All"
-        subCategoryList.add(subcat)
+
         val serviceObject = JsonObject()
         serviceObject.addProperty(
                 "category", catId
@@ -75,10 +76,12 @@ class ServicesListActivity : BaseActivity() {
                 "subcategory", "0"
         )
         if (UtilsFunctions.isNetworkConnected()) {
-            servicesViewModel.getServices(serviceObject)
+            servicesViewModel.getServices(catId)
             startProgressDialog()
         }
 
+        val subcat = Headers("0", "", catId, "All", "All", "true")
+        subCategoryList.add(subcat)
         //  initSubCatRecyclerView()
         servicesViewModel.serviceListRes().observe(this,
                 Observer<ServicesListResponse> { response ->
@@ -89,17 +92,29 @@ class ServicesListActivity : BaseActivity() {
                             response.code == 200 -> {
                                 serVicesList.clear()
                                 var isCheck = "false"
-                                subCategoryList.addAll(response.subCategory)
-                                for (item in subCategoryList) {
-                                    if (item.subCategorySelect == "true") {
-                                        isCheck = "true"
+                                if (subCategoryList.size == 1) {
+                                    subCategoryList.addAll(response.body.headers)
+                                    for (item in subCategoryList) {
+                                        item.isSelected = "false"
                                     }
+                                    subCategoryList[0].isSelected = "true"
                                 }
-                                if (isCheck == "false") {
+                                if (subCategoryList.size == 1) {
+                                    servicesBinding.rvSubcategories.visibility = View.GONE
+                                } else {
+                                    servicesBinding.rvSubcategories.visibility = View.VISIBLE
+                                    initSubCatRecyclerView()
+                                }
+                                /* for (item in subCategoryList) {
+                                     if (item.subCategorySelect == "true") {
+                                         isCheck = "true"
+                                     }
+                                 }*/
+                                /*if (isCheck == "false") {
                                     subCategoryList[0].subCategorySelect = "true"
-                                }
-                                serVicesList.addAll(response.services)
-                                if (response.services.size > 0) {
+                                }*/
+                                serVicesList.addAll(response.body.services)
+                                if (response.body.services.size > 0) {
                                     servicesBinding.rvServices.visibility = View.VISIBLE
                                     servicesBinding.tvNoRecord.visibility = View.GONE
                                 } else {
@@ -107,7 +122,7 @@ class ServicesListActivity : BaseActivity() {
                                     servicesBinding.tvNoRecord.visibility = View.VISIBLE
                                 }
                                 initRecyclerView()
-                                initSubCatRecyclerView()
+
 
                             }
                             else -> message?.let {
@@ -127,7 +142,7 @@ class ServicesListActivity : BaseActivity() {
                         val message = response.message
                         when {
                             response.code == 200 -> {
-                                servicesViewModel.getServices(serviceObject)
+                                servicesViewModel.getServices(catId)
                             }
                             else -> message?.let {
                                 UtilsFunctions.showToastError(it)
@@ -144,10 +159,10 @@ class ServicesListActivity : BaseActivity() {
                         val message = response.message
                         when {
                             response.code == 200 -> {
-                                if (serVicesList[pos].favorite.equals("false")) {
-                                    serVicesList[pos].favorite = "true"
+                                if (serVicesList[pos].favourite.equals("false")) {
+                                    serVicesList[pos].favourite = "true"
                                 } else {
-                                    serVicesList[pos].favorite = "false"
+                                    serVicesList[pos].favourite = "false"
                                 }
                                 servicesListAdapter?.notifyDataSetChanged()
                                 // servicesViewModel.getServices(serviceObject)
@@ -177,7 +192,7 @@ class ServicesListActivity : BaseActivity() {
 
     private fun initRecyclerView() {
         servicesListAdapter = ServicesListAdapter(this, serVicesList, this)
-        val gridLayoutManager = GridLayoutManager(this, 2)
+        val gridLayoutManager = GridLayoutManager(this, 1)
         servicesBinding.rvServices.layoutManager = gridLayoutManager
         servicesBinding.rvServices.setHasFixedSize(true)
         servicesBinding.rvServices.adapter = servicesListAdapter
@@ -222,7 +237,7 @@ class ServicesListActivity : BaseActivity() {
                 "status", isCart
         )
         if (UtilsFunctions.isNetworkConnected()) {
-            servicesViewModel.addRemoveCart(cartObject)
+            servicesViewModel.addCart(cartObject)
             startProgressDialog()
         }
     }
@@ -234,7 +249,7 @@ class ServicesListActivity : BaseActivity() {
         cartObject.addProperty(
                 "serviceId", serVicesList[position].id
         )
-        if (serVicesList[position].favorite.equals("false")) {
+        if (serVicesList[position].favourite.equals("false")) {
             isCart = "true"
         } else {
             isCart = "false"
@@ -252,8 +267,9 @@ class ServicesListActivity : BaseActivity() {
     fun selectSubCat(id: String, position: Int) {
         selectedPos == position
         for (item in subCategoryList) {
-            item.subCategorySelect = "false"
+            item.isSelected = "false"
         }
+        subCategoryList[position].isSelected = "true"
         val serviceObject = JsonObject()
         serviceObject.addProperty(
                 "category", catId
@@ -261,12 +277,15 @@ class ServicesListActivity : BaseActivity() {
         serviceObject.addProperty(
                 "subcategory", id
         )
-        subCategoryList.clear()
-        val subcat = SubCategory("0", "", "All", "false")
-        //subcat.name="All"
-        subCategoryList.add(subcat)
+
+        subcatFilterAdapter?.notifyDataSetChanged()
         if (UtilsFunctions.isNetworkConnected()) {
-            servicesViewModel.getServices(serviceObject)
+            /*  if (id.equals("0")) {
+                  servicesViewModel.getServices(catId)
+              } else {*/
+            servicesViewModel.getServices(id)
+            //}
+
             startProgressDialog()
         }
 

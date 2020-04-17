@@ -27,6 +27,7 @@
     <color name="trans">#00000000 </color>
     <color name="tabSelection">#DB6589</color>
     <color name="btnBackground">#F75469</color>
+    <color name="salonBtnBackground">#F75469</color>
     <color name="btnBackgroundWhite">#F8F8F8</color>
     <color name="colorPrice">#1DBB2D</color>
 

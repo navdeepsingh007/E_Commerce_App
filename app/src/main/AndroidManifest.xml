@@ -30,6 +30,7 @@
 
     <application
         android:name=".application.MyApplication"
+        android:allowBackup="true"
         android:fullBackupContent="@xml/backup_descriptor"
         android:icon="@drawable/ic_app"
         android:label="@string/app_name"
@@ -39,7 +40,6 @@
         android:theme="@style/AppTheme.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup"
-        android:allowBackup="true"
         tools:targetApi="n">
         <activity
             android:name=".views.promocode.PromoCodeActivity"
@@ -143,6 +143,12 @@
             android:name=".views.home.DashboardActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".views.home.LandingMainActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+
+
         <activity
             android:name=".views.settings.MyAccountsActivity"
             android:launchMode="singleTop"

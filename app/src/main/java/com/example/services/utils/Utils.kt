@@ -118,4 +118,19 @@ class Utils(internal var context: Context) {
 
     }
 
+    fun getDateLocal(format: String, milisec: String?,outputFormat:String?): String {
+        val inputFormat = SimpleDateFormat(format, Locale.getDefault())
+        val outputFormat1 = SimpleDateFormat(outputFormat, Locale.getDefault())
+
+        //val tz = TimeZone.getTimeZone("Local")
+       // inputFormat.timeZone = tz
+        val date = inputFormat.parse(milisec)
+
+        val tzLocal = TimeZone.getDefault()
+        outputFormat1.timeZone = tzLocal
+        return  outputFormat1.format(date)
+
+
+    }
+
 }

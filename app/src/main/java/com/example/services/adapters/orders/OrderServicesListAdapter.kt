@@ -12,21 +12,18 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.services.R
 import com.example.services.databinding.OrderServiceItemBinding
-import com.example.services.model.cart.CartListResponse
 import com.example.services.model.orders.OrdersListResponse
 import com.example.services.utils.BaseActivity
-import com.example.services.views.orders.OrdersListActivity
-import kotlinx.android.synthetic.main.trending_service_item.view.*
 
 class OrderServicesListAdapter(
         context: BaseActivity,
-        addressList: ArrayList<OrdersListResponse.OrderServices>?,
+        addressList: ArrayList<OrdersListResponse.Suborders>?,
         var activity: Context
 ) :
         RecyclerView.Adapter<OrderServicesListAdapter.ViewHolder>() {
     private val mContext: BaseActivity
     private var viewHolder: ViewHolder? = null
-    private var addressList: ArrayList<OrdersListResponse.OrderServices>?
+    private var addressList: ArrayList<OrdersListResponse.Suborders>?
 
     init {
         this.mContext = context
@@ -46,13 +43,13 @@ class OrderServicesListAdapter(
 
     override fun onBindViewHolder(@NonNull holder: ViewHolder, position: Int) {
         viewHolder = holder
-        holder.binding!!.tvServiceName.text = addressList!![position].ServiceName
+        holder.binding!!.tvServiceName.text = addressList!![position].service?.name
         holder.binding!!.tvQuantity.setText(mContext.resources.getString(R.string.quantity) + ": " + addressList!![position].quantity)
-        holder.binding!!.tvTime.setText(": " + addressList!![position].TimeSlot)
-        holder.binding!!.tvDate.setText(": " + addressList!![position].date)
+        // holder.binding!!.tvTime.setText(": " + addressList!![position].Timing)
+        // holder.binding!!.tvDate.setText(": " + addressList!![position].created_at)
 
         Glide.with(mContext)
-                .load(addressList!![position].icon)
+                .load(addressList!![position].service?.icon)
                 .apply(RequestOptions.bitmapTransform(RoundedCorners(20)))
                 .placeholder(R.drawable.ic_category)
                 .into(holder.binding!!.imgService!!)
@@ -69,7 +66,7 @@ class OrderServicesListAdapter(
             v: View, val viewType: Int, //These are the general elements in the RecyclerView
             val binding: OrderServiceItemBinding?,
             mContext: BaseActivity,
-            addressList: ArrayList<OrdersListResponse.OrderServices>?
+            addressList: ArrayList<OrdersListResponse.Suborders>?
     ) : RecyclerView.ViewHolder(v) {
         /*init {
             binding.linAddress.setOnClickListener {

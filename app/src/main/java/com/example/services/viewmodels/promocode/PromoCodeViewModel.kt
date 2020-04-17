@@ -7,6 +7,7 @@ import com.example.services.common.UtilsFunctions
 import com.example.services.model.CommonModel
 import com.example.services.model.LoginResponse
 import com.example.services.model.address.AddressResponse
+import com.example.services.model.promocode.ApplyPromoCodeResponse
 import com.example.services.model.promocode.PromoCodeListResponse
 import com.example.services.repositories.promocode.PromoCodeRepository
 import com.example.services.viewmodels.BaseViewModel
@@ -18,7 +19,7 @@ class PromoCodeViewModel : BaseViewModel() {
     private var deleteAddress = MutableLiveData<CommonModel>()
 
     private var promocodeList = MutableLiveData<PromoCodeListResponse>()
-    private var applyPromoCode = MutableLiveData<CommonModel>()
+    private var applyPromoCode = MutableLiveData<ApplyPromoCodeResponse>()
     private var removePromoCode = MutableLiveData<CommonModel>()
 
     private var promoCodeRepository = PromoCodeRepository()
@@ -38,7 +39,7 @@ class PromoCodeViewModel : BaseViewModel() {
         return promocodeList
     }
 
-    fun getApplyPromoRes(): LiveData<CommonModel> {
+    fun getApplyPromoRes(): LiveData<ApplyPromoCodeResponse> {
         return applyPromoCode
     }
 
@@ -63,7 +64,7 @@ class PromoCodeViewModel : BaseViewModel() {
         if (UtilsFunctions.isNetworkConnected()) {
             var codeObject = JsonObject()
             codeObject.addProperty(
-                    "coupanCode", code
+                    "promoCode", code
             )
             removePromoCode = promoCodeRepository.removePromoCode(codeObject)
             mIsUpdating.postValue(true)
@@ -74,7 +75,7 @@ class PromoCodeViewModel : BaseViewModel() {
         if (UtilsFunctions.isNetworkConnected()) {
             var codeObject = JsonObject()
             codeObject.addProperty(
-                    "coupanCode", code
+                    "promoCode", code
             )
             applyPromoCode = promoCodeRepository.applyPromoCode(codeObject)
             mIsUpdating.postValue(true)

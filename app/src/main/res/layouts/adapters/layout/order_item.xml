@@ -85,7 +85,31 @@
                         android:id="@+id/rv_order_service"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp_5" />
+                        android:layout_marginLeft="@dimen/dp_5" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_10"
+                        android:layout_marginTop="@dimen/dp_5"
+                        android:layout_marginRight="@dimen/dp_5"
+                        android:singleLine="true"
+                        android:text="@string/service_date"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                        android:textColor="@color/colorGrey"
+                        app:font="@{`regular`}" />
+
+                    <TextView
+                        android:id="@+id/tv_service_on"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_10"
+                        android:layout_marginRight="@dimen/dp_5"
+                        android:singleLine="true"
+                        android:text="8 April 2020 10:30 AM"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                        android:textColor="@color/colorBlack"
+                        app:font="@{`regular`}" />
 
                     <TextView
                         android:layout_width="match_parent"

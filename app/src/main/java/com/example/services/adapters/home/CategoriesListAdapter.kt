@@ -14,14 +14,14 @@ import com.example.services.views.home.HomeFragment
 import kotlin.collections.ArrayList
 
 class CategoriesListAdapter(
-    context : HomeFragment,
-    addressList : ArrayList<com.example.services.viewmodels.home.Service>,
-    var activity : Context
+        context : HomeFragment,
+        addressList : ArrayList<com.example.services.viewmodels.home.Services>,
+        var activity : Context
 ) :
     RecyclerView.Adapter<CategoriesListAdapter.ViewHolder>() {
     private val mContext : HomeFragment
     private var viewHolder : ViewHolder? = null
-    private var categoriesList : ArrayList<com.example.services.viewmodels.home.Service>
+    private var categoriesList : ArrayList<com.example.services.viewmodels.home.Services>
 
     init {
         this.mContext = context
@@ -58,7 +58,7 @@ class CategoriesListAdapter(
         v : View, val viewType : Int, //These are the general elements in the RecyclerView
         val binding : CategoryItemBinding?,
         mContext : HomeFragment,
-        addressList : ArrayList<com.example.services.viewmodels.home.Service>?
+        addressList : ArrayList<com.example.services.viewmodels.home.Services>?
     ) : RecyclerView.ViewHolder(v) {
         /*init {
             binding.linAddress.setOnClickListener {

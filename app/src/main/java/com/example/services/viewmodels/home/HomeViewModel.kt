@@ -12,38 +12,44 @@ class HomeViewModel : BaseViewModel() {
     private val isClick = MutableLiveData<String>()
     private var homeRepository = HomeJobsRepository()
     private var categoriesList = MutableLiveData<CategoriesListResponse>()
+    private var subServicesList = MutableLiveData<CategoriesListResponse>()
+
     /*private var jobsHistoryResponse = MutableLiveData<JobsResponse>()
     private var acceptRejectJob = MutableLiveData<CommonModel>()
     private var startCompleteJob = MutableLiveData<CommonModel>()*/
 
     init {
         if (UtilsFunctions.isNetworkConnectedWithoutToast()) {
-             categoriesList = homeRepository.getCategories("")
+            categoriesList = homeRepository.getCategories("")
+            subServicesList = homeRepository.getSubServices("")
         }
 
     }
 
-    fun getJobs() : LiveData<CategoriesListResponse> {
+    fun getJobs(): LiveData<CategoriesListResponse> {
         return categoriesList
     }
 
+    fun getGetSubServices(): LiveData<CategoriesListResponse> {
+        return subServicesList
+    }
 
 
-    override fun isLoading() : LiveData<Boolean> {
+    override fun isLoading(): LiveData<Boolean> {
         return mIsUpdating
     }
 
-    override fun isClick() : LiveData<String> {
+    override fun isClick(): LiveData<String> {
         return isClick
     }
 
-    override fun clickListener(v : View) {
+    override fun clickListener(v: View) {
         isClick.value = v.resources.getResourceName(v.id).split("/")[1]
     }
 
-    fun getMyJobs(mJsonObject : String) {
+    fun getSubServices(mJsonObject: String) {
         if (UtilsFunctions.isNetworkConnected()) {
-            categoriesList = homeRepository.getCategories(mJsonObject)
+            subServicesList = homeRepository.getSubServices(mJsonObject)
             mIsUpdating.postValue(true)
         }
 

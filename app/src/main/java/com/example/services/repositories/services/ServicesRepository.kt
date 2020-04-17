@@ -20,12 +20,12 @@ import com.google.gson.JsonObject
 import retrofit2.Response
 
 class ServicesRepository {
-    private var data : MutableLiveData<ServicesListResponse>? = null
-    private var data2 : MutableLiveData<ServicesDetailResponse>? = null
-    private var data1 : MutableLiveData<CommonModel>? = null
-    private var data3 : MutableLiveData<CommonModel>? = null
-    private var data4 : MutableLiveData<TimeSlotsResponse>? = null
-    private var data5 : MutableLiveData<DateSlotsResponse>? = null
+    private var data: MutableLiveData<ServicesListResponse>? = null
+    private var data2: MutableLiveData<ServicesDetailResponse>? = null
+    private var data1: MutableLiveData<CommonModel>? = null
+    private var data3: MutableLiveData<CommonModel>? = null
+    private var data4: MutableLiveData<TimeSlotsResponse>? = null
+    private var data5: MutableLiveData<DateSlotsResponse>? = null
     private val gson = GsonBuilder().serializeNulls().create()
 
     init {
@@ -34,35 +34,35 @@ class ServicesRepository {
         data1 = MutableLiveData()
         data3 = MutableLiveData()
         data4 = MutableLiveData()
-        data5= MutableLiveData()
+        data5 = MutableLiveData()
     }
 
-    fun getServicesList(jsonObject : JsonObject?) : MutableLiveData<ServicesListResponse> {
-        if (jsonObject != null) {
+    fun getServicesList(jsonObject: String): MutableLiveData<ServicesListResponse> {
+        if (!TextUtils.isEmpty(jsonObject)) {
             val mApiService = ApiService<JsonObject>()
             mApiService.get(
-                object : ApiResponse<JsonObject> {
-                    override fun onResponse(mResponse : Response<JsonObject>) {
-                        val loginResponse = if (mResponse.body() != null)
-                            gson.fromJson<ServicesListResponse>(
-                                "" + mResponse.body(),
-                                ServicesListResponse::class.java
-                            )
-                        else {
-                            gson.fromJson<ServicesListResponse>(
-                                mResponse.errorBody()!!.charStream(),
-                                ServicesListResponse::class.java
-                            )
+                    object : ApiResponse<JsonObject> {
+                        override fun onResponse(mResponse: Response<JsonObject>) {
+                            val loginResponse = if (mResponse.body() != null)
+                                gson.fromJson<ServicesListResponse>(
+                                        "" + mResponse.body(),
+                                        ServicesListResponse::class.java
+                                )
+                            else {
+                                gson.fromJson<ServicesListResponse>(
+                                        mResponse.errorBody()!!.charStream(),
+                                        ServicesListResponse::class.java
+                                )
+                            }
+                            data!!.postValue(loginResponse)
                         }
-                        data!!.postValue(loginResponse)
-                    }
 
-                    override fun onError(mKey : String) {
-                        UtilsFunctions.showToastError(MyApplication.instance.getString(R.string.internal_server_error))
-                        data!!.postValue(null)
-                    }
+                        override fun onError(mKey: String) {
+                            UtilsFunctions.showToastError(MyApplication.instance.getString(R.string.internal_server_error))
+                            data!!.postValue(null)
+                        }
 
-                }, ApiClient.getApiInterface().getServices(jsonObject)
+                    }, ApiClient.getApiInterface().getServices(jsonObject)
             )
 
         }
@@ -70,32 +70,32 @@ class ServicesRepository {
 
     }
 
-    fun getServiceDetail(jsonObject : String) : MutableLiveData<ServicesDetailResponse> {
+    fun getServiceDetail(jsonObject: String): MutableLiveData<ServicesDetailResponse> {
         if (!TextUtils.isEmpty(jsonObject)) {
             val mApiService = ApiService<JsonObject>()
             mApiService.get(
-                object : ApiResponse<JsonObject> {
-                    override fun onResponse(mResponse : Response<JsonObject>) {
-                        val loginResponse = if (mResponse.body() != null)
-                            gson.fromJson<ServicesDetailResponse>(
-                                "" + mResponse.body(),
-                                ServicesDetailResponse::class.java
-                            )
-                        else {
-                            gson.fromJson<ServicesDetailResponse>(
-                                mResponse.errorBody()!!.charStream(),
-                                ServicesDetailResponse::class.java
-                            )
+                    object : ApiResponse<JsonObject> {
+                        override fun onResponse(mResponse: Response<JsonObject>) {
+                            val loginResponse = if (mResponse.body() != null)
+                                gson.fromJson<ServicesDetailResponse>(
+                                        "" + mResponse.body(),
+                                        ServicesDetailResponse::class.java
+                                )
+                            else {
+                                gson.fromJson<ServicesDetailResponse>(
+                                        mResponse.errorBody()!!.charStream(),
+                                        ServicesDetailResponse::class.java
+                                )
+                            }
+                            data2!!.postValue(loginResponse)
                         }
-                        data2!!.postValue(loginResponse)
-                    }
 
-                    override fun onError(mKey : String) {
-                        UtilsFunctions.showToastError(MyApplication.instance.getString(R.string.internal_server_error))
-                        data2!!.postValue(null)
-                    }
+                        override fun onError(mKey: String) {
+                            UtilsFunctions.showToastError(MyApplication.instance.getString(R.string.internal_server_error))
+                            data2!!.postValue(null)
+                        }
 
-                }, ApiClient.getApiInterface().getServiceDetail(jsonObject)
+                    }, ApiClient.getApiInterface().getServiceDetail(jsonObject)
             )
 
         }
@@ -103,32 +103,32 @@ class ServicesRepository {
 
     }
 
-    fun addRemoveCart(jsonObject : JsonObject?) : MutableLiveData<CommonModel> {
-        if (jsonObject!=null) {
+    fun addCart(jsonObject: JsonObject?): MutableLiveData<CommonModel> {
+        if (jsonObject != null) {
             val mApiService = ApiService<JsonObject>()
             mApiService.get(
-                object : ApiResponse<JsonObject> {
-                    override fun onResponse(mResponse : Response<JsonObject>) {
-                        val loginResponse = if (mResponse.body() != null)
-                            gson.fromJson<CommonModel>(
-                                "" + mResponse.body(),
-                                CommonModel::class.java
-                            )
-                        else {
-                            gson.fromJson<CommonModel>(
-                                mResponse.errorBody()!!.charStream(),
-                                CommonModel::class.java
-                            )
+                    object : ApiResponse<JsonObject> {
+                        override fun onResponse(mResponse: Response<JsonObject>) {
+                            val loginResponse = if (mResponse.body() != null)
+                                gson.fromJson<CommonModel>(
+                                        "" + mResponse.body(),
+                                        CommonModel::class.java
+                                )
+                            else {
+                                gson.fromJson<CommonModel>(
+                                        mResponse.errorBody()!!.charStream(),
+                                        CommonModel::class.java
+                                )
+                            }
+                            data1!!.postValue(loginResponse)
                         }
-                        data1!!.postValue(loginResponse)
-                    }
 
-                    override fun onError(mKey : String) {
-                        UtilsFunctions.showToastError(MyApplication.instance.getString(R.string.internal_server_error))
-                        data1!!.postValue(null)
-                    }
+                        override fun onError(mKey: String) {
+                            UtilsFunctions.showToastError(MyApplication.instance.getString(R.string.internal_server_error))
+                            data1!!.postValue(null)
+                        }
 
-                }, ApiClient.getApiInterface().addCart(jsonObject)
+                    }, ApiClient.getApiInterface().addCart(jsonObject)
             )
 
         }
@@ -136,32 +136,65 @@ class ServicesRepository {
 
     }
 
-    fun addRemoveFav(jsonObject : JsonObject?) : MutableLiveData<CommonModel> {
-        if (jsonObject!=null) {
+    fun removeCart(jsonObject: String): MutableLiveData<CommonModel> {
+        if (!TextUtils.isEmpty(jsonObject)) {
             val mApiService = ApiService<JsonObject>()
             mApiService.get(
-                object : ApiResponse<JsonObject> {
-                    override fun onResponse(mResponse : Response<JsonObject>) {
-                        val loginResponse = if (mResponse.body() != null)
-                            gson.fromJson<CommonModel>(
-                                "" + mResponse.body(),
-                                CommonModel::class.java
-                            )
-                        else {
-                            gson.fromJson<CommonModel>(
-                                mResponse.errorBody()!!.charStream(),
-                                CommonModel::class.java
-                            )
+                    object : ApiResponse<JsonObject> {
+                        override fun onResponse(mResponse: Response<JsonObject>) {
+                            val loginResponse = if (mResponse.body() != null)
+                                gson.fromJson<CommonModel>(
+                                        "" + mResponse.body(),
+                                        CommonModel::class.java
+                                )
+                            else {
+                                gson.fromJson<CommonModel>(
+                                        mResponse.errorBody()!!.charStream(),
+                                        CommonModel::class.java
+                                )
+                            }
+                            data1!!.postValue(loginResponse)
                         }
-                        data3!!.postValue(loginResponse)
-                    }
 
-                    override fun onError(mKey : String) {
-                        UtilsFunctions.showToastError(MyApplication.instance.getString(R.string.internal_server_error))
-                        data3!!.postValue(null)
-                    }
+                        override fun onError(mKey: String) {
+                            UtilsFunctions.showToastError(MyApplication.instance.getString(R.string.internal_server_error))
+                            data1!!.postValue(null)
+                        }
 
-                }, ApiClient.getApiInterface().addFav(jsonObject)
+                    }, ApiClient.getApiInterface().removeCart(jsonObject)
+            )
+
+        }
+        return data1!!
+
+    }
+
+    fun addRemoveFav(jsonObject: JsonObject?): MutableLiveData<CommonModel> {
+        if (jsonObject != null) {
+            val mApiService = ApiService<JsonObject>()
+            mApiService.get(
+                    object : ApiResponse<JsonObject> {
+                        override fun onResponse(mResponse: Response<JsonObject>) {
+                            val loginResponse = if (mResponse.body() != null)
+                                gson.fromJson<CommonModel>(
+                                        "" + mResponse.body(),
+                                        CommonModel::class.java
+                                )
+                            else {
+                                gson.fromJson<CommonModel>(
+                                        mResponse.errorBody()!!.charStream(),
+                                        CommonModel::class.java
+                                )
+                            }
+                            data3!!.postValue(loginResponse)
+                        }
+
+                        override fun onError(mKey: String) {
+                            UtilsFunctions.showToastError(MyApplication.instance.getString(R.string.internal_server_error))
+                            data3!!.postValue(null)
+                        }
+
+                    }, ApiClient.getApiInterface().addFav(jsonObject)
             )
 
         }
@@ -169,71 +202,71 @@ class ServicesRepository {
 
     }
 
-    fun getTimeSlots(jsonObject : JsonObject?) : MutableLiveData<TimeSlotsResponse> {
-        if (jsonObject!=null) {
+    fun getTimeSlots(jsonObject: String): MutableLiveData<TimeSlotsResponse> {
+        if (!TextUtils.isEmpty(jsonObject)) {
             val mApiService = ApiService<JsonObject>()
             mApiService.get(
-                object : ApiResponse<JsonObject> {
-                    override fun onResponse(mResponse : Response<JsonObject>) {
-                        val loginResponse = if (mResponse.body() != null)
-                            gson.fromJson<TimeSlotsResponse>(
-                                "" + mResponse.body(),
-                                TimeSlotsResponse::class.java
-                            )
-                        else {
-                            gson.fromJson<TimeSlotsResponse>(
-                                mResponse.errorBody()!!.charStream(),
-                                TimeSlotsResponse::class.java
-                            )
+                    object : ApiResponse<JsonObject> {
+                        override fun onResponse(mResponse: Response<JsonObject>) {
+                            val loginResponse = if (mResponse.body() != null)
+                                gson.fromJson<TimeSlotsResponse>(
+                                        "" + mResponse.body(),
+                                        TimeSlotsResponse::class.java
+                                )
+                            else {
+                                gson.fromJson<TimeSlotsResponse>(
+                                        mResponse.errorBody()!!.charStream(),
+                                        TimeSlotsResponse::class.java
+                                )
+                            }
+                            data4!!.postValue(loginResponse)
                         }
-                        data4!!.postValue(loginResponse)
-                    }
 
-                    override fun onError(mKey : String) {
-                        UtilsFunctions.showToastError(MyApplication.instance.getString(R.string.internal_server_error))
-                        data4!!.postValue(null)
-                    }
+                        override fun onError(mKey: String) {
+                            UtilsFunctions.showToastError(MyApplication.instance.getString(R.string.internal_server_error))
+                            data4!!.postValue(null)
+                        }
 
-                }, ApiClient.getApiInterface().getTimeSlots(jsonObject)
+                    }, ApiClient.getApiInterface().getTimeSlots(jsonObject)
             )
 
         }
         return data4!!
 
     }
-    fun getDateSlots() : MutableLiveData<DateSlotsResponse> {
+
+    fun getDateSlots(): MutableLiveData<DateSlotsResponse> {
         //if (jsonObject!=null) {
-            val mApiService = ApiService<JsonObject>()
-            mApiService.get(
-                    object : ApiResponse<JsonObject> {
-                        override fun onResponse(mResponse : Response<JsonObject>) {
-                            val loginResponse = if (mResponse.body() != null)
-                                gson.fromJson<DateSlotsResponse>(
-                                        "" + mResponse.body(),
-                                        DateSlotsResponse::class.java
-                                )
-                            else {
-                                gson.fromJson<DateSlotsResponse>(
-                                        mResponse.errorBody()!!.charStream(),
-                                        DateSlotsResponse::class.java
-                                )
-                            }
-                            data5!!.postValue(loginResponse)
+        val mApiService = ApiService<JsonObject>()
+        mApiService.get(
+                object : ApiResponse<JsonObject> {
+                    override fun onResponse(mResponse: Response<JsonObject>) {
+                        val loginResponse = if (mResponse.body() != null)
+                            gson.fromJson<DateSlotsResponse>(
+                                    "" + mResponse.body(),
+                                    DateSlotsResponse::class.java
+                            )
+                        else {
+                            gson.fromJson<DateSlotsResponse>(
+                                    mResponse.errorBody()!!.charStream(),
+                                    DateSlotsResponse::class.java
+                            )
                         }
+                        data5!!.postValue(loginResponse)
+                    }
 
-                        override fun onError(mKey : String) {
-                            UtilsFunctions.showToastError(MyApplication.instance.getString(R.string.internal_server_error))
-                            data5!!.postValue(null)
-                        }
+                    override fun onError(mKey: String) {
+                        UtilsFunctions.showToastError(MyApplication.instance.getString(R.string.internal_server_error))
+                        data5!!.postValue(null)
+                    }
 
-                    }, ApiClient.getApiInterface().getDateSlots()
-            )
+                }, ApiClient.getApiInterface().getDateSlots()
+        )
 
-       // }
+        // }
         return data5!!
 
     }
-
 
 
 }

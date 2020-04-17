@@ -55,7 +55,7 @@ class OrdersRepository {
                         data1!!.postValue(null)
                     }
 
-                }, ApiClient.getApiInterface().orderList(/*mJsonObject*/)
+                }, ApiClient.getApiInterface().orderList("0,1")
         )
 
         //}
@@ -88,7 +88,7 @@ class OrdersRepository {
                         data3!!.postValue(null)
                     }
 
-                }, ApiClient.getApiInterface().orderHistroyList(/*mJsonObject*/)
+                }, ApiClient.getApiInterface().orderHistroyList("2,3,4,5")
         )
 
         //}

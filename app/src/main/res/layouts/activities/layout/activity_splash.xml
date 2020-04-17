@@ -2,18 +2,28 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/ic_splash_bg">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/ic_splash">
+            android:gravity="center"
+            android:orientation="horizontal">
 
-        <ImageView
+            <ImageView
+                android:id="@+id/splsh_hut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/fm_hut" />
+
+            <ImageView
                 android:id="@+id/splsh_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:visibility="gone"
-                android:background="@drawable/ic_app_logo"
-                android:contentDescription="@string/todo" />
+                android:background="@drawable/fm_home_services" />
+        </LinearLayout>
 
     </RelativeLayout>
 </layout>

@@ -15,6 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/dp_1"
+
         android:background="@color/colorWhite"
         android:elevation="@dimen/dp_20"
         android:padding="@dimen/dp_5">
@@ -37,6 +38,7 @@
                     android:id="@+id/service_item"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_25"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -49,7 +51,6 @@
                             android:id="@+id/img_service"
                             android:layout_width="@dimen/dp_30"
                             android:layout_height="@dimen/dp_30"
-                            android:layout_marginTop="@dimen/dp_5"
                             android:scaleType="fitXY"
                             android:src="@drawable/ic_category" />
 
@@ -82,7 +83,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
 
                         <TextView

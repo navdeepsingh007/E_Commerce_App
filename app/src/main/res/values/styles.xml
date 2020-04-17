@@ -16,11 +16,11 @@
         <item name="android:backgroundDimEnabled">true</item>
     </style>
 
-<!--    <style name="CustomRatingBar" parent="Widget.AppCompat.RatingBar">-->
-<!--        <item name="android:progressDrawable">@drawable/custom_ratingbar</item>-->
-<!--        <item name="colorControlNormal">#f57c00</item>-->
-<!--        <item name="colorControlActivated">#c51162</item>-->
-<!--    </style>-->
+    <!--    <style name="CustomRatingBar" parent="Widget.AppCompat.RatingBar">-->
+    <!--        <item name="android:progressDrawable">@drawable/custom_ratingbar</item>-->
+    <!--        <item name="colorControlNormal">#f57c00</item>-->
+    <!--        <item name="colorControlActivated">#c51162</item>-->
+    <!--    </style>-->
 
     <style name="RatingBar" parent="Theme.AppCompat">
         <item name="colorControlNormal">@color/colorGrey</item>
@@ -79,6 +79,18 @@
     <style name="AlertDialogStylePayUMoney" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorAccent">@color/colorPrimary</item>
         <item name="android:textColorPrimary">@color/payumoney_text_color</item>
+    </style>
+
+    <style name="ThemeSalon">
+        <item name="colorPrimary">@color/salonBtnBackground</item>
+        <item name="colorPrimaryDark">@color/salonBtnBackground</item>
+        <item name="background">@color/salonBtnBackground</item>
+    </style>
+
+    <style name="Themefacial">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="background">@color/colorPrimary</item>
     </style>
 
 </resources>

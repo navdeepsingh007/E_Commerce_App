@@ -16,14 +16,14 @@ import com.example.services.model.promocode.PromoCodeListResponse
 import com.example.services.views.promocode.PromoCodeActivity
 
 class PromoCodeListAdapter(
-    context : PromoCodeActivity,
-    addressList : ArrayList<PromoCodeListResponse.Body>,
-    var activity : Context
+        context: PromoCodeActivity,
+        addressList: ArrayList<PromoCodeListResponse.Body>,
+        var activity: Context
 ) :
-    RecyclerView.Adapter<PromoCodeListAdapter.ViewHolder>() {
-    private val mContext : PromoCodeActivity
-    private var viewHolder : ViewHolder? = null
-    private var addressList : ArrayList<PromoCodeListResponse.Body>
+        RecyclerView.Adapter<PromoCodeListAdapter.ViewHolder>() {
+    private val mContext: PromoCodeActivity
+    private var viewHolder: ViewHolder? = null
+    private var addressList: ArrayList<PromoCodeListResponse.Body>
 
     init {
         this.mContext = context
@@ -31,49 +31,48 @@ class PromoCodeListAdapter(
     }
 
     @NonNull
-    override fun onCreateViewHolder(@NonNull parent : ViewGroup, viewType : Int) : ViewHolder {
+    override fun onCreateViewHolder(@NonNull parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = DataBindingUtil.inflate(
-            LayoutInflater.from(parent.context),
-            R.layout.promo_code_item,
-            parent,
-            false
+                LayoutInflater.from(parent.context),
+                R.layout.promo_code_item,
+                parent,
+                false
         ) as PromoCodeItemBinding
         return ViewHolder(binding.root, viewType, binding, mContext, addressList)
     }
 
-    override fun onBindViewHolder(@NonNull holder : ViewHolder, position : Int) {
+    override fun onBindViewHolder(@NonNull holder: ViewHolder, position: Int) {
         viewHolder = holder
         holder.binding!!.tvPromo.text = addressList[position].name
         holder.binding!!.tvPromoCode.text = addressList[position].code
-
+        holder.binding!!.tvDiscount.text = addressList[position].discount + "%"
         holder.binding!!.tvPromoDesc.setText(
-            addressList[position].description
+                addressList[position].description
         )
-         //holder.binding!!.rBar.setRating(addressList[position].rating?.toFloat())
-         Glide.with(mContext)
-             .load(addressList[position].icon)
-             .apply(RequestOptions.bitmapTransform(RoundedCorners(20)))
-             .placeholder(R.drawable.ic_category)
-             .into(holder.binding.imgPromo)
+        //holder.binding!!.rBar.setRating(addressList[position].rating?.toFloat())
+        Glide.with(mContext)
+                .load(addressList[position].icon)
+                .apply(RequestOptions.bitmapTransform(RoundedCorners(20)))
+                .placeholder(R.drawable.ic_category)
+                .into(holder.binding.imgPromo)
 
         holder.binding!!.btnApply.setOnClickListener {
             mContext.callApplyCouponApi(addressList[position].code!!)
         }
 
 
-
     }
 
-    override fun getItemCount() : Int {
+    override fun getItemCount(): Int {
         return addressList.count()
     }
 
     inner class ViewHolder//This constructor would switch what to findViewBy according to the type of viewType
-        (
-                v : View, val viewType : Int, //These are the general elements in the RecyclerView
-                val binding : PromoCodeItemBinding?,
-                mContext : PromoCodeActivity,
-                addressList : ArrayList<PromoCodeListResponse.Body>?
+    (
+            v: View, val viewType: Int, //These are the general elements in the RecyclerView
+            val binding: PromoCodeItemBinding?,
+            mContext: PromoCodeActivity,
+            addressList: ArrayList<PromoCodeListResponse.Body>?
     ) : RecyclerView.ViewHolder(v) {
         /*init {
             binding.linAddress.setOnClickListener {

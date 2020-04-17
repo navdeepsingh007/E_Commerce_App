@@ -17,6 +17,7 @@ import com.example.services.common.UtilsFunctions
 import com.example.services.constants.GlobalConstants
 import com.example.services.model.CommonModel
 import com.example.services.model.cart.CartListResponse
+import com.example.services.model.promocode.ApplyPromoCodeResponse
 import com.example.services.model.promocode.PromoCodeListResponse
 import com.example.services.sharedpreference.SharedPrefClass
 import com.example.services.utils.BaseActivity
@@ -81,14 +82,21 @@ class PromoCodeActivity : BaseActivity() {
                 })
 
         promcodeViewModel.getApplyPromoRes().observe(this,
-                Observer<CommonModel> { response ->
+                Observer<ApplyPromoCodeResponse> { response ->
                     stopProgressDialog()
                     if (response != null) {
                         val message = response.message
                         when {
                             response.code == 200 -> {
                                 showToastSuccess(message)
+                                val mJsonObject = JsonObject()
+                                mJsonObject.addProperty("discount", response.data?.coupanDiscount)
+                                mJsonObject.addProperty("payableAmount", response.data?.payableAmount)
+                                mJsonObject.addProperty("totalAmount", response.data?.totalAmount)
+                                mJsonObject.addProperty("couponId", response.data?.coupanId)
+                                mJsonObject.addProperty("code", response.data?.coupanCode)
                                 val intent = Intent()
+                                intent.putExtra("promoCodeData", mJsonObject.toString())
                                 setResult(Activity.RESULT_OK, intent)
                                 finish()
                             }
@@ -105,7 +113,22 @@ class PromoCodeActivity : BaseActivity() {
         fun(it: String?) {
             when (it) {
                 "btnApplyPromo" -> {
-                    callApplyCouponApi(promoCodeBinding.etCouponCode.getText().toString())
+                    if (!TextUtils.isEmpty(promoCodeBinding.etCouponCode.getText().toString())) {
+
+                    } else {
+
+                    }
+                    val mJsonObject = JsonObject()
+                    mJsonObject.addProperty("discount", "20")
+                    mJsonObject.addProperty("payableAmount", "800")
+                    mJsonObject.addProperty("totalAmount", "1000")
+                    mJsonObject.addProperty("couponId", "123456698")
+                    //mJsonObject.addProperty("phoneNumber", response.data?.coupanDiscount)
+                    val intent = Intent()
+                    intent.putExtra("promoCodeData", mJsonObject.toString())
+                    setResult(Activity.RESULT_OK, intent)
+                    finish()
+                    //callApplyCouponApi(promoCodeBinding.etCouponCode.getText().toString())
                 }
 
             }

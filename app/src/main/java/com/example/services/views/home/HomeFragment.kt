@@ -13,16 +13,16 @@ import android.os.Looper
 import android.view.View
 import android.widget.Toast
 import android.provider.Settings
-import android.util.Log
 import android.widget.AdapterView
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.services.R
 import com.example.services.application.MyApplication
 import com.example.services.common.UtilsFunctions
 import com.example.services.common.UtilsFunctions.showToastError
-import com.example.services.common.UtilsFunctions.showToastSuccess
 import com.example.services.constants.GlobalConstants
 import com.example.services.databinding.FragmentHomeBinding
 import com.example.services.maps.FusedLocationClass
@@ -33,26 +33,22 @@ import com.example.services.utils.BaseFragment
 import com.example.services.utils.DialogClass
 import com.example.services.viewmodels.home.CategoriesListResponse
 import com.example.services.viewmodels.home.HomeViewModel
-import com.example.services.views.profile.ProfileActivity
+import com.example.services.viewmodels.home.Subcat
 import com.example.services.views.subcategories.ServicesListActivity
-import com.example.services.views.subcategories.SubCategoriesActivity
 import com.google.android.gms.location.*
 import com.google.gson.JsonObject
-import com.uniongoods.adapters.CategoriesGridListAdapter
-import com.uniongoods.adapters.CategoriesListAdapter
-import com.uniongoods.adapters.OffersListAdapter
-import com.uniongoods.adapters.TrendingServiceListAdapter
+import com.uniongoods.adapters.*
 import org.json.JSONObject
 
 class
 HomeFragment : BaseFragment(), SocketInterface {
     private var mFusedLocationClass: FusedLocationClass? = null
     private var socket = SocketClass.socket
-    private var categoriesList = ArrayList<com.example.services.viewmodels.home.Service>()
+    private var categoriesList = ArrayList<Subcat>()
     private var trendingServiceList =
-            ArrayList<com.example.services.viewmodels.home.TrendingService>()
+            ArrayList<com.example.services.viewmodels.home.Trending>()
     private var offersList =
-            ArrayList<com.example.services.viewmodels.home.Banner>()
+            ArrayList<com.example.services.viewmodels.home.Offers>()
     private var myJobsListAdapter: CategoriesListAdapter? = null
     private lateinit var fragmentHomeBinding: FragmentHomeBinding
     private lateinit var homeViewModel: HomeViewModel
@@ -74,6 +70,7 @@ HomeFragment : BaseFragment(), SocketInterface {
 
     }
 
+    //api/mobile/services/getSubcat/b21a7c8f-078f-4323-b914-8f59054c4467
     override fun initView() {
         fragmentHomeBinding = viewDataBinding as FragmentHomeBinding
         homeViewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
@@ -92,20 +89,21 @@ HomeFragment : BaseFragment(), SocketInterface {
                 "acceptStatus", "1"
         )
         // initRecyclerView()
+
         if (UtilsFunctions.isNetworkConnected()) {
-            //categoriesList = homeRepository.getCategories("")
+            homeViewModel.getSubServices(GlobalConstants.CATEGORY_SELECTED)
             baseActivity.startProgressDialog()
         }
-        homeViewModel.getJobs().observe(this,
+        homeViewModel.getGetSubServices().observe(this,
                 Observer<CategoriesListResponse> { response ->
                     baseActivity.stopProgressDialog()
                     if (response != null) {
                         val message = response.message
                         when {
                             response.code == 200 -> {
-                                categoriesList?.addAll(response.body.services)
-                                trendingServiceList.addAll(response.body.trendingServices)
-                                offersList.addAll(response.body.banners)
+                                categoriesList.addAll(response.body.subcat)
+                                trendingServiceList.addAll(response.body.trending)
+                                offersList.addAll(response.body.offers)
                                 fragmentHomeBinding.rvJobs.visibility = View.VISIBLE
 
                                 initRecyclerView()
@@ -136,15 +134,15 @@ HomeFragment : BaseFragment(), SocketInterface {
         fragmentHomeBinding.gridview.onItemClickListener =
                 AdapterView.OnItemClickListener { parent, v, position, id ->
                     //showToastSuccess(" Clicked Position: " + (position + 1))
-                    if (categoriesList[position].isService.equals("false")) {
-                        val intent = Intent(activity!!, ServicesListActivity::class.java)
-                        intent.putExtra("catId", categoriesList[position].id)
-                        startActivity(intent)
-                    } else {
-                        val intent = Intent(activity!!, ServicesListActivity::class.java)
-                        intent.putExtra("catId", categoriesList[position].id)
-                        startActivity(intent)
-                    }
+                    // if (categoriesList[position].isService.equals("false")) {
+                    val intent = Intent(activity!!, ServicesListActivity::class.java)
+                    intent.putExtra("catId", categoriesList[position].id)
+                    startActivity(intent)
+                    /* } else {
+                         val intent = Intent(activity!!, ServicesListActivity::class.java)
+                         intent.putExtra("catId", categoriesList[position].id)
+                         startActivity(intent)
+                     }*/
                 }
     }
 
@@ -170,16 +168,7 @@ HomeFragment : BaseFragment(), SocketInterface {
     }
 
     private fun initRecyclerView() {
-        /* myJobsListAdapter = CategoriesListAdapter(this@HomeFragment, categoriesList, activity!!)
-         val linearLayoutManager = LinearLayoutManager(this.baseActivity)
-         linearLayoutManager.orientation = RecyclerView.VERTICAL
-         fragmentHomeBinding.rvJobs.layoutManager = linearLayoutManager
-         fragmentHomeBinding.rvJobs.adapter = myJobsListAdapter
-         fragmentHomeBinding.rvJobs.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-             override fun onScrolled(recyclerView : RecyclerView, dx : Int, dy : Int) {
 
-             }
-         })*/
         val adapter = CategoriesGridListAdapter(this@HomeFragment, categoriesList, activity!!)
         fragmentHomeBinding.gridview.adapter = adapter
     }
@@ -191,9 +180,19 @@ HomeFragment : BaseFragment(), SocketInterface {
     }
 
     private fun offerListViewPager() {
-        val adapter = OffersListAdapter(this@HomeFragment, offersList, activity!!)
-        fragmentHomeBinding.offersViewpager.adapter = adapter
+        val offersListRecyclerAdapter = OffersListRecyclerAdapter(this@HomeFragment, offersList, activity!!)
+        val linearLayoutManager = LinearLayoutManager(this.baseActivity)
+        linearLayoutManager.orientation = RecyclerView.HORIZONTAL
+        fragmentHomeBinding.rvOffers.layoutManager = linearLayoutManager
+        fragmentHomeBinding.rvOffers.adapter = offersListRecyclerAdapter
+        fragmentHomeBinding.rvOffers.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
 
+            }
+        })
+        /* val adapter = OffersListAdapter(this@HomeFragment, offersList, activity!!)
+         fragmentHomeBinding.offersViewpager.adapter = adapter
+ */
     }
 
     override fun onSocketCall(onMethadCall: String, vararg args: Any) {

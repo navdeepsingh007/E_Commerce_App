@@ -21,18 +21,11 @@ import com.example.services.viewmodels.orders.OrdersViewModel
 import com.google.gson.JsonObject
 import com.uniongoods.adapters.OrderListAdapter
 
-class OrdersHistoryListActivity : BaseActivity(), DialogssInterface {
+class OrdersHistoryListActivity : BaseActivity() {
     lateinit var orderBinding: ActivityOrderListBinding
     lateinit var ordersViewModel: OrdersViewModel
     var orderList = ArrayList<OrdersListResponse.Body>()
     var orderListAdapter: OrderListAdapter? = null
-    private var confirmationDialog: Dialog? = null
-    private var mDialogClass = DialogClass()
-    var cancelOrderObject = JsonObject()
-    var pos = 0
-    var couponCode = ""
-    var addressType = ""
-    private val SECOND_ACTIVITY_REQUEST_CODE = 0
     override fun getLayoutId(): Int {
         return R.layout.activity_order_list
     }
@@ -45,17 +38,6 @@ class OrdersHistoryListActivity : BaseActivity(), DialogssInterface {
         orderBinding.commonToolBar.imgToolbarText.text =
                 resources.getString(R.string.orders_history)
         orderBinding.cartViewModel = ordersViewModel
-        val userId = SharedPrefClass()!!.getPrefValue(
-                MyApplication.instance,
-                GlobalConstants.USERID
-        ).toString()
-        if (UtilsFunctions.isNetworkConnected()) {
-            startProgressDialog()
-        }
-        addressType = SharedPrefClass().getPrefValue(
-                MyApplication.instance,
-                GlobalConstants.SelectedAddressType
-        ).toString()
 
         ordersViewModel.getOrdersHistoryListRes().observe(this,
                 Observer<OrdersListResponse> { response ->
@@ -65,9 +47,16 @@ class OrdersHistoryListActivity : BaseActivity(), DialogssInterface {
                         when {
                             response.code == 200 -> {
                                 orderList.addAll(response.data!!)
-                                orderBinding.rvOrder.visibility = View.VISIBLE
-                                orderBinding.tvNoRecord.visibility = View.GONE
-                                initRecyclerView()
+                                if (orderList.size > 0) {
+                                    orderBinding.rvOrder.visibility = View.VISIBLE
+                                    orderBinding.tvNoRecord.visibility = View.GONE
+                                    initRecyclerView()
+                                } else {
+                                    UtilsFunctions.showToastError(getString(R.string.no_record_found))
+                                    orderBinding.rvOrder.visibility = View.GONE
+                                    orderBinding.tvNoRecord.visibility = View.VISIBLE
+                                }
+
                             }
                             else -> message?.let {
                                 UtilsFunctions.showToastError(it)
@@ -82,7 +71,6 @@ class OrdersHistoryListActivity : BaseActivity(), DialogssInterface {
 
     }
 
-
     private fun initRecyclerView() {
         orderListAdapter = OrderListAdapter(this, orderList, null)
         val linearLayoutManager = LinearLayoutManager(this)
@@ -95,40 +83,5 @@ class OrdersHistoryListActivity : BaseActivity(), DialogssInterface {
 
             }
         })
-    }
-
-    override fun onDialogConfirmAction(mView: View?, mKey: String) {
-        when (mKey) {
-            "Cancel Order" -> {
-                confirmationDialog?.dismiss()
-                if (UtilsFunctions.isNetworkConnected()) {
-                    ordersViewModel.cancelOrder(cancelOrderObject)
-                }
-
-            }
-
-        }
-    }
-
-    override fun onDialogCancelAction(mView: View?, mKey: String) {
-        when (mKey) {
-            "Cancel Order" -> confirmationDialog?.dismiss()
-
-        }
-    }
-
-    fun cancelOrder(position: Int) {
-        cancelOrderObject.addProperty(
-                "orderId", orderList[position].id
-        )
-
-        confirmationDialog = mDialogClass.setDefaultDialog(
-                this,
-                this,
-                "Cancel Order",
-                getString(R.string.warning_cancel_order)
-        )
-        confirmationDialog?.show()
-
     }
 }
