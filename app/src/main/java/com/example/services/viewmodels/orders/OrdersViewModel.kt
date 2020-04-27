@@ -17,7 +17,7 @@ class OrdersViewModel : BaseViewModel() {
     private var addressDetail = MutableLiveData<AddressResponse>()
     private var deleteAddress = MutableLiveData<CommonModel>()
     private var cancelOrder = MutableLiveData<CommonModel>()
-
+    private var completeOrder = MutableLiveData<CommonModel>()
     private var ordersList = MutableLiveData<OrdersListResponse>()
     private var ordersHistoryList = MutableLiveData<OrdersListResponse>()
     private var ordersRepository = OrdersRepository()
@@ -29,6 +29,7 @@ class OrdersViewModel : BaseViewModel() {
             ordersList = ordersRepository.orderList()
             ordersHistoryList = ordersRepository.orderHistoryList()
             cancelOrder = ordersRepository.cancelOrder(null)
+            completeOrder = ordersRepository.completeOrder(null)
         }
 
     }
@@ -43,6 +44,10 @@ class OrdersViewModel : BaseViewModel() {
 
     fun getCancelOrderRes(): LiveData<CommonModel> {
         return cancelOrder
+    }
+
+    fun getCompleteOrderRes(): LiveData<CommonModel> {
+        return completeOrder
     }
 
     override fun isLoading(): LiveData<Boolean> {
@@ -60,6 +65,13 @@ class OrdersViewModel : BaseViewModel() {
     fun cancelOrder(mJsonObject: JsonObject) {
         if (UtilsFunctions.isNetworkConnected()) {
             cancelOrder = ordersRepository.cancelOrder(mJsonObject)
+            mIsUpdating.postValue(true)
+        }
+    }
+
+    fun completeOrder(mJsonObject: JsonObject) {
+        if (UtilsFunctions.isNetworkConnected()) {
+            cancelOrder = ordersRepository.completeOrder(mJsonObject)
             mIsUpdating.postValue(true)
         }
     }

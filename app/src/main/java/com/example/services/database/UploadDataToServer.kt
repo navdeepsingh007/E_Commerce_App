@@ -177,7 +177,7 @@ class UploadDataToServer : SocketInterface {
                                 var jsonObject = JsonObject()
                                 jsonObject.addProperty("progressStatus", "1")
                                 jsonObject.addProperty("jobId", jobID)
-                                homeJobsRepository.startCompleteJob(jsonObject)
+                               // homeJobsRepository.startCompleteJob(jsonObject)
                                 //   mIsUpdating.postValue(true)
                                 synchData("0", "offline")
                             }

@@ -2,6 +2,8 @@ package com.example.services.views.subcategories
 
 import android.app.Dialog
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.text.TextUtils
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -30,6 +32,7 @@ import com.example.services.sharedpreference.SharedPrefClass
 import com.example.services.utils.DialogClass
 import com.example.services.utils.DialogssInterface
 import com.example.services.views.cart.CartListActivity
+import com.example.services.views.ratingreviews.ReviewsListActivity
 import com.google.gson.JsonObject
 import com.uniongoods.adapters.*
 
@@ -82,10 +85,13 @@ class ServiceDetailActivity : BaseActivity(), DialogssInterface {
         servicesViewModel = ViewModelProviders.of(this).get(ServicesViewModel::class.java)
 
         serviceDetailBinding.commonToolBar.imgRight.visibility = View.GONE
-        serviceDetailBinding.commonToolBar.imgRight.setImageResource(R.drawable.ic_nav_edit_icon)
+        serviceDetailBinding.commonToolBar.imgRight.setImageResource(R.drawable.ic_cart)
         serviceDetailBinding.commonToolBar.imgToolbarText.text =
                 resources.getString(R.string.services_detail)
         serviceDetailBinding.servicesViewModel = servicesViewModel
+        serviceDetailBinding.btnSubmit.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(GlobalConstants.COLOR_CODE))/*mContext.getResources().getColorStateList(R.color.colorOrange)*/)
+        serviceDetailBinding.AddCart.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(GlobalConstants.COLOR_CODE))/*mContext.getResources().getColorStateList(R.color.colorOrange)*/)
+
         serviceId = intent.extras?.get("serviceId").toString()
         var serviceObject = JsonObject()
         serviceObject.addProperty(
@@ -127,14 +133,21 @@ class ServiceDetailActivity : BaseActivity(), DialogssInterface {
                                 detailList.add(detail)
                                 detail = DetailModel("Pricing", response.data!!.type.toString())
                                 detailList.add(detail)
-                                detail = DetailModel("Included Services", response.data!!.includedServices.toString())
-                                detailList.add(detail)
-                                detail = DetailModel("Excluded Services", response.data!!.excludedServices.toString())
-                                detailList.add(detail)
+
+
+                                if (!TextUtils.isEmpty(response.data!!.includedServices.toString())) {
+                                    detail = DetailModel("Included Services", response.data!!.includedServices.toString())
+                                    detailList.add(detail)
+                                }
+
+                                if (!TextUtils.isEmpty(response.data!!.excludedServices.toString())) {
+                                    detail = DetailModel("Excluded Services", response.data!!.excludedServices.toString())
+                                    detailList.add(detail)
+                                }
 
                                 initRecyclerView(detailList)
                                 priceAmount = response.data!!.price.toString()
-                                serviceDetailBinding.tvOfferPrice.setText( GlobalConstants.Currency + " " + priceAmount)
+                                serviceDetailBinding.tvOfferPrice.setText(GlobalConstants.Currency + " " + priceAmount)
                                 serviceDetailBinding.rBar.setRating(response.data!!.rating!!.toFloat())
                                 Glide.with(this)
                                         .load(response.data!!.icon)
@@ -227,6 +240,11 @@ class ServiceDetailActivity : BaseActivity(), DialogssInterface {
                 this, Observer<String>(function =
         fun(it: String?) {
             when (it) {
+                "ratingView" -> {
+                    val intent = Intent(this, ReviewsListActivity::class.java)
+                    intent.putExtra("serviceId", serviceId)
+                    startActivity(intent)
+                }
                 "img_right" -> {
                     val intent = Intent(this, CartListActivity::class.java)
                     startActivity(intent)
@@ -258,7 +276,7 @@ class ServiceDetailActivity : BaseActivity(), DialogssInterface {
                     if (quantityCount > 0) {
                         quantityCount--
                         price = quantityCount * priceAmount.toInt()
-                        serviceDetailBinding.tvTotalPrice.setText( GlobalConstants.Currency + price.toString())
+                        serviceDetailBinding.tvTotalPrice.setText(GlobalConstants.Currency + price.toString())
                         //callGetTimeSlotsApi()
                     }
                     if (quantityCount == 0) {
@@ -278,7 +296,7 @@ class ServiceDetailActivity : BaseActivity(), DialogssInterface {
                         //   serviceDetailBinding.btnSubmit.visibility = View.VISIBLE
                         //callGetTimeSlotsApi()
                         price = quantityCount * priceAmount.toInt()
-                        serviceDetailBinding.tvTotalPrice.setText( GlobalConstants.Currency + price.toString())
+                        serviceDetailBinding.tvTotalPrice.setText(GlobalConstants.Currency + price.toString())
                     }
 
 
@@ -292,7 +310,7 @@ class ServiceDetailActivity : BaseActivity(), DialogssInterface {
 
                 }
                 "img_add_favorite" -> {
-                    addRemovefav()
+                    // addRemovefav()
                 }
             }
 
@@ -406,7 +424,7 @@ class ServiceDetailActivity : BaseActivity(), DialogssInterface {
                 "serviceId", serviceId
         )
         if (UtilsFunctions.isNetworkConnected()) {
-            servicesViewModel.addRemoveFav(favObject)
+            servicesViewModel.addFav(favObject)
             startProgressDialog()
         }
     }

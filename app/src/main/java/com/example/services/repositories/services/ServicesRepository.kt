@@ -169,7 +169,7 @@ class ServicesRepository {
 
     }
 
-    fun addRemoveFav(jsonObject: JsonObject?): MutableLiveData<CommonModel> {
+    fun addFav(jsonObject: JsonObject?): MutableLiveData<CommonModel> {
         if (jsonObject != null) {
             val mApiService = ApiService<JsonObject>()
             mApiService.get(
@@ -195,6 +195,39 @@ class ServicesRepository {
                         }
 
                     }, ApiClient.getApiInterface().addFav(jsonObject)
+            )
+
+        }
+        return data3!!
+
+    }
+
+    fun removeFav(jsonObject: String): MutableLiveData<CommonModel> {
+        if (!TextUtils.isEmpty(jsonObject)) {
+            val mApiService = ApiService<JsonObject>()
+            mApiService.get(
+                    object : ApiResponse<JsonObject> {
+                        override fun onResponse(mResponse: Response<JsonObject>) {
+                            val loginResponse = if (mResponse.body() != null)
+                                gson.fromJson<CommonModel>(
+                                        "" + mResponse.body(),
+                                        CommonModel::class.java
+                                )
+                            else {
+                                gson.fromJson<CommonModel>(
+                                        mResponse.errorBody()!!.charStream(),
+                                        CommonModel::class.java
+                                )
+                            }
+                            data3!!.postValue(loginResponse)
+                        }
+
+                        override fun onError(mKey: String) {
+                            UtilsFunctions.showToastError(MyApplication.instance.getString(R.string.internal_server_error))
+                            data3!!.postValue(null)
+                        }
+
+                    }, ApiClient.getApiInterface().removeFav(jsonObject)
             )
 
         }

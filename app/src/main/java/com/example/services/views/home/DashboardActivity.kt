@@ -24,18 +24,8 @@ import com.example.services.socket.TrackingActivity
 import com.example.services.utils.BaseActivity
 import com.example.services.utils.DialogClass
 import com.example.services.utils.DialogssInterface
-import com.example.services.views.address.AddAddressActivity
-import com.example.services.views.address.AddressListActivity
-import com.example.services.views.authentication.LoginActivity
 import com.example.services.views.cart.CartListActivity
-import com.example.services.views.favorite.FavoriteListActivity
-import com.example.services.views.orders.OrdersHistoryListActivity
-import com.example.services.views.orders.OrdersListActivity
-import com.example.services.views.profile.ProfileActivity
-import com.example.services.views.settings.MyAccountsActivity
-import com.google.android.material.navigation.NavigationView
-import com.google.android.material.tabs.TabLayout
-import kotlinx.android.synthetic.main.layout_custom_alert.view.*
+import com.example.services.views.promocode.PromoCodeActivity
 
 class DashboardActivity : BaseActivity(),
         DialogssInterface {
@@ -60,6 +50,8 @@ class DashboardActivity : BaseActivity(),
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun initViews() {
+
+
         activityDashboardBinding = viewDataBinding as ActivityDashboardBinding
         dashboardViewModel = ViewModelProviders.of(this).get(DashboardViewModel::class.java)
         activityDashboardBinding!!.dashboardViewModel = dashboardViewModel
@@ -67,10 +59,22 @@ class DashboardActivity : BaseActivity(),
         val name = intent.extras?.get("name").toString()
         activityDashboardBinding!!.commonToolBar.imgRight.visibility = View.GONE
         activityDashboardBinding!!.commonToolBar.imgToolbarText.setText(name/*resources.getString(R.string.home)*/)
-        activityDashboardBinding!!.commonToolBar.imgRight.setImageResource(R.drawable.ic_notifications)
+        activityDashboardBinding!!.commonToolBar.imgRight.setImageResource(R.drawable.ic_cart)
 
         fragment = HomeFragment()
         callFragments(fragment, supportFragmentManager, false, "send_data", "")
+        //img_right
+        dashboardViewModel!!.isClick().observe(
+                this, Observer<String>(function =
+        fun(it: String?) {
+            when (it) {
+                "img_right" -> {
+                    val intent = Intent(this, CartListActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+        })
+        )
     }
 
 
@@ -91,10 +95,6 @@ class DashboardActivity : BaseActivity(),
     override fun onResume() {
         super.onResume()
         setHeadings()
-        /*  if (GlobalConstants.selectedCheckedFragment == 100) {
-              activityDashboardBinding!!.tablayout.getTabAt(GlobalConstants.selectedFragment)!!.select()
-              GlobalConstants.selectedCheckedFragment = 0
-          }*/
         isCart = SharedPrefClass().getPrefValue(
                 MyApplication.instance,
                 GlobalConstants.isCartAdded
@@ -105,25 +105,9 @@ class DashboardActivity : BaseActivity(),
             activityDashboardBinding!!.commonToolBar.imgRight.visibility = View.GONE
         }
 
-        val image = SharedPrefClass().getPrefValue(
-                MyApplication.instance.applicationContext,
-                GlobalConstants.USER_IAMGE
-        )
-        // ic_profile
-        Glide.with(this)
-                .load(image)
-                .placeholder(R.drawable.user)
-                .into(activityDashboardBinding!!.icProfile)
 
-        val name = SharedPrefClass().getPrefValue(
-                MyApplication.instance.applicationContext,
-                getString(R.string.first_name)
-        )
-        if (TextUtils.isEmpty(name.toString().trim()) || name.toString().trim().equals("null")) {
-            activityDashboardBinding!!.tvName.text = getString(R.string.create_profile)
-        } else {
-            activityDashboardBinding!!.tvName.text = name.toString()
-        }
+        // ic_profile
+
 
     }
 
@@ -131,7 +115,7 @@ class DashboardActivity : BaseActivity(),
         when (mKey) {
             "logout" -> {
                 confirmationDialog?.dismiss()
-                dashboardViewModel!!.callLogoutApi()
+                //dashboardViewModel!!.callLogoutApi()
                 // dashboardViewModel!!.callLogoutApi()
 
             }
@@ -143,7 +127,7 @@ class DashboardActivity : BaseActivity(),
 
     override fun onDialogCancelAction(mView: View?, mKey: String) {
         when (mKey) {
-            "logout" -> confirmationDialog?.dismiss()
+
             "rating" -> ratingDialog?.dismiss()
         }
     }

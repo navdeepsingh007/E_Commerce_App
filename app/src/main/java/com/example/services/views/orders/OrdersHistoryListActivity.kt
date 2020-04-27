@@ -34,7 +34,7 @@ class OrdersHistoryListActivity : BaseActivity() {
         orderBinding = viewDataBinding as ActivityOrderListBinding
         ordersViewModel = ViewModelProviders.of(this).get(OrdersViewModel::class.java)
         orderBinding.commonToolBar.imgRight.visibility = View.GONE
-        orderBinding.commonToolBar.imgRight.setImageResource(R.drawable.ic_nav_edit_icon)
+        orderBinding.commonToolBar.imgRight.setImageResource(R.drawable.ic_cart)
         orderBinding.commonToolBar.imgToolbarText.text =
                 resources.getString(R.string.orders_history)
         orderBinding.cartViewModel = ordersViewModel

@@ -1,6 +1,8 @@
 package com.uniongoods.adapters
 
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +10,7 @@ import androidx.annotation.NonNull
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.services.R
+import com.example.services.constants.GlobalConstants
 import com.example.services.databinding.TimeItemBinding
 import com.example.services.model.services.DateSlotsResponse
 import com.example.services.views.cart.CheckoutAddressActivity
@@ -46,21 +49,25 @@ class DateListAdapter(
 
         if (dateList[position].selected.equals("true")) {
             // holder.binding.topLay.setBackgroundResource(R.drawable.btn_bg_shape_colored)
-            holder.binding.tvCatName.setBackgroundColor(mContext.resources.getColor(R.color.btnBackground))
+            // holder.binding.tvCatName.setBackgroundColor(mContext.resources.getColor(R.color.btnBackground))
+            holder.binding.tvCatName.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(GlobalConstants.COLOR_CODE))/*mContext.getResources().getColorStateList(R.color.colorOrange)*/)
+
             holder.binding.tvCatName.setTextColor(mContext.resources.getColor(R.color.colorWhite))
         } else {
             // holder.binding.topLay.setBackgroundResource(R.drawable.shape_round_corner)
             holder.binding.tvCatName.setTextColor(mContext.resources.getColor(R.color.colorBlack))
             holder.binding.tvCatName.setBackgroundColor(mContext.resources.getColor(R.color.btnBackgroundWhite))
+            holder.binding.tvCatName.setBackgroundTintList(mContext.getResources().getColorStateList(R.color.colorWhite))
+
         }
 
-      /*  if(dateList[position].status.equals("Open")){
-            holder.binding.tvCatName.isEnabled=true
-            //  holder.binding.mainLayout.setBackgroundColor(mContext.resources.getColor(R.color.colorSuccess))
-        }else{
-            holder.binding.tvCatName.isEnabled=false
-            holder.binding.tvCatName.setBackgroundColor(mContext.resources.getColor(R.color.colorGrey))
-        }*/
+        /*  if(dateList[position].status.equals("Open")){
+              holder.binding.tvCatName.isEnabled=true
+              //  holder.binding.mainLayout.setBackgroundColor(mContext.resources.getColor(R.color.colorSuccess))
+          }else{
+              holder.binding.tvCatName.isEnabled=false
+              holder.binding.tvCatName.setBackgroundColor(mContext.resources.getColor(R.color.colorGrey))
+          }*/
         holder.binding!!.tvCatName.setOnClickListener {
             mContext.selectDatelot(position)
         }

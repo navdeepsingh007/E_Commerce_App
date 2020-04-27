@@ -16,7 +16,7 @@ class TrackingViewModel : BaseViewModel() {
     private var homeJobsRepository = HomeJobsRepository()
 
     init {
-        completejob = homeJobsRepository.startCompleteJob(null)
+        //completejob = homeJobsRepository.startCompleteJob(null)
     }
 
     override fun isLoading() : LiveData<Boolean> {
@@ -40,7 +40,7 @@ class TrackingViewModel : BaseViewModel() {
             var jsonObject = JsonObject()
             jsonObject.addProperty("progressStatus", status)
             jsonObject.addProperty("jobId", jobId)
-            completejob = homeJobsRepository.startCompleteJob(jsonObject)
+            //completejob = homeJobsRepository.startCompleteJob(jsonObject)
             mIsUpdating.postValue(true)
         }
 

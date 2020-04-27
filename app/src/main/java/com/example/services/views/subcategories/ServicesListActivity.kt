@@ -1,6 +1,7 @@
 package com.example.services.views.subcategories
 
 import android.content.Intent
+import android.text.TextUtils
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -36,6 +37,7 @@ class ServicesListActivity : BaseActivity() {
     var servicesListAdapter: ServicesListAdapter? = null
     var subcatFilterAdapter: SubCategoriesFilterListAdapter? = null
     var isCart = ""
+    val serviceObject = JsonObject()
     override fun getLayoutId(): Int {
         return R.layout.activity_services
     }
@@ -58,17 +60,14 @@ class ServicesListActivity : BaseActivity() {
         servicesBinding = viewDataBinding as ActivityServicesBinding
         servicesViewModel = ViewModelProviders.of(this).get(ServicesViewModel::class.java)
 
-        servicesBinding.commonToolBar.imgRight.setImageResource(R.drawable.ic_nav_edit_icon)
+        servicesBinding.commonToolBar.imgRight.setImageResource(R.drawable.ic_cart)
         servicesBinding.commonToolBar.imgToolbarText.text =
                 resources.getString(R.string.services)
         servicesBinding.servicesViewModel = servicesViewModel
         catId = intent.extras?.get("catId").toString()
         subCatId = intent.extras?.get("subCatId").toString()
         //initRecyclerView()
-
         //subcat.name="All"
-
-        val serviceObject = JsonObject()
         serviceObject.addProperty(
                 "category", catId
         )
@@ -159,13 +158,13 @@ class ServicesListActivity : BaseActivity() {
                         val message = response.message
                         when {
                             response.code == 200 -> {
-                                if (serVicesList[pos].favourite.equals("false")) {
+                                /*if (serVicesList[pos].favourite.equals("false")) {
                                     serVicesList[pos].favourite = "true"
                                 } else {
                                     serVicesList[pos].favourite = "false"
                                 }
-                                servicesListAdapter?.notifyDataSetChanged()
-                                // servicesViewModel.getServices(serviceObject)
+                                servicesListAdapter?.notifyDataSetChanged()*/
+                                servicesViewModel.getServices(catId)
                             }
                             else -> message?.let {
                                 UtilsFunctions.showToastError(it)
@@ -242,35 +241,34 @@ class ServicesListActivity : BaseActivity() {
         }
     }
 
-    fun addRemovefav(position: Int, addRemove: String) {
-        var isCart = "false"
+    fun addRemovefav(position: Int, favId: String) {
         pos = position
-        var cartObject = JsonObject()
-        cartObject.addProperty(
-                "serviceId", serVicesList[position].id
-        )
-        if (serVicesList[position].favourite.equals("false")) {
-            isCart = "true"
+        var favObject = JsonObject()
+        if (TextUtils.isEmpty(favId)) {
+            favObject.addProperty(
+                    "serviceId", serVicesList[position].id
+            )
+            if (UtilsFunctions.isNetworkConnected()) {
+                servicesViewModel.addFav(favObject)
+                startProgressDialog()
+            }
         } else {
-            isCart = "false"
+            if (UtilsFunctions.isNetworkConnected()) {
+                servicesViewModel.removeFav(favId)
+                startProgressDialog()
+            }
         }
-        cartObject.addProperty(
-                "status", isCart
-        )
-        if (UtilsFunctions.isNetworkConnected()) {
-            servicesViewModel.addRemoveFav(cartObject)
-            startProgressDialog()
-        }
-
     }
 
     fun selectSubCat(id: String, position: Int) {
         selectedPos == position
+
+        catId = id
         for (item in subCategoryList) {
             item.isSelected = "false"
         }
         subCategoryList[position].isSelected = "true"
-        val serviceObject = JsonObject()
+
         serviceObject.addProperty(
                 "category", catId
         )
@@ -280,12 +278,7 @@ class ServicesListActivity : BaseActivity() {
 
         subcatFilterAdapter?.notifyDataSetChanged()
         if (UtilsFunctions.isNetworkConnected()) {
-            /*  if (id.equals("0")) {
-                  servicesViewModel.getServices(catId)
-              } else {*/
             servicesViewModel.getServices(id)
-            //}
-
             startProgressDialog()
         }
 

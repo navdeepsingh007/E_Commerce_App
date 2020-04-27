@@ -1,6 +1,7 @@
 package com.uniongoods.adapters
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import androidx.annotation.NonNull
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.services.R
+import com.example.services.constants.GlobalConstants
 import com.example.services.databinding.OfferItemBinding
 import com.example.services.views.home.HomeFragment
 import java.util.*
@@ -42,8 +44,8 @@ class OffersListRecyclerAdapter(
 
     override fun onBindViewHolder(@NonNull holder: ViewHolder, position: Int) {
         viewHolder = holder
-        holder.binding!!.tvDiscount.setText("20%")
-        holder.binding!!.tvDiscountCode.setText("User Code: NewUser")
+        holder.binding!!.tvDiscount.setText(categoriesList[position].discount + "% " + mContext.getString(R.string.off))
+        holder.binding!!.tvDiscountCode.setText(mContext.getString(R.string.use_code) + ": " + categoriesList[position].code)
         val rnd = Random();
         val color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
         if (color.equals(mContext.resources.getColor(R.color.colorBlack))) {
@@ -52,9 +54,12 @@ class OffersListRecyclerAdapter(
             holder.binding!!.tvDiscountCode.setTextColor(Color.WHITE)
         } else {
             // mContext.baseActivity.showToastError("other")
+
         }
-        holder.binding!!.cardView.setBackgroundColor(color)
-        holder.binding!!.cardView.setRadius(10f)
+        //holder.binding!!.cardView.setBackgroundColor(color)
+        holder.binding!!.cardView.setBackgroundTintList(ColorStateList.valueOf(color)/*mContext.getResources().getColorStateList(R.color.colorOrange)*/)
+
+        // holder.binding!!.cardView.setRadius(10f)
         //val background: Drawable = (holder.binding!!.toLayout.getBackground() as GradientDrawable).mutate()
         // (background as GradientDrawable).setColor(color)
         /* if (background instanceof ShapeDrawable) {

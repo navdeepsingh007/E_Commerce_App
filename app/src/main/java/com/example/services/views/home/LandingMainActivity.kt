@@ -2,6 +2,8 @@ package com.example.services.views.home
 
 import android.app.Dialog
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Build
 import android.os.Handler
 import android.text.TextUtils
@@ -50,7 +52,6 @@ class LandingMainActivity : BaseActivity(),
         return R.layout.activity_landing
     }
 
-
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun initViews() {
         activityLandingBinding = viewDataBinding as ActivityLandingBinding
@@ -67,7 +68,7 @@ class LandingMainActivity : BaseActivity(),
         activityLandingBinding!!.toolbarCommon.toolbar.setImageResource(R.drawable.ic_menu)
         activityLandingBinding!!.toolbarCommon.imgRight.visibility = View.GONE
         activityLandingBinding!!.toolbarCommon.imgToolbarText.setText(resources.getString(R.string.home))
-        activityLandingBinding!!.toolbarCommon.imgRight.setImageResource(R.drawable.ic_notifications)
+        activityLandingBinding!!.toolbarCommon.imgRight.setImageResource(R.drawable.ic_cart)
 //        activityDashboardBinding!!.toolbarCommon.rlTop.setBackgroundColor(resources.getColor(R.color.orange_transparent))
 
         val image = SharedPrefClass().getPrefValue(
@@ -285,6 +286,11 @@ class LandingMainActivity : BaseActivity(),
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    fun onResumedForFragment() {
+        onResume()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onResume() {
         super.onResume()
         setHeadings()
@@ -292,6 +298,8 @@ class LandingMainActivity : BaseActivity(),
               activityDashboardBinding!!.tablayout.getTabAt(GlobalConstants.selectedFragment)!!.select()
               GlobalConstants.selectedCheckedFragment = 0
           }*/
+        activityLandingBinding!!.topBannerLayout.setBackgroundColor((Color.parseColor(GlobalConstants.COLOR_CODE)))
+        activityLandingBinding!!.topBannerLayout.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(GlobalConstants.COLOR_CODE))/*mContext.getResources().getColorStateList(R.color.colorOrange)*/)
         isCart = SharedPrefClass().getPrefValue(
                 MyApplication.instance,
                 GlobalConstants.isCartAdded

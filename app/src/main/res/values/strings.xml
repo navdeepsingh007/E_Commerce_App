@@ -355,11 +355,22 @@
     <string name="txt_product_price">8000</string>
 
 
-
-
-
     <string name="book">Book</string>
     <string name="current_location">Current Location</string>
     <string name="duration">Duration</string>
     <string name="service_date">Service Date</string>
+    <string name="reviews">Reviews</string>
+    <string name="rating">Ratings</string>
+    <string name="rate_service">Rate Service</string>
+    <string name="no_review">No review added yet</string>
+    <string name="enter_review">Enter review here...</string>
+    <string name="warning_rate_order">Do you want to rate this order?</string>
+    <string name="warning_rate_cancel">Do you want to leave this screen?</string>
+    <string name="warning_complete_order">Do you really want to complete this order?</string>
+    <string name="warning_clear_cart">Remove Cart Message</string>
+    <string name="enter_promo_code">Enter Promo Code</string>
+    <string name="order_services_msg">Thank you for using our services</string>
+    <string name="done">Done</string>
+    <string name="success">Success</string>
+
 </resources>

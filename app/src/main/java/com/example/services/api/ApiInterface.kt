@@ -1,5 +1,6 @@
 package com.example.services.api
 
+import com.example.services.model.ratnigreviews.RatingReviewListInput
 import com.google.gson.JsonObject
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -67,6 +68,9 @@ interface ApiInterface {
     @GET("mobile/services/getCategories")
     fun getCategories(): Call<JsonObject>
 
+    @DELETE("mobile/cart/clear")
+    fun clearCart(): Call<JsonObject>
+
     @GET("mobile/services/getSubcat/{id}")
     fun getSubServices(@Path("id") id: String): Call<JsonObject>
 
@@ -89,9 +93,17 @@ interface ApiInterface {
     @GET("mobile/cart/list")
     fun cartList(/*@Path("id") id : String*/): Call<JsonObject>
 
-    @GET("mobile/services/getFavorite")
+    @GET("mobile/favourite/list")
     fun favList(/*@Path("id") id : String*/): Call<JsonObject>
 
+    @GET("mobile/rating/serviceRatings")
+    fun ratingRaviewsList(@Query("serviceId") serviceId: String, @Query("page") page: String, @Query("limit") limit: String): Call<JsonObject>
+
+    @GET("mobile/orders/detail/{id}")
+    fun orderDetail(@Path("id") id: String): Call<JsonObject>
+
+    @POST("mobile/rating/addRating")
+    fun addRatings(@Body mJsonObject: RatingReviewListInput): Call<JsonObject>
 
     //    {id}
 //service_id
@@ -119,8 +131,11 @@ interface ApiInterface {
     @DELETE("mobile/cart/remove")
     fun removeCart(@Query("cartId") cartId: String): Call<JsonObject>
 
-    @POST("mobile/services/addFavorite")
+    @POST("mobile/favourite/add")
     fun addFav(@Body mJsonObject: JsonObject): Call<JsonObject>
+
+    @DELETE("mobile/favourite/remove")
+    fun removeFav(@Query("favId") favId: String): Call<JsonObject>
 
     @GET("mobile/schedule/getSchedule")
     fun getTimeSlots(@Query("serviceDate") serviceDate: String): Call<JsonObject>
@@ -140,8 +155,11 @@ interface ApiInterface {
     @POST("mobile/orders/create")
     fun ordePlace(@Body mJsonObject: JsonObject): Call<JsonObject>
 
-    @POST("mobile/order/cancelOrder")
+    @POST("mobile/orders/cancel")
     fun cancelOrder(@Body mJsonObject: JsonObject): Call<JsonObject>
+
+    @POST("mobile/orders/status")
+    fun completeOrder(@Body mJsonObject: JsonObject): Call<JsonObject>
 
     @GET("mobile/services/detail")
     fun getServiceDetail(@Query("serviceId") addressId: String): Call<JsonObject>

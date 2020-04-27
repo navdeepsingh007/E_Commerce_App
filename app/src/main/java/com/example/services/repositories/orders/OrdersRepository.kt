@@ -22,12 +22,14 @@ class OrdersRepository {
     private var data2: MutableLiveData<CommonModel>? = null
     private var data1: MutableLiveData<OrdersListResponse>? = null
     private var data3: MutableLiveData<OrdersListResponse>? = null
+    private var data4: MutableLiveData<CommonModel>? = null
     private val gson = GsonBuilder().serializeNulls().create()
 
     init {
         data1 = MutableLiveData()
         data3 = MutableLiveData()
         data2 = MutableLiveData()
+        data4 = MutableLiveData()
     }
 
     fun orderList(/*mJsonObject : String*/): MutableLiveData<OrdersListResponse> {
@@ -55,7 +57,7 @@ class OrdersRepository {
                         data1!!.postValue(null)
                     }
 
-                }, ApiClient.getApiInterface().orderList("0,1")
+                }, ApiClient.getApiInterface().orderList("0,1,3")
         )
 
         //}
@@ -88,7 +90,7 @@ class OrdersRepository {
                         data3!!.postValue(null)
                     }
 
-                }, ApiClient.getApiInterface().orderHistroyList("2,3,4,5")
+                }, ApiClient.getApiInterface().orderHistroyList("2,4,5")
         )
 
         //}
@@ -126,6 +128,39 @@ class OrdersRepository {
 
         }
         return data2!!
+
+    }
+
+    fun completeOrder(mJsonObject: JsonObject?): MutableLiveData<CommonModel> {
+        if (mJsonObject != null) {
+            val mApiService = ApiService<JsonObject>()
+            mApiService.get(
+                    object : ApiResponse<JsonObject> {
+                        override fun onResponse(mResponse: Response<JsonObject>) {
+                            val loginResponse = if (mResponse.body() != null)
+                                gson.fromJson<CommonModel>(
+                                        "" + mResponse.body(),
+                                        CommonModel::class.java
+                                )
+                            else {
+                                gson.fromJson<CommonModel>(
+                                        mResponse.errorBody()!!.charStream(),
+                                        CommonModel::class.java
+                                )
+                            }
+                            data4!!.postValue(loginResponse)
+                        }
+
+                        override fun onError(mKey: String) {
+                            UtilsFunctions.showToastError(MyApplication.instance.getString(R.string.internal_server_error))
+                            data4!!.postValue(null)
+                        }
+
+                    }, ApiClient.getApiInterface().completeOrder(mJsonObject)
+            )
+
+        }
+        return data4!!
 
     }
 

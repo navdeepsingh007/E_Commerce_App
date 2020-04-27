@@ -1,6 +1,8 @@
 package com.uniongoods.adapters
 
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,19 +14,20 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.services.R
 import com.example.services.constants.GlobalConstants
-import com.example.services.databinding.FavoriteItemBinding
+import com.example.services.databinding.ServicesItemBinding
 import com.example.services.model.cart.CartListResponse
+import com.example.services.model.fav.FavListResponse
 import com.example.services.views.favorite.FavoriteListActivity
 
 class FavoriteListAdapter(
         context: FavoriteListActivity,
-        addressList: ArrayList<CartListResponse.Data>,
+        addressList: ArrayList<FavListResponse.Body>,
         var activity: Context
 ) :
         RecyclerView.Adapter<FavoriteListAdapter.ViewHolder>() {
     private val mContext: FavoriteListActivity
     private var viewHolder: ViewHolder? = null
-    private var addressList: ArrayList<CartListResponse.Data>
+    private var addressList: ArrayList<FavListResponse.Body>
 
     init {
         this.mContext = context
@@ -35,19 +38,22 @@ class FavoriteListAdapter(
     override fun onCreateViewHolder(@NonNull parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = DataBindingUtil.inflate(
                 LayoutInflater.from(parent.context),
-                R.layout.favorite_item,
+                R.layout.services_item,
                 parent,
                 false
-        ) as FavoriteItemBinding
+        ) as ServicesItemBinding
         return ViewHolder(binding.root, viewType, binding, mContext, addressList)
     }
 
     override fun onBindViewHolder(@NonNull holder: ViewHolder, position: Int) {
         viewHolder = holder
+
         holder.binding!!.tvCatName.text = addressList[position].service?.name
-        holder.binding!!.tvOfferPrice.setText(
-                GlobalConstants.Currency + " " + addressList[position].service?.price.toString()
-        )
+        holder.binding!!.tvOfferPrice.text = GlobalConstants.Currency + " " + addressList[position].service?.price.toString()
+        holder.binding!!.tvDuration.setText(mContext.resources.getString(R.string.duration) + ": " + addressList[position].service?.duration)
+        holder.binding!!.tvAdd.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(GlobalConstants.COLOR_CODE))/*mContext.getResources().getColorStateList(R.color.colorOrange)*/)
+
+        holder.binding.imgFavourite.setImageResource(R.drawable.ic_delete)
         //holder.binding!!.rBar.setRating(addressList[position].rating?.toFloat())
         Glide.with(mContext)
                 .load(addressList[position].service?.icon)
@@ -55,11 +61,11 @@ class FavoriteListAdapter(
                 .placeholder(R.drawable.ic_category)
                 .into(holder.binding.imgCat)
 
-        holder.binding!!.serviceItem.setOnClickListener {
+        holder.binding!!.cardView.setOnClickListener {
             mContext.callServiceDetail(addressList[position].service?.id!!)
         }
 
-        holder.binding!!.imgRemove.setOnClickListener {
+        holder.binding!!.imgFavourite.setOnClickListener {
             mContext.addRemoveToCart(position/*, holder.binding!!.imgCart.getText().toString()*/)
         }
 
@@ -72,9 +78,9 @@ class FavoriteListAdapter(
     inner class ViewHolder//This constructor would switch what to findViewBy according to the type of viewType
     (
             v: View, val viewType: Int, //These are the general elements in the RecyclerView
-            val binding: FavoriteItemBinding?,
+            val binding: ServicesItemBinding?,
             mContext: FavoriteListActivity,
-            addressList: ArrayList<CartListResponse.Data>?
+            addressList: ArrayList<FavListResponse.Body>?
     ) : RecyclerView.ViewHolder(v) {
         /*init {
             binding.linAddress.setOnClickListener {

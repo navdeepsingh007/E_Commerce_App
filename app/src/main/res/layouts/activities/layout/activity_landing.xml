@@ -111,9 +111,10 @@
                      layout="@layout/header_view"/>-->
 
                 <LinearLayout
+                    android:id="@+id/topBannerLayout"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/nav_header_height"
-                    android:background="@color/colorPrimary"
+
                     android:gravity="bottom"
                     android:orientation="vertical"
                     android:paddingLeft="@dimen/dp_16"

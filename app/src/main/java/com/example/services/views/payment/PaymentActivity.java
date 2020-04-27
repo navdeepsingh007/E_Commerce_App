@@ -50,7 +50,7 @@ public class PaymentActivity extends BaseActivity {
 
     protected void initViews() {
         //  setContentView(R.layout.activity_payment);
-         mTxvProductPrice = findViewById(R.id.txv_product_price);
+        mTxvProductPrice = findViewById(R.id.txv_product_price);
         mTxvBuy = findViewById(R.id.txt_buy_product);
         amount = getIntent().getStringExtra("amount");
         currency = getIntent().getStringExtra("currency");
@@ -178,7 +178,6 @@ public class PaymentActivity extends BaseActivity {
 
             TransactionResponse transactionResponse = data.getParcelableExtra(PayUmoneyFlowManager.INTENT_EXTRA_TRANSACTION_RESPONSE);
             ResultModel resultModel = data.getParcelableExtra(PayUmoneyFlowManager.ARG_RESULT);
-
 
             if (transactionResponse != null && transactionResponse.getPayuResponse() != null) {
 

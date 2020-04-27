@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Resources
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import android.graphics.Color
@@ -41,54 +42,74 @@ import java.util.HashMap
  * Created by Saira on 2018-12-9.
  */
 abstract class BaseActivity : AppCompatActivity() {
-    protected var viewDataBinding : ViewDataBinding? = null
-    private var utils : Utils? = null
-    private var inputMethodManager : InputMethodManager? = null
-    private var progressDialog : Dialog? = null
-    private var mFragmentManager : androidx.fragment.app.FragmentManager? = null
+    private var colorRes: Res? = null
+    protected var viewDataBinding: ViewDataBinding? = null
+    private var utils: Utils? = null
+    private var inputMethodManager: InputMethodManager? = null
+    private var progressDialog: Dialog? = null
+    private var mFragmentManager: androidx.fragment.app.FragmentManager? = null
     private val gson = GsonBuilder().serializeNulls().create()
-    private var permCallback : PermissionCallback? = null
-     val REQUEST_ID_MULTIPLE_PERMISSIONS = 1
-    override fun onCreate(savedInstanceState : Bundle?) {
+    private var permCallback: PermissionCallback? = null
+    val REQUEST_ID_MULTIPLE_PERMISSIONS = 1
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         this@BaseActivity.overridePendingTransition(
-            R.anim.slide_in,
-            R.anim.slide_out
+                R.anim.slide_in,
+                R.anim.slide_out
         )
+
 
         viewDataBinding = DataBindingUtil.setContentView(this, getLayoutId())
         //  mtoolbar = findViewById(R.id.toolbar);
         //        retrofitClient = (ApiService) RetrofitClient.with(this).getClient(Constants.API_BASE_URL, false, this).create(ApiService.class);
         inputMethodManager = this
-            .getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+                .getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         //store = new PrefStore(this);
         //    public ApiService retrofitClient;
         strictModeThread()
         initializeProgressDialog()
         initViews()
+
         checkAndRequestPermissions()
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        colorRes = null
+        getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary))
+    }
+
     protected abstract fun initViews()
-    protected abstract fun getLayoutId() : Int
+    protected abstract fun getLayoutId(): Int
 
     private fun strictModeThread() {
         StrictMode.setThreadPolicy(
-            StrictMode.ThreadPolicy.Builder()
-                .permitAll().build()
+                StrictMode.ThreadPolicy.Builder()
+                        .permitAll().build()
         )
     }
 
-    fun eventCreatedDialog(activity : Activity, key : String, message : String) {
+    override fun getResources(): Resources {
+        if (colorRes == null) {
+            colorRes = Res(super.getResources(), getRequiredColor())
+        }
+        return colorRes!!
+    }
+
+    fun getRequiredColor(): Int? {
+        return Color.parseColor(GlobalConstants.COLOR_CODE)
+    }
+
+    fun eventCreatedDialog(activity: Activity, key: String, message: String) {
         showToastSuccess(message)
         val dialog = Dialog(activity)
         dialog.setContentView(R.layout.activity_dialog_tick)
         dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         val imgTick = dialog.findViewById(R.id.img_tick) as ImageView
         object : CountDownTimer(500, 200) {
-            override fun onTick(millisUntilFinished : Long) {
+            override fun onTick(millisUntilFinished: Long) {
                 (imgTick.drawable as Animatable).start()
             }
 
@@ -108,9 +129,8 @@ abstract class BaseActivity : AppCompatActivity() {
                     }
 
                     "cancel" -> dialog.dismiss()
-                    "update" ->  dialog.dismiss()
-                    "update_profile" ->  dialog.dismiss()
-
+                    "update" -> dialog.dismiss()
+                    "update_profile" -> dialog.dismiss()
 
 
                 }
@@ -121,19 +141,19 @@ abstract class BaseActivity : AppCompatActivity() {
 
     }
 
-    fun checkObjectNull(obj : Any?) : Boolean {
+    fun checkObjectNull(obj: Any?): Boolean {
         return obj != null
     }
 
 
-    fun showAlert(activity : Activity, message1 : String) {
+    fun showAlert(activity: Activity, message1: String) {
         val binding =
-            DataBindingUtil.inflate<ViewDataBinding>(
-                LayoutInflater.from(activity),
-                R.layout.layout_custom_alert,
-                null,
-                false
-            )
+                DataBindingUtil.inflate<ViewDataBinding>(
+                        LayoutInflater.from(activity),
+                        R.layout.layout_custom_alert,
+                        null,
+                        false
+                )
 
         val dialog = Dialog(this)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -154,18 +174,17 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
 
-
-
     /*}
      *Method called  progress dialog */
     private fun initializeProgressDialog() {
         progressDialog = Dialog(this, R.style.transparent_dialog_borderless)
         val binding = DataBindingUtil.inflate<ViewDataBinding>(
-            LayoutInflater.from(this),
-            R.layout.progress_dialog,
-            null,
-            false
+                LayoutInflater.from(this),
+                R.layout.progress_dialog,
+                null,
+                false
         )
+       // binding.loader.setColor(Color.parseColor(GlobalConstants.COLOR_CODE))
         progressDialog!!.requestWindowFeature(Window.FEATURE_NO_TITLE)
         progressDialog!!.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         progressDialog!!.setContentView(binding.root)
@@ -175,20 +194,21 @@ abstract class BaseActivity : AppCompatActivity() {
         progressDialog!!.setCancelable(false)
     }
 
-    fun showToastSuccess(message : String?) {
+    fun showToastSuccess(message: String?) {
         UtilsFunctions.showToastSuccess(message!!)
 
     }
 
-     fun showToastError(message : String?) {
+    fun showToastError(message: String?) {
         UtilsFunctions.showToastError(message!!)
 
     }
 
-    private fun showToastWarning(message : String?) {
+    private fun showToastWarning(message: String?) {
         UtilsFunctions.showToastWarning(message)
 
     }
+
     /*
      * Method to show snack bar*/
     /*
@@ -197,7 +217,7 @@ abstract class BaseActivity : AppCompatActivity() {
         if (progressDialog != null && !progressDialog!!.isShowing) {
             try {
                 progressDialog!!.show()
-            } catch (e : Exception) {
+            } catch (e: Exception) {
                 e.printStackTrace()
             }
 
@@ -210,14 +230,14 @@ abstract class BaseActivity : AppCompatActivity() {
         if (progressDialog != null && progressDialog!!.isShowing) {
             try {
                 progressDialog!!.dismiss()
-            } catch (e : Exception) {
+            } catch (e: Exception) {
                 e.printStackTrace()
             }
 
         }
     }
 
-    fun utils() : Utils {
+    fun utils(): Utils {
         if (utils == null)
             utils = Utils(this)
         return utils!!
@@ -225,11 +245,11 @@ abstract class BaseActivity : AppCompatActivity() {
 
 
     fun callFragments(
-        fragment : androidx.fragment.app.Fragment?,
-        mFragmentManager : androidx.fragment.app.FragmentManager,
-        mSendDataCheck : Boolean,
-        key : String?,
-        mObject : Any
+            fragment: androidx.fragment.app.Fragment?,
+            mFragmentManager: androidx.fragment.app.FragmentManager,
+            mSendDataCheck: Boolean,
+            key: String?,
+            mObject: Any
     ) {
         val mFragmentTransaction = mFragmentManager.beginTransaction()
         if (fragment != null) {
@@ -244,19 +264,19 @@ abstract class BaseActivity : AppCompatActivity() {
                 }
             }
             mFragmentTransaction.addToBackStack(null)
-           mFragmentTransaction.replace(R.id.frame_layout, fragment)
+            mFragmentTransaction.replace(R.id.frame_layout, fragment)
             // mFragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             mFragmentTransaction.commit()
         }
     }
 
     fun callFragmentsContainer(
-        fragment : androidx.fragment.app.Fragment?,
-        mFragmentManager : androidx.fragment.app.FragmentManager,
-        mSendDataCheck : Boolean,
-        key : String?,
-        mObject : Any,
-        id : Int
+            fragment: androidx.fragment.app.Fragment?,
+            mFragmentManager: androidx.fragment.app.FragmentManager,
+            mSendDataCheck: Boolean,
+            key: String?,
+            mObject: Any,
+            id: Int
     ) {
         val mFragmentTransaction = mFragmentManager.beginTransaction()
         if (fragment != null) {
@@ -301,9 +321,9 @@ abstract class BaseActivity : AppCompatActivity() {
                         perms[permissions[i]] = grantResults[i]
                     // Check for both permissions
                     if (perms[Manifest.permission.CAMERA] == PackageManager.PERMISSION_GRANTED
-                        && perms[Manifest.permission.WRITE_EXTERNAL_STORAGE] == PackageManager.PERMISSION_GRANTED
-                        && perms[Manifest.permission.ACCESS_FINE_LOCATION] == PackageManager.PERMISSION_GRANTED
-                        && perms[Manifest.permission.RECORD_AUDIO] == PackageManager.PERMISSION_GRANTED) {
+                            && perms[Manifest.permission.WRITE_EXTERNAL_STORAGE] == PackageManager.PERMISSION_GRANTED
+                            && perms[Manifest.permission.ACCESS_FINE_LOCATION] == PackageManager.PERMISSION_GRANTED
+                            && perms[Manifest.permission.RECORD_AUDIO] == PackageManager.PERMISSION_GRANTED) {
                         // process the normal flow
                         //else any one or both the permissions are not granted
                     } else {
@@ -311,18 +331,18 @@ abstract class BaseActivity : AppCompatActivity() {
                         //                        // shouldShowRequestPermissionRationale will return true
                         //show the dialog or snackbar saying its necessary and try again otherwise proceed with setup.
                         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)
-                            || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                            || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                            || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECORD_AUDIO)) {
+                                || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                                || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECORD_AUDIO)) {
                             showDialogOK("Service Permissions are required for this app",
-                                DialogInterface.OnClickListener { dialog, which ->
-                                    when (which) {
-                                        DialogInterface.BUTTON_POSITIVE -> checkAndRequestPermissions()
-                                        DialogInterface.BUTTON_NEGATIVE ->
-                                            // proceed with logic by disabling the related features or quit the app.
-                                            finish()
-                                    }
-                                })
+                                    DialogInterface.OnClickListener { dialog, which ->
+                                        when (which) {
+                                            DialogInterface.BUTTON_POSITIVE -> checkAndRequestPermissions()
+                                            DialogInterface.BUTTON_NEGATIVE ->
+                                                // proceed with logic by disabling the related features or quit the app.
+                                                finish()
+                                        }
+                                    })
                         } else {
                             explain("You need to give some mandatory permissions to continue. Do you want to go to app settings?")
                             //                            //proceed with logic by disabling the related features or quit the app.
@@ -336,21 +356,21 @@ abstract class BaseActivity : AppCompatActivity() {
 
     private fun showDialogOK(message: String, okListener: DialogInterface.OnClickListener) {
         AlertDialog.Builder(this)
-            .setMessage(message)
-            .setPositiveButton("OK", okListener)
-            .setNegativeButton("Cancel", okListener)
-            .create()
-            .show()
+                .setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", okListener)
+                .create()
+                .show()
     }
 
     private fun explain(msg: String) {
         val dialog = AlertDialog.Builder(this)
         dialog.setMessage(msg)
-            .setPositiveButton("Yes") { paramDialogInterface, paramInt ->
-                //  permissionsclass.requestPermission(type,code);
-                startActivity(Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:com.uniongoods")))
-            }
-            .setNegativeButton("Cancel") { paramDialogInterface, paramInt -> finish() }
+                .setPositiveButton("Yes") { paramDialogInterface, paramInt ->
+                    //  permissionsclass.requestPermission(type,code);
+                    startActivity(Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:com.uniongoods")))
+                }
+                .setNegativeButton("Cancel") { paramDialogInterface, paramInt -> finish() }
         dialog.show()
     }
 
@@ -381,7 +401,6 @@ abstract class BaseActivity : AppCompatActivity() {
         }
         return true
     }
-
 
 
 }

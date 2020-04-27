@@ -3,6 +3,7 @@ package com.example.services.views.cart
 import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
@@ -40,6 +41,7 @@ import com.example.services.utils.Utils
 import com.example.services.viewmodels.address.AddressViewModel
 import com.example.services.viewmodels.promocode.PromoCodeViewModel
 import com.example.services.viewmodels.services.ServicesViewModel
+import com.example.services.views.address.AddAddressActivity
 import com.example.services.views.home.DashboardActivity
 import com.example.services.views.home.LandingMainActivity
 import com.example.services.views.payment.PaymentActivity
@@ -84,6 +86,13 @@ class CheckoutAddressActivity : BaseActivity(), DialogssInterface {
         return R.layout.activity_checkout_address
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (cartBinding.tvChange.getText().toString().equals(getString(R.string.add_address))) {
+            addressViewModel.addressList()
+        }
+    }
+
     override fun initViews() {
         cartBinding = viewDataBinding as ActivityCheckoutAddressBinding
         cartViewModel = ViewModelProviders.of(this).get(CartViewModel::class.java)
@@ -91,7 +100,7 @@ class CheckoutAddressActivity : BaseActivity(), DialogssInterface {
         servicesViewModel = ViewModelProviders.of(this).get(ServicesViewModel::class.java)
         promcodeViewModel = ViewModelProviders.of(this).get(PromoCodeViewModel::class.java)
         cartBinding.commonToolBar.imgRight.visibility = View.GONE
-        cartBinding.commonToolBar.imgRight.setImageResource(R.drawable.ic_nav_edit_icon)
+        cartBinding.commonToolBar.imgRight.setImageResource(R.drawable.ic_cart)
         cartBinding.commonToolBar.imgToolbarText.text =
                 resources.getString(R.string.checkout)
         cartBinding.cartViewModel = cartViewModel
@@ -103,20 +112,9 @@ class CheckoutAddressActivity : BaseActivity(), DialogssInterface {
             startProgressDialog()
             //cartViewModel.getcartList(userId)
         }
-        /* addressType = SharedPrefClass().getPrefValue(
-                 MyApplication.instance,
-                 GlobalConstants.SelectedAddressType
-         ).toString()
-         if (!TextUtils.isEmpty(addressType) && !addressType.equals("null")) {
-             if (addressType.equals("Shop")) {
-                 cartBinding.addressLayout.visibility = View.GONE
-             } else {
-                 cartBinding.addressLayout.visibility = View.VISIBLE
-             }
-         } else {
-             addressType = "Shop"
-             cartBinding.addressLayout.visibility = View.GONE
-         }*/
+         cartBinding.tvChange.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(GlobalConstants.COLOR_CODE))/*mContext.getResources().getColorStateList(R.color.colorOrange)*/)
+        cartBinding.btnCheckout.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(GlobalConstants.COLOR_CODE))/*mContext.getResources().getColorStateList(R.color.colorOrange)*/)
+
         for (i in 0..4) {
             val item = DateSlotsResponse()
             dateList.add(item.Body())
@@ -142,44 +140,11 @@ class CheckoutAddressActivity : BaseActivity(), DialogssInterface {
                         when {
                             response.code == 200 -> {
                                 cartList.addAll(response.body!!.data!!)
-                                payableAmount = response.coupanDetails?.payableAmount.toString()
+                                payableAmount = response.body?.sum.toString()
                                 cartBinding.tvTotalItems.setText(cartList.size.toString())
-                                cartBinding.tvOfferPrice.setText( GlobalConstants.Currency + " " + response.body?.sum)
-                                /*if (response.coupanDetails?.isCouponApplied.equals("true")) {
-                                    if (response.coupanDetails?.isCoupanValid.equals("true")) {
-                                        cartBinding.rlRealPrice.visibility = View.VISIBLE
-                                        cartBinding.tvOfferPrice.setText(cartList[0].service?.currency + " " + response.coupanDetails?.payableAmount)
-                                        cartBinding.tvRealPrice.setText(cartList[0].service?.currency + " " + response.coupanDetails?.totalAmount)
-                                    }
-                                }*/
+                                cartBinding.tvOfferPrice.setText(GlobalConstants.Currency + " " + response.body?.sum)
                                 cartBinding.tvPromo.setText(getString(R.string.apply_coupon))
                                 cartBinding.rlRealPrice.visibility = View.GONE
-
-                                /* if (response.coupanDetails?.isCouponApplied.equals("true")) {
-
-                                     if (response.coupanDetails?.isCoupanValid.equals("true")) {
-                                         couponCode = response.coupanDetails?.coupanCode.toString()
-                                         cartBinding.tvPromo.setText(response.coupanDetails?.coupanDiscount + "% " + "Discount coupon applied. Remove?")
-                                         cartBinding.rlRealPrice.visibility = View.VISIBLE
-                                         cartBinding.tvOfferPrice.setText(cartList[0].service?.currency + " " + response.coupanDetails?.payableAmount)
-                                         cartBinding.tvRealPrice.setText(cartList[0].service?.currency + " " + response.coupanDetails?.totalAmount)
-                                     } else {
-                                         couponCode = response.coupanDetails?.coupanCode.toString()
-                                         cartBinding.tvPromo.setText("Invalid Coupon. Remove?")
-                                     }
-                                     val str = cartBinding.tvPromo.getText().toString()
-                                     var span = str.split(".")
-                                     val rr = span[1]
-                                     val styledString = SpannableStringBuilder(cartBinding.tvPromo.getText().toString())
-                                     var length = cartBinding.tvPromo.getText().toString().length
-                                     val startPos = length - 7
-                                     styledString.setSpan(StyleSpan(Typeface.BOLD), startPos, styledString.length, 0)
-                                     styledString.setSpan(ForegroundColorSpan(Color.RED), startPos, styledString.length, 0)
-                                     cartBinding.tvPromo.setText(*//*span[0] + ". " +*//* styledString)
-                                } else {
-                                    cartBinding.rlRealPrice.visibility = View.GONE
-                                    cartBinding.tvPromo.setText(getString(R.string.apply_coupon))
-                                }*/
                             }
                             else -> message?.let {
                                 UtilsFunctions.showToastError(it)
@@ -238,11 +203,9 @@ class CheckoutAddressActivity : BaseActivity(), DialogssInterface {
                                         GlobalConstants.SelectedAddressType,
                                         "null"
                                 )
-                                val intent = Intent(this, LandingMainActivity::class.java)
-                                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                startActivity(intent)
-                                finish()
-                                finish()
+                                //showToastSuccess(message)
+                                showPaymentSuccessDialog()
+
                             }
                             else -> message?.let {
                                 UtilsFunctions.showToastError(it)
@@ -259,8 +222,8 @@ class CheckoutAddressActivity : BaseActivity(), DialogssInterface {
                         when {
                             response.code == 200 -> {
                                 addressesList.addAll(response.data!!)
-
                                 var default = "false"
+                                cartBinding.tvChange.setText(getString(R.string.change))
                                 for (item in addressesList) {
                                     if (item.default.equals("1")) {
                                         default = "true"
@@ -282,9 +245,14 @@ class CheckoutAddressActivity : BaseActivity(), DialogssInterface {
                                         setAddressData(0)
                                     }
                                 }
+                                cartBinding.addressItem.visibility = View.VISIBLE
                             }
-                            else -> message?.let {
-                                UtilsFunctions.showToastError(it)
+                            else -> {
+                                /*message?.let {
+                                    UtilsFunctions.showToastError(it)
+                                }*/
+                                cartBinding.tvChange.setText(getString(R.string.add_address))
+                                cartBinding.addressItem.visibility = View.GONE
                             }
                         }
 
@@ -330,19 +298,26 @@ class CheckoutAddressActivity : BaseActivity(), DialogssInterface {
                     }
                 }
                 "tvChange" -> {
-                    addressDialog()
+                    if (cartBinding.tvChange.getText().toString().equals(getString(R.string.add_address))) {
+                        val intent = Intent(this, AddAddressActivity::class.java)
+                        startActivity(intent)
+                    } else {
+                        addressDialog()
+                    }
+
                 }
                 "btnCheckout" -> {
-
 
                     if (TextUtils.isEmpty(selectedDate)) {
                         showToastError("Please Select Date For The Service")
                     } else if (TextUtils.isEmpty(selectedTime)) {
                         showToastError("Please Select Time Slot For The Service")
+                    } else if (TextUtils.isEmpty(addressId)) {
+                        showToastError("Please Select Address")
                     } else {
                         val intent = Intent(this, PaymentActivity::class.java)
                         intent.putExtra("amount", payableAmount)
-                        intent.putExtra("currency",  GlobalConstants.Currency)
+                        intent.putExtra("currency", GlobalConstants.Currency)
                         intent.putExtra("totalItems", cartList.size.toString())
                         startActivityForResult(intent, 200)
 
@@ -532,6 +507,64 @@ class CheckoutAddressActivity : BaseActivity(), DialogssInterface {
         }
     }
 
+    private fun showPaymentSuccessDialog() {
+        confirmationDialog = Dialog(this, R.style.transparent_dialog)
+        confirmationDialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        val binding =
+                DataBindingUtil.inflate<ViewDataBinding>(
+                        LayoutInflater.from(this),
+                        R.layout.order_place_success_dialog,
+                        null,
+                        false
+                )
+
+        confirmationDialog?.setContentView(binding.root)
+        confirmationDialog?.setCancelable(false)
+
+        confirmationDialog?.window!!.setLayout(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT
+        )
+        confirmationDialog?.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        val cancel = confirmationDialog?.findViewById<Button>(R.id.btnDone)
+        // val imgTick = confirmationDialog?.findViewById<ImageView>(R.id.imgTick)
+        /* val timer = object : CountDownTimer(800, 800) {
+             override fun onTick(millisUntilFinished: Long) {
+                 //((Animatable) imgTick.getDrawable()).start();
+             }
+
+             override fun onFinish() {
+             }
+         }
+         timer.start()*/
+
+        /*new CountDownTimer(800, 800) {
+
+            public void onTick(long millisUntilFinished) {
+
+                ((Animatable) imgTick.getDrawable()).start();
+            }
+
+            public void onFinish() {
+                switch (key) {
+                    case "bank_detail":
+
+                        dialog.dismiss();
+                        break;
+                }
+            }
+
+        }.start();
+*/        cancel?.setOnClickListener {
+            confirmationDialog?.dismiss()
+            val intent = Intent(this, LandingMainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finish()
+        }
+        confirmationDialog?.show()
+    }
+
     // This method is called when the second activity finishes
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -551,8 +584,8 @@ class CheckoutAddressActivity : BaseActivity(), DialogssInterface {
                 // couponCode = response.coupanDetails?.coupanCode.toString()
                 cartBinding.tvPromo.setText(dis + "% " + "Discount coupon applied. Remove?")
                 cartBinding.rlRealPrice.visibility = View.VISIBLE
-                cartBinding.tvOfferPrice.setText( GlobalConstants.Currency + " " + payableAmount)
-                cartBinding.tvRealPrice.setText( GlobalConstants.Currency + " " + totalAmount)
+                cartBinding.tvOfferPrice.setText(GlobalConstants.Currency + " " + payableAmount)
+                cartBinding.tvRealPrice.setText(GlobalConstants.Currency + " " + totalAmount)
 
                 val str = cartBinding.tvPromo.getText().toString()
                 var span = str.split(".")
@@ -569,7 +602,7 @@ class CheckoutAddressActivity : BaseActivity(), DialogssInterface {
             } else if (requestCode == 200) {
                 val message = data?.getStringExtra("status")
                 if (message.equals("success")) {
-                    showToastSuccess("Hit Api")
+                    // showToastSuccess("Hit Api")
                     val addressObject = JsonObject()
                     addressObject.addProperty(
                             "addressId", addressId

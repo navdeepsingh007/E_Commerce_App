@@ -107,10 +107,10 @@
 
             <ImageView
                     android:id="@+id/img_right"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/dp_40"
+                    android:layout_width="@dimen/dp_30"
+                    android:layout_height="@dimen/dp_30"
                     android:layout_alignParentRight="true"
-                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
                     android:layout_marginEnd="@dimen/dp_15"
                     android:layout_marginRight="@dimen/dp_15"
                     android:contentDescription="@string/todo"

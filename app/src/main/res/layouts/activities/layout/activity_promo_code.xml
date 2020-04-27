@@ -46,7 +46,7 @@
                 android:layout_toLeftOf="@+id/btnApplyPromo"
                 android:background="@null"
                 android:gravity="center_vertical"
-                android:hint="@string/enter_price"
+                android:hint="@string/enter_promo_code"
                 android:imeOptions="actionDone"
                 android:paddingStart="@dimen/dp_20"
                 android:paddingLeft="@dimen/dp_20"

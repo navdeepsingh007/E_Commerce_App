@@ -84,6 +84,9 @@ class OrdersListResponse {
         @SerializedName("suborders")
         @Expose
         var suborders: ArrayList<Suborders>? = null
+        @SerializedName("cancellable")
+        @Expose
+        var cancellable: String? = null
 
 
     }

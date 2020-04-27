@@ -6,5 +6,8 @@ data class Body(
         val services: List<Services>,
         val subcat: List<Subcat>,
         val offers: List<Offers>,
-        val trending: List<Trending>
+        val trending: List<Trending>,
+        val cartCategoryType: String,
+        val currency: String
+
 )

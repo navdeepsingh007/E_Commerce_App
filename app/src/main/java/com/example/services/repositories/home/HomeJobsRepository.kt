@@ -95,8 +95,8 @@ class HomeJobsRepository {
     }
 
 
-    fun startCompleteJob(mJsonObject: JsonObject?): MutableLiveData<CommonModel> {
-        if (mJsonObject != null) {
+    fun clearCart(mJsonObject: String): MutableLiveData<CommonModel> {
+        if (!TextUtils.isEmpty(mJsonObject)) {
             val mApiService = ApiService<JsonObject>()
             mApiService.get(
                     object : ApiResponse<JsonObject> {
@@ -123,7 +123,7 @@ class HomeJobsRepository {
 
                         }
 
-                    }, ApiClient.getApiInterface().startCompleteJob(mJsonObject)
+                    }, ApiClient.getApiInterface().clearCart()
             )
         }
         return data1!!

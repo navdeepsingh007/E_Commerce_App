@@ -8,16 +8,19 @@ package com.example.services.utils
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
+import android.content.res.ColorStateList
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.*
 import android.widget.RatingBar.OnRatingBarChangeListener
+import androidx.annotation.RequiresApi
 import com.example.services.R
 import com.example.services.callbacks.ChoiceCallBack
 import com.example.services.constants.GlobalConstants
@@ -28,6 +31,7 @@ import com.example.services.views.subcategories.ServiceDetailActivity
 class DialogClass {
     private var checkClick = 0
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     fun setDefaultDialog(
             mContext: Context,
             mInterface: DialogssInterface,
@@ -50,6 +54,8 @@ class DialogClass {
         dialogView.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         val yes = dialogView.findViewById<Button>(R.id.yes)
         val no = dialogView.findViewById<Button>(R.id.no)
+        no.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(GlobalConstants.COLOR_CODE))/*mContext.getResources().getColorStateList(R.color.colorOrange)*/)
+
         val radioGroup = dialogView.findViewById<RadioGroup>(R.id.radio_group)
         val tvLogout = dialogView.findViewById<TextView>(R.id.tv_dialog_logout)
         if (mKey.equals("logout"))

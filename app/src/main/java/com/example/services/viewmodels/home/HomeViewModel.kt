@@ -4,6 +4,7 @@ import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.services.common.UtilsFunctions
+import com.example.services.model.CommonModel
 import com.example.services.repositories.home.HomeJobsRepository
 import com.example.services.viewmodels.BaseViewModel
 
@@ -13,7 +14,7 @@ class HomeViewModel : BaseViewModel() {
     private var homeRepository = HomeJobsRepository()
     private var categoriesList = MutableLiveData<CategoriesListResponse>()
     private var subServicesList = MutableLiveData<CategoriesListResponse>()
-
+    private var clearCart = MutableLiveData<CommonModel>()
     /*private var jobsHistoryResponse = MutableLiveData<JobsResponse>()
     private var acceptRejectJob = MutableLiveData<CommonModel>()
     private var startCompleteJob = MutableLiveData<CommonModel>()*/
@@ -22,6 +23,7 @@ class HomeViewModel : BaseViewModel() {
         if (UtilsFunctions.isNetworkConnectedWithoutToast()) {
             categoriesList = homeRepository.getCategories("")
             subServicesList = homeRepository.getSubServices("")
+            clearCart = homeRepository.clearCart("")
         }
 
     }
@@ -33,7 +35,9 @@ class HomeViewModel : BaseViewModel() {
     fun getGetSubServices(): LiveData<CategoriesListResponse> {
         return subServicesList
     }
-
+    fun getClearCartRes(): LiveData<CommonModel> {
+        return clearCart
+    }
 
     override fun isLoading(): LiveData<Boolean> {
         return mIsUpdating
@@ -50,6 +54,22 @@ class HomeViewModel : BaseViewModel() {
     fun getSubServices(mJsonObject: String) {
         if (UtilsFunctions.isNetworkConnected()) {
             subServicesList = homeRepository.getSubServices(mJsonObject)
+            mIsUpdating.postValue(true)
+        }
+
+    }
+
+    fun getCategories() {
+        if (UtilsFunctions.isNetworkConnected()) {
+            categoriesList = homeRepository.getCategories("")
+            mIsUpdating.postValue(true)
+        }
+
+    }
+
+    fun clearCart(s: String) {
+        if (UtilsFunctions.isNetworkConnected()) {
+            clearCart = homeRepository.clearCart(s)
             mIsUpdating.postValue(true)
         }
 

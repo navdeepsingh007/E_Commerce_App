@@ -11,6 +11,10 @@ data class Services(
         var type: String,
         var duration: String,
         var rating: String,
-        var favourite : String
+        val favourite: String
         //var cart : String
+)
+
+data class Favourite(
+        val id: String
 )

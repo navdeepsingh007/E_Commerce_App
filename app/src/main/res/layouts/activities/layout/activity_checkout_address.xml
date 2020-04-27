@@ -177,8 +177,8 @@
                     android:layout_marginBottom="@dimen/dp_5"
                     android:background="@drawable/round_back_transparent"
                     android:elevation="@dimen/dp_5"
-                    android:paddingTop="@dimen/dp_5"
                     android:orientation="vertical"
+                    android:paddingTop="@dimen/dp_5"
                     android:visibility="visible">
 
                     <TextView
@@ -309,7 +309,7 @@
                         android:layout_height="@dimen/dp_30"
                         android:layout_gravity="center_vertical"
                         android:scaleType="fitXY"
-                        android:src="@drawable/ic_category" />
+                        android:src="@drawable/ic_coupon" />
 
                     <TextView
                         android:id="@+id/tvPromo"
@@ -388,7 +388,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp_1"
-                        android:background="@color/colorGreyLight" />
+                        android:background="@color/colorGrey1" />
 
                     <LinearLayout
                         android:layout_width="match_parent"

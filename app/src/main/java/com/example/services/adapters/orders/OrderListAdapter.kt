@@ -1,5 +1,7 @@
 package com.uniongoods.adapters
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,11 +10,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.services.R
+import com.example.services.constants.GlobalConstants
 import com.example.services.databinding.OrderItemBinding
 import com.example.services.model.orders.OrdersListResponse
 import com.example.services.utils.BaseActivity
 import com.example.services.utils.Utils
 import com.example.services.views.orders.OrdersListActivity
+import java.util.*
+import kotlin.collections.ArrayList
 
 class OrderListAdapter(
         context: BaseActivity,
@@ -46,7 +51,7 @@ class OrderListAdapter(
         viewHolder = holder
         holder.binding!!.tvOrderOn.text = Utils(mContext).getDate(
                 "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
-                addressList[position].serviceDateTime,
+                addressList[position].createdAt,
                 "HH:mm yyyy-MM-dd"
         )
         holder.binding!!.tvServiceOn.text = Utils(mContext).getDate(
@@ -57,34 +62,54 @@ class OrderListAdapter(
 
         holder.binding!!.tvTotal.setText(addressList[position].totalOrderPrice)
 ////0-Pending/Not Confirmed, 1-> Confirmed , 2->Cancelled , 3->Processing,4//cancelled by company, 5->Completed
-        if (addressList[position].progressStatus.equals("0")) {
-            holder.binding!!.tvCancel.setText("Pending"/*addressList[position].progressStatus*/)
+        if (addressList[position].cancellable.equals("true")) {
+            holder.binding!!.tvCancel.setText("Cancel Order"/*addressList[position].progressStatus*/)
             holder.binding!!.tvCancel.isEnabled = true
-        } else if (addressList[position].progressStatus.equals("1")) {
-            holder.binding!!.tvCancel.setText("Confirmed"/*addressList[position].progressStatus*/)
-            holder.binding!!.tvCancel.isEnabled = false
-        } else if (addressList[position].progressStatus.equals("2")) {
-            holder.binding!!.tvCancel.setText("Cancelled"/*addressList[position].progressStatus*/)
-            holder.binding!!.tvCancel.isEnabled = false
-        } else if (addressList[position].progressStatus.equals("3")) {
-            holder.binding!!.tvCancel.setText("Processing"/*addressList[position].progressStatus*/)
-            holder.binding!!.tvCancel.isEnabled = false
-        } else if (addressList[position].progressStatus.equals("4")) {
-            holder.binding!!.tvCancel.setText("Cancelled by company"/*addressList[position].progressStatus*/)
-            holder.binding!!.tvCancel.isEnabled = false
-        } else if (addressList[position].progressStatus.equals("5")) {
-            holder.binding!!.tvCancel.setText("Completed"/*addressList[position].progressStatus*/)
-            holder.binding!!.tvCancel.isEnabled = false
-        }
-        holder.binding!!.tvCancel.setOnClickListener {
-            if (orderListActivity != null)
-                orderListActivity.cancelOrder(position)
-        }
-        if (orderListActivity == null) {
-            holder.binding!!.tvCancel.visibility = View.GONE
         } else {
-            holder.binding!!.tvCancel.visibility = View.VISIBLE
+
+            if (addressList[position].progressStatus.equals("0")) {
+                holder.binding!!.tvCancel.setText("Pending"/*addressList[position].progressStatus*/)
+                holder.binding!!.tvCancel.isEnabled = true
+                holder.binding!!.tvCancel.setBackgroundTintList(mContext.getResources().getColorStateList(R.color.colorStatus))
+
+            } else if (addressList[position].progressStatus.equals("1")) {
+                holder.binding!!.tvCancel.setText("Confirmed"/*addressList[position].progressStatus*/)
+                holder.binding!!.tvCancel.isEnabled = true
+                holder.binding!!.tvCancel.setBackgroundTintList(mContext.getResources().getColorStateList(R.color.colorStatus))
+
+            } else if (addressList[position].progressStatus.equals("2")) {
+                holder.binding!!.tvCancel.setText("Cancelled"/*addressList[position].progressStatus*/)
+                holder.binding!!.tvCancel.isEnabled = false
+            } else if (addressList[position].progressStatus.equals("3")) {
+                holder.binding!!.tvCancel.isEnabled = true
+                holder.binding!!.tvCancel.setBackgroundTintList(mContext.getResources().getColorStateList(R.color.colorStatus))
+
+                holder.binding!!.tvCancel.setText("Processing"/*addressList[position].progressStatus*/)
+            } else if (addressList[position].progressStatus.equals("4")) {
+                holder.binding!!.tvCancel.isEnabled = false
+                holder.binding!!.tvCancel.setText("Cancelled by company"/*addressList[position].progressStatus*/)
+            } else if (addressList[position].progressStatus.equals("5")) {
+                holder.binding!!.tvCancel.isEnabled = false
+                holder.binding!!.tvCancel.setText("Completed"/*addressList[position].progressStatus*/)
+                holder.binding!!.tvCancel.setBackgroundTintList(mContext.getResources().getColorStateList(R.color.colorSuccess))
+
+            }
         }
+
+        holder.binding!!.tvCancel.setOnClickListener {
+            if (addressList[position].cancellable.equals("true")) {
+                if (orderListActivity != null)
+                    orderListActivity.cancelOrder(position)
+            } else {
+                orderListActivity!!.completeOrder(position)
+            }
+            //orderListActivity?.callRatingReviewsActivity(addressList[position].id.toString())
+        }
+        /* if (orderListActivity == null) {
+             holder.binding!!.tvCancel.visibility = View.GONE
+         } else {
+             holder.binding!!.tvCancel.visibility = View.VISIBLE
+         }*/
         val orderListAdapter = OrderServicesListAdapter(mContext, addressList[position].suborders, mContext)
         val linearLayoutManager = LinearLayoutManager(mContext)
         linearLayoutManager.orientation = RecyclerView.VERTICAL
@@ -97,6 +122,13 @@ class OrderListAdapter(
             }
         })
 
+    }
+
+    fun getDaysAgo(daysAgo: Int): Date {
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.DAY_OF_YEAR, daysAgo)
+
+        return calendar.time
     }
 
     override fun getItemCount(): Int {

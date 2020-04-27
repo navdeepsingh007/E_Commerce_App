@@ -48,7 +48,7 @@ class SubCategoriesActivity : BaseActivity() {
         categoriesViewModel = ViewModelProviders.of(this).get(SubCategoriesViewModel::class.java)
         categoriesBinding.subCategoriesViewModel = categoriesViewModel
         categoriesBinding.commonToolBar.imgRight.visibility = View.GONE
-        categoriesBinding.commonToolBar.imgRight.setImageResource(R.drawable.ic_nav_edit_icon)
+        categoriesBinding.commonToolBar.imgRight.setImageResource(R.drawable.ic_cart)
         categoriesBinding.commonToolBar.imgToolbarText.text =
                 resources.getString(R.string.sub_categories)
         catId = intent.extras?.get("catId").toString()

@@ -18,6 +18,7 @@ import com.example.services.sharedpreference.SharedPrefClass
 import com.example.services.utils.BaseActivity
 import com.example.services.viewmodels.OTPVerificationModel
 import com.example.services.views.home.DashboardActivity
+import com.example.services.views.home.LandingMainActivity
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.credentials.HintRequest
 import com.google.android.gms.auth.api.phone.SmsRetriever
@@ -239,7 +240,7 @@ class OTPVerificationActivity : BaseActivity(),
                                         true
                                 )
 
-                                val intent = Intent(this, DashboardActivity::class.java)
+                                val intent = Intent(this, LandingMainActivity::class.java)
                                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                 intent.putExtra("data", mJsonObject.toString())
                                 startActivity(intent)

@@ -31,9 +31,10 @@ class ServicesViewModel : BaseViewModel() {
             servicesList = servicesRepository.getServicesList("")
             servicesDetail = servicesRepository.getServiceDetail("")
             carRes = servicesRepository.addCart(null)
-            favRes = servicesRepository.addRemoveFav(null)
+            favRes = servicesRepository.addFav(null)
+            favRes = servicesRepository.removeFav("")
             timeSlotsList = servicesRepository.getTimeSlots("")
-           // dateSlots = servicesRepository.getDateSlots()
+            // dateSlots = servicesRepository.getDateSlots()
         }
 
     }
@@ -50,9 +51,9 @@ class ServicesViewModel : BaseViewModel() {
         return timeSlotsList
     }
 
-   /* fun getDateSlotsRes(): LiveData<DateSlotsResponse> {
-        return dateSlots
-    }*/
+    /* fun getDateSlotsRes(): LiveData<DateSlotsResponse> {
+         return dateSlots
+     }*/
 
     fun getServiceDetailRes(): LiveData<ServicesDetailResponse> {
         return servicesDetail
@@ -87,15 +88,24 @@ class ServicesViewModel : BaseViewModel() {
             mIsUpdating.postValue(true)
         }
     }
+
     fun removeCart(mJsonObject: String) {
         if (UtilsFunctions.isNetworkConnected()) {
             carRes = servicesRepository.removeCart(mJsonObject)
             mIsUpdating.postValue(true)
         }
     }
-    fun addRemoveFav(mJsonObject: JsonObject) {
+
+    fun addFav(mJsonObject: JsonObject) {
         if (UtilsFunctions.isNetworkConnected()) {
-            favRes = servicesRepository.addRemoveFav(mJsonObject)
+            favRes = servicesRepository.addFav(mJsonObject)
+            mIsUpdating.postValue(true)
+        }
+    }
+
+    fun removeFav(mJsonObject: String) {
+        if (UtilsFunctions.isNetworkConnected()) {
+            favRes = servicesRepository.removeFav(mJsonObject)
             mIsUpdating.postValue(true)
         }
     }

@@ -2,6 +2,8 @@ package com.example.services.views.promocode
 
 import android.app.Activity
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.text.TextUtils
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -45,7 +47,7 @@ class PromoCodeActivity : BaseActivity() {
         promcodeViewModel = ViewModelProviders.of(this).get(PromoCodeViewModel::class.java)
 
         promoCodeBinding.commonToolBar.imgRight.visibility = View.GONE
-        promoCodeBinding.commonToolBar.imgRight.setImageResource(R.drawable.ic_nav_edit_icon)
+        promoCodeBinding.commonToolBar.imgRight.setImageResource(R.drawable.ic_cart)
         promoCodeBinding.commonToolBar.imgToolbarText.text =
                 resources.getString(R.string.promo_code)
         promoCodeBinding.promcodeViewModel = promcodeViewModel
@@ -58,6 +60,8 @@ class PromoCodeActivity : BaseActivity() {
             //cartViewModel.getcartList(userId)
         }
         //initRecyclerView()
+        promoCodeBinding.btnApplyPromo.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(GlobalConstants.COLOR_CODE))/*mContext.getResources().getColorStateList(R.color.colorOrange)*/)
+
         UtilsFunctions.hideKeyBoard(promoCodeBinding.tvNoRecord)
         promcodeViewModel.getPromoListRes().observe(this,
                 Observer<PromoCodeListResponse> { response ->
@@ -113,26 +117,13 @@ class PromoCodeActivity : BaseActivity() {
         fun(it: String?) {
             when (it) {
                 "btnApplyPromo" -> {
-                    if (!TextUtils.isEmpty(promoCodeBinding.etCouponCode.getText().toString())) {
-
+                    if (TextUtils.isEmpty(promoCodeBinding.etCouponCode.getText().toString())) {
+                        showToastError(getString(R.string.enter_promocode_msg))
                     } else {
-
+                        callApplyCouponApi(promoCodeBinding.etCouponCode.getText().toString())
                     }
-                    val mJsonObject = JsonObject()
-                    mJsonObject.addProperty("discount", "20")
-                    mJsonObject.addProperty("payableAmount", "800")
-                    mJsonObject.addProperty("totalAmount", "1000")
-                    mJsonObject.addProperty("couponId", "123456698")
-                    //mJsonObject.addProperty("phoneNumber", response.data?.coupanDiscount)
-                    val intent = Intent()
-                    intent.putExtra("promoCodeData", mJsonObject.toString())
-                    setResult(Activity.RESULT_OK, intent)
-                    finish()
-                    //callApplyCouponApi(promoCodeBinding.etCouponCode.getText().toString())
                 }
-
             }
-
         })
         )
 

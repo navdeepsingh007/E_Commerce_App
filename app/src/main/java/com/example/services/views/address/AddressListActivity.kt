@@ -3,6 +3,8 @@ package com.example.services.views.address
 import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -42,9 +44,10 @@ class AddressListActivity : BaseActivity(), DialogssInterface {
 
         addressBinding.addressViewModel = addressViewModel
         addressBinding.commonToolBar.imgRight.visibility = View.GONE
-        addressBinding.commonToolBar.imgRight.setImageResource(R.drawable.ic_nav_edit_icon)
+        addressBinding.commonToolBar.imgRight.setImageResource(R.drawable.ic_cart)
         addressBinding.commonToolBar.imgToolbarText.text =
                 resources.getString(R.string.locations)
+        addressBinding.tvAddAddress.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(GlobalConstants.COLOR_CODE))/*mContext.getResources().getColorStateList(R.color.colorOrange)*/)
 
         if (UtilsFunctions.isNetworkConnected()) {
             startProgressDialog()

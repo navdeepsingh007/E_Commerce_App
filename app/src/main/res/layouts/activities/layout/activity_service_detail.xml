@@ -101,8 +101,18 @@
                             android:layout_marginLeft="@dimen/dp_5"
                             android:layout_marginTop="@dimen/dp_5"
                             android:numStars="5"
+
                             android:stepSize="0.5"
                             android:theme="@style/RatingBar" />
+
+                        <View
+                            android:id="@+id/ratingView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignTop="@+id/rBar"
+                            android:onClick="@{(v) -> servicesViewModel.clickListener(v)}"
+                            android:layout_alignBottom="@+id/rBar"
+                            />
 
                         <ImageView
                             android:id="@+id/img_add_favorite"

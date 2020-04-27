@@ -3,6 +3,8 @@ package com.example.services.views.cart
 import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -65,6 +67,8 @@ class CartListActivity : BaseActivity(), DialogssInterface {
                 MyApplication.instance,
                 GlobalConstants.SelectedAddressType
         ).toString()
+        cartBinding.btnCheckout.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(GlobalConstants.COLOR_CODE))/*mContext.getResources().getColorStateList(R.color.colorOrange)*/)
+
         cartViewModel.getCartListRes().observe(this,
                 Observer<CartListResponse> { response ->
                     stopProgressDialog()
