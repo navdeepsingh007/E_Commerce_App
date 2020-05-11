@@ -22,6 +22,7 @@ import com.example.services.utils.DialogssInterface
 import com.example.services.viewmodels.home.CategoriesListResponse
 import com.example.services.viewmodels.home.HomeViewModel
 import com.example.services.viewmodels.home.Services
+import com.example.services.views.vendor.VendorsListActivity
 import com.google.gson.JsonObject
 import com.uniongoods.adapters.*
 
@@ -67,8 +68,8 @@ LandingHomeFragment : BaseFragment(), DialogssInterface {
                         val message = response.message
                         when {
                             response.code == 200 -> {
-                                GlobalConstants.Currency = response.body.currency
-                                cartCategoryTypeId = response.body.cartCategoryType
+                               // GlobalConstants.Currency = response.body.currency
+                              //  cartCategoryTypeId = response.body.cartCategoryType
                                 if (TextUtils.isEmpty(cartCategoryTypeId)) {
                                     SharedPrefClass().putObject(
                                             activity!!,
@@ -137,10 +138,11 @@ LandingHomeFragment : BaseFragment(), DialogssInterface {
                         showClearCartDialog()
                     } else {
                         GlobalConstants.COLOR_CODE = "#" + categoriesList[position].colorCode.toString().trim()
-                        val intent = Intent(activity!!, DashboardActivity::class.java)
+                        val intent = Intent(activity!!, VendorsListActivity::class.java)
                         intent.putExtra("catId", categoriesList[position].id)
                         intent.putExtra("name", categoriesList[position].name)
                         GlobalConstants.CATEGORY_SELECTED = categoriesList[position].id
+                        GlobalConstants.CATEGORY_SELECTED_NAME = categoriesList[position].name
                         startActivity(intent)
                     }
                     // if (categoriesList[position].isService.equals("false")) {

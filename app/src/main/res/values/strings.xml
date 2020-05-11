@@ -372,5 +372,6 @@
     <string name="order_services_msg">Thank you for using our services</string>
     <string name="done">Done</string>
     <string name="success">Success</string>
+    <string name="vendor">Vendors</string>
 
 </resources>

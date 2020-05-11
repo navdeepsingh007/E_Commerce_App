@@ -82,7 +82,7 @@ object GlobalConstants {
     /* @JvmStatic
      val BASE_URL = "http://10.8.23.202:9062/"*/
     @JvmStatic
-    val BASE_URL = "http://51.79.40.224:9067/api/"
+    val BASE_URL = "http://51.79.40.224:9062/api/"
     @JvmStatic
     val BASE_SERVER = "http://infinitywebtechnologies.com:9062"
     /* @JvmStatic
@@ -116,6 +116,8 @@ object GlobalConstants {
     var OTP_VERIFICATION_ID = "OTP_VERIFICATION_ID"
     @JvmStatic
     var CATEGORY_SELECTED = "CATEGORY_SELECTED"
+    @JvmStatic
+    var CATEGORY_SELECTED_NAME = "CATEGORY_SELECTED_NAME"
     @JvmStatic
     var Currency = "Rs"
     @JvmStatic

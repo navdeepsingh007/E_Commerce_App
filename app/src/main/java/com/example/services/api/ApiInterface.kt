@@ -65,7 +65,7 @@ interface ApiInterface {
     @GET("vendor/getVendorList")
     fun getVendorList(): Call<JsonObject>
 
-    @GET("mobile/services/getCategories")
+    @GET("mobile/services/getParentCategories")
     fun getCategories(): Call<JsonObject>
 
     @DELETE("mobile/cart/clear")
@@ -98,6 +98,10 @@ interface ApiInterface {
 
     @GET("mobile/rating/serviceRatings")
     fun ratingRaviewsList(@Query("serviceId") serviceId: String, @Query("page") page: String, @Query("limit") limit: String): Call<JsonObject>
+
+    @GET("mobile/services/getCompanies")
+    fun vendorList(@Query("categoryId") serviceId: String, @Query("latitude") page: String, @Query("longitude") limit: String): Call<JsonObject>
+
 
     @GET("mobile/orders/detail/{id}")
     fun orderDetail(@Path("id") id: String): Call<JsonObject>

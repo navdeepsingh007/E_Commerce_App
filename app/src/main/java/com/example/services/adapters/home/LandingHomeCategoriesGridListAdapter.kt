@@ -1,11 +1,14 @@
 package com.uniongoods.adapters
 
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -43,11 +46,13 @@ class LandingHomeCategoriesGridListAdapter(
             holder = ItemHolder()
             holder.name = convertView!!.findViewById(R.id.cat_header)
             holder.icon = convertView.findViewById(R.id.cat_img)
+            holder.topLayout = convertView.findViewById(R.id.topLayout)
             convertView.tag = holder
         } else {
             holder = convertView.tag as ItemHolder
         }
 
+        holder.topLayout!!.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#" + categoriesList[position].colorCode.trim()))/*mContext.getResources().getColorStateList(R.color.colorOrange)*/)
         holder.name!!.text = categoriesList[position].name
 
         Glide.with(mContext)
@@ -62,6 +67,7 @@ class LandingHomeCategoriesGridListAdapter(
     class ItemHolder {
         var name: TextView? = null
         var icon: ImageView? = null
+        var topLayout: LinearLayout? = null
     }
 
 }
