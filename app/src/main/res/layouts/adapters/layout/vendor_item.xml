@@ -14,12 +14,12 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_5"
         android:layout_marginLeft="@dimen/dp_3"
         android:layout_marginRight="@dimen/dp_3"
         android:layout_marginBottom="@dimen/dp_5"
         android:background="@drawable/round_back_transparent"
-        android:elevation="@dimen/dp_20"
-        android:padding="@dimen/dp_5">
+        android:elevation="@dimen/dp_20" >
         <!---->
         <androidx.cardview.widget.CardView
             android:id="@+id/card_view"
@@ -27,9 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:elevation="@dimen/dp_5"
-            android:paddingLeft="@dimen/dp_10"
-            android:paddingRight="@dimen/dp_10"
-            android:paddingBottom="@dimen/dp_10">
+            android:padding="@dimen/dp_10">
 
             <RelativeLayout
                 android:id="@+id/trending_item"
