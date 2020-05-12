@@ -113,7 +113,8 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="2dp" />
+                    android:layout_height="2dp"
+                    android:layout_marginTop="@dimen/dp_5" />
 
                 <LinearLayout
                     android:id="@+id/trending_layout"
