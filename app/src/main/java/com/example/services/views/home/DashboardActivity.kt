@@ -28,7 +28,7 @@ import com.example.services.views.cart.CartListActivity
 import com.example.services.views.promocode.PromoCodeActivity
 
 class DashboardActivity : BaseActivity(),
-        DialogssInterface {
+    DialogssInterface {
     var activityDashboardBinding: ActivityDashboardBinding? = null
     private var confirmationDialog: Dialog? = null
     private var ratingDialog: Dialog? = null
@@ -55,25 +55,25 @@ class DashboardActivity : BaseActivity(),
         activityDashboardBinding = viewDataBinding as ActivityDashboardBinding
         dashboardViewModel = ViewModelProviders.of(this).get(DashboardViewModel::class.java)
         activityDashboardBinding!!.dashboardViewModel = dashboardViewModel
-        val catId = intent.extras?.get("catId").toString()
-        val name = intent.extras?.get("name").toString()
+        // val catId = intent.extras?.get("catId").toString()
+        // val name = intent.extras?.get("name").toString()
         activityDashboardBinding!!.commonToolBar.imgRight.visibility = View.GONE
-        activityDashboardBinding!!.commonToolBar.imgToolbarText.setText(name/*resources.getString(R.string.home)*/)
+        activityDashboardBinding!!.commonToolBar.imgToolbarText.setText(GlobalConstants.CATEGORY_SELECTED_NAME)//name/*resources.getString(R.string.home)*/)
         activityDashboardBinding!!.commonToolBar.imgRight.setImageResource(R.drawable.ic_cart)
 
         fragment = HomeFragment()
         callFragments(fragment, supportFragmentManager, false, "send_data", "")
         //img_right
         dashboardViewModel!!.isClick().observe(
-                this, Observer<String>(function =
-        fun(it: String?) {
-            when (it) {
-                "img_right" -> {
-                    val intent = Intent(this, CartListActivity::class.java)
-                    startActivity(intent)
+            this, Observer<String>(function =
+            fun(it: String?) {
+                when (it) {
+                    "img_right" -> {
+                        val intent = Intent(this, CartListActivity::class.java)
+                        startActivity(intent)
+                    }
                 }
-            }
-        })
+            })
         )
     }
 
@@ -96,8 +96,8 @@ class DashboardActivity : BaseActivity(),
         super.onResume()
         setHeadings()
         isCart = SharedPrefClass().getPrefValue(
-                MyApplication.instance,
-                GlobalConstants.isCartAdded
+            MyApplication.instance,
+            GlobalConstants.isCartAdded
         ).toString()
         if (isCart.equals("true")) {
             activityDashboardBinding!!.commonToolBar.imgRight.visibility = View.VISIBLE

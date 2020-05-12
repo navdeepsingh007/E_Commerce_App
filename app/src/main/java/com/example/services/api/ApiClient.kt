@@ -36,32 +36,35 @@ object ApiClient {
     private fun setApiInterface(): ApiInterface {
         val lang = "en"
         var mAuthToken = GlobalConstants.SESSION_TOKEN
+        var companyId = GlobalConstants.COMPANY_ID
 
 
         if (mAuthToken == "session_token" && UtilsFunctions.checkObjectNull(
-                        SharedPrefClass().getPrefValue(
-                                MyApplication.instance.applicationContext,
-                                GlobalConstants.ACCESS_TOKEN
-                        )
+                SharedPrefClass().getPrefValue(
+                    MyApplication.instance.applicationContext,
+                    GlobalConstants.ACCESS_TOKEN
                 )
+            )
         ) {
             mAuthToken = sharedPrefClass.getPrefValue(
-                    MyApplication.instance,
-                    GlobalConstants.ACCESS_TOKEN
+                MyApplication.instance,
+                GlobalConstants.ACCESS_TOKEN
             ).toString()
+
         }
+
 
         val httpClient = OkHttpClient.Builder()
         //.connectTimeout(1, TimeUnit.MINUTES)
         // .readTimeout(1, TimeUnit.MINUTES)
         // .writeTimeout(1, TimeUnit.MINUTES)
         val mBuilder = Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
 
         val isLogin = sharedPrefClass.getPrefValue(
-                MyApplication.instance,
-                "isLogin"
+            MyApplication.instance,
+            "isLogin"
         ).toString()
         if (!TextUtils.isEmpty(mAuthToken) && mAuthToken.equals("session_token")) {
             mAuthToken = ""
@@ -78,19 +81,20 @@ object ApiClient {
                 override fun intercept(@NonNull chain: Interceptor.Chain): Response {
                     val original = chain.request()
                     val builder = original.newBuilder()
-                            .header("Authorization", finalMAuthToken)
-                            .header("lang", lang)
+                        .header("Authorization", finalMAuthToken)
+                        .header("lang", lang)
+                        .header("companyId", companyId)
                     val request = builder.build()
                     val response = chain.proceed(request)
                     return if (response.code() == 401) {
                         SharedPrefClass().putObject(
-                                MyApplication.instance.applicationContext,
-                                "isLogin",
-                                false
+                            MyApplication.instance.applicationContext,
+                            "isLogin",
+                            false
                         )
                         val i = Intent(
-                                MyApplication.instance.applicationContext,
-                                LoginActivity::class.java
+                            MyApplication.instance.applicationContext,
+                            LoginActivity::class.java
                         )
                         i.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         MyApplication.instance.applicationContext.startActivity(i)

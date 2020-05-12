@@ -77,15 +77,9 @@
             android:maxHeight="200dp"
             android:numColumns="4"
             android:padding="@dimen/dp_5"
-            android:verticalSpacing="@dimen/dp_2" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_jobs"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/gridview"
-            android:layout_marginTop="@dimen/dp_10"
+            android:verticalSpacing="@dimen/dp_2"
             android:visibility="gone" />
+
 
         <ScrollView
             android:layout_width="match_parent"
@@ -95,9 +89,31 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-
                 android:gravity="center"
                 android:orientation="vertical">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_banners"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_150"
+                    android:layout_margin="@dimen/dp_5"
+                    android:padding="@dimen/dp_5"
+                    android:visibility="visible" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_jobs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/gridview"
+                    android:layout_marginLeft="@dimen/dp_5"
+                    android:layout_marginRight="@dimen/dp_5"
+                    android:layout_marginBottom="@dimen/dp_5"
+                    android:padding="@dimen/dp_5"
+                    android:visibility="visible" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp" />
 
                 <LinearLayout
                     android:id="@+id/trending_layout"

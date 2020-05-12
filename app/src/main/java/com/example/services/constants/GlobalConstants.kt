@@ -21,9 +21,11 @@ object GlobalConstants {
     @JvmStatic
     var MONEY_HASH = "https://debajyotibasak.000webhostapp.com/PayUMoneyHash.php"
     @JvmStatic
-    var SURL = "https://www.payumoney.com/mobileapp/payumoney/success.php"/*"https://www.payumoney.com/mobileapp/payumoney/success.php"*/
+    var SURL =
+        "https://www.payumoney.com/mobileapp/payumoney/success.php"/*"https://www.payumoney.com/mobileapp/payumoney/success.php"*/
     @JvmStatic
-    var FURL = "https://www.payumoney.com/mobileapp/payumoney/failure.php"/*"https://www.payumoney.com/mobileapp/payumoney/failure.php"*/
+    var FURL =
+        "https://www.payumoney.com/mobileapp/payumoney/failure.php"/*"https://www.payumoney.com/mobileapp/payumoney/failure.php"*/
     @JvmStatic
     var MERCHANT_KEY = "n01WMWPL"
     @JvmStatic
@@ -64,6 +66,8 @@ object GlobalConstants {
     val isCartAdded = "isCartAdded"
     @JvmStatic
     val USERID = "USERID"
+    @JvmStatic
+    var COMPANY_ID = ""
     @JvmStatic
     val JOBID = "JOBID"
     @JvmStatic
