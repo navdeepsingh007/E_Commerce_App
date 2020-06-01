@@ -6,11 +6,11 @@
 
     <data>
 
-        <import type="com.example.services.common.BindingUtils" />
+        <import type="com.example.ecommerce.common.BindingUtils" />
 
         <variable
                 name="subCategoriesViewModel"
-                type="com.example.services.viewmodels.subcategories.SubCategoriesViewModel" />
+                type="com.example.ecommerce.viewmodels.subcategories.SubCategoriesViewModel" />
 
     </data>
 

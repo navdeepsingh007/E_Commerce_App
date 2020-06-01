@@ -6,11 +6,11 @@
 
     <data>
 
-        <import type="com.example.services.common.BindingUtils" />
+        <import type="com.example.ecommerce.common.BindingUtils" />
 
         <variable
             name="reviewsViewModel"
-            type="com.example.services.viewmodels.ratingreviews.RatingReviewsViewModel" />
+            type="com.example.ecommerce.viewmodels.ratingreviews.RatingReviewsViewModel" />
 
     </data>
 

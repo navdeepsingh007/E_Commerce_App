@@ -7,11 +7,11 @@
 
     <data>
 
-        <import type="com.example.services.common.BindingUtils" />
+        <import type="com.example.ecommerce.common.BindingUtils" />
 
         <variable
                 name="homeViewModel"
-                type="com.example.services.viewmodels.home.HomeViewModel" />
+                type="com.example.ecommerce.viewmodels.home.HomeViewModel" />
 
     </data>
 

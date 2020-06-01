@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:paddingBottom="20dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/ivCustomerPic"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/customer_profile"
+                />
+
+
+            <TextView
+                android:id="@+id/tvProfileName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/ivCustomerPic"
+                android:fontFamily="sans-serif-black"
+                android:paddingStart="20dp"
+                android:text="James Lawson"
+                android:textFontWeight="bold"
+                android:textSize="20sp" />
+
+            <RatingBar
+                android:id="@+id/rating"
+                style="?android:attr/ratingBarStyleIndicator"
+                android:layout_width="195dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvProfileName"
+                android:layout_alignStart="@id/tvProfileName"
+                android:layout_gravity="bottom"
+                android:layout_weight="1"
+                android:isIndicator="true"
+                android:numStars="5"
+                android:paddingStart="12dp"
+                android:stepSize="0.1" />
+
+            <TextView
+                android:id="@+id/tvPIngName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ivCustomerPic"
+                android:paddingTop="20dp"
+                android:text="@string/customer_review"
+                android:textSize="20sp" />
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_below="@id/tvPIngName"
+                android:paddingRight="8dp"
+                android:src="@drawable/user_review_picture" />
+
+ <!--           <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_below="@id/tvPIngName"
+                android:layout_toRightOf="@id/imageView2"
+                android:paddingRight="8dp"
+                android:src="@drawable/p2" />
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_below="@id/tvPIngName"
+                android:layout_toRightOf="@id/imageView3"
+                android:paddingRight="8dp"
+                android:src="@drawable/p3" />-->
+        </RelativeLayout>
+    </LinearLayout>
+</layout>

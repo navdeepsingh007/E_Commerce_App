@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="com.example.ecommerce.common.BindingUtils" />
+
+        <!--        <variable
+                    name="homeViewModel"
+                    type="com.example.ecommerce.viewmodels.home.HomeViewModel" />-->
+
+    </data>
+
+    <RelativeLayout
+        android:id="@+id/rlSize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_10"
+        >
+
+        <LinearLayout
+            android:id="@+id/topLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/circle_size"
+            android:gravity="center"
+            android:visibility="invisible"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/toLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+<!--                <TextView
+                    android:id="@+id/tvCategoryName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:text="7.5"
+                    android:textColor="@color/headingColor"
+                    android:textStyle="bold" />-->
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvCategoryName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:ellipsize="end"
+            android:layout_centerInParent="true"
+            android:maxLines="2"
+            android:text="7.5"
+            android:textColor="@color/headingColor"
+            android:textStyle="bold" />
+    </RelativeLayout>
+</layout>

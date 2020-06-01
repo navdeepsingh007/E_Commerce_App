@@ -1,4 +1,4 @@
-package com.example.services
+package com.example.ecommerce
 
 import androidx.test.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4

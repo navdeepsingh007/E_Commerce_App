@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.services">
+    package="com.example.ecommerce">
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -29,7 +29,7 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
-        android:name=".application.MyApplication"
+        android:name="com.example.ecommerce.application.MyApplication"
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_descriptor"
         android:icon="@drawable/ic_app"
@@ -42,63 +42,63 @@
         tools:replace="android:allowBackup"
         tools:targetApi="n">
         <activity
-            android:name=".views.promocode.PromoCodeActivity"
+            android:name="com.example.ecommerce.views.promocode.PromoCodeActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"></activity>
         <activity
-            android:name=".views.favorite.FavoriteListActivity"
+            android:name="com.example.ecommerce.views.favorite.FavoriteListActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".views.cart.CartListActivity"
+            android:name="com.example.ecommerce.views.cart.CartListActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".views.cart.CheckoutAddressActivity"
+            android:name="com.example.ecommerce.views.cart.CheckoutAddressActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".views.subcategories.ServiceDetailActivity"
+            android:name="com.example.ecommerce.views.subcategories.ServiceDetailActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".views.orders.OrdersListActivity"
+            android:name="com.example.ecommerce.views.orders.OrdersListActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".views.orders.OrdersHistoryListActivity"
+            android:name="com.example.ecommerce.views.orders.OrdersHistoryListActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".views.subcategories.SubCategoriesActivity"
+            android:name="com.example.ecommerce.views.subcategories.SubCategoriesActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".views.ratingreviews.ReviewsListActivity"
+            android:name="com.example.ecommerce.views.ratingreviews.ReviewsListActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".views.ratingreviews.AddRatingReviewsListActivity"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
-
-
-        <activity
-            android:name=".views.subcategories.ServicesListActivity"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".views.address.AddressListActivity"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".views.address.AddAddressActivity"
+            android:name="com.example.ecommerce.views.ratingreviews.AddRatingReviewsListActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 
+
         <activity
-            android:name=".views.payment.PaymentActivity"
+            android:name="com.example.ecommerce.views.subcategories.ServicesListActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.example.ecommerce.views.address.AddressListActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.example.ecommerce.views.address.AddAddressActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.example.ecommerce.views.payment.PaymentActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 
@@ -108,11 +108,11 @@
         <!-- <activity android:name=".views.services.ServicesListActivity" /> -->
         <!-- <activity android:name=".views.fuel.FuelEntryList" /> -->
         <!-- <activity android:name=".views.fuel.AddFuelDetailActivity" /> -->
-        <activity android:name=".views.profile.ProfileActivity" />
+        <activity android:name="com.example.ecommerce.views.profile.ProfileActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.example.servies.fileprovider"
+            android:authorities="com.example.ecommerce.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -121,7 +121,7 @@
         </provider>
 
         <activity
-            android:name=".views.SplashActivity"
+            android:name="com.example.ecommerce.views.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -131,15 +131,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".views.authentication.LoginActivity"
+            android:name="com.example.ecommerce.views.authentication.LoginActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".views.authentication.LoginPasswordActivity"
+            android:name="com.example.ecommerce.views.authentication.LoginPasswordActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".views.authentication.OTPVerificationActivity"
+            android:name="com.example.ecommerce.views.authentication.OTPVerificationActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
@@ -151,17 +151,17 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".views.home.DashboardActivity"
+            android:name="com.example.ecommerce.views.home.DashboardActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".views.home.LandingMainActivity"
+            android:name="com.example.ecommerce.views.home.LandingMainActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 
 
         <activity
-            android:name=".views.settings.MyAccountsActivity"
+            android:name="com.example.ecommerce.views.settings.MyAccountsActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
@@ -169,15 +169,20 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".socket.TrackingActivity"
+            android:name="com.example.ecommerce.socket.TrackingActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".socket.DriverTrackingActivity"
+            android:name="com.example.ecommerce.socket.DriverTrackingActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".views.vendor.VendorsListActivity"
+            android:name="com.example.ecommerce.views.vendor.VendorsListActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.example.ecommerce.views.notifications.NotificationsListActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 
@@ -191,18 +196,61 @@
             </intent-filter>
         </service>
         <service
-            android:name=".database.NetworkJobService"
+            android:name="com.example.ecommerce.database.NetworkJobService"
             android:permission="android.permission.BIND_JOB_SERVICE" />
         <service
-            android:name=".socket.LocationTrackingService"
+            android:name="com.example.ecommerce.socket.LocationTrackingService"
             android:enabled="true" />
         <service
-            android:name=".database.BackgroundLocationService"
+            android:name="com.example.ecommerce.database.BackgroundLocationService"
             android:enabled="true" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyA7Zj-PTZm4sDG-eoiLPA-XohvgxBe95wU" />
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/app_name" />
+        <!--AIzaSyD2-RDPo0jssFqwwTXr6NDpOFzQTcIc3dI-->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_app_logo" />
+        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
+
+        <activity
+            android:name="com.example.ecommerce.views.category.ProductCategoriesActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.example.ecommerce.views.homenew.FlashSaleActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.example.ecommerce.views.homenew.SearchProductsActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.example.ecommerce.views.product.ProductDetailsActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.example.ecommerce.views.product.FavouriteProductsActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.example.ecommerce.views.product.CustomerAllReviewsActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

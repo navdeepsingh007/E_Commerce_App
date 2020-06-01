@@ -4,5 +4,6 @@
         <!--<domain includeSubdomains="true">3.90.42.207</domain>-->
         <domain includeSubdomains="true">infinitywebtechnologies.com</domain>
         <domain includeSubdomains="true">10.8.23.202</domain>
+        <domain includeSubdomains="true">51.79.40.224</domain>
     </domain-config>
 </network-security-config>

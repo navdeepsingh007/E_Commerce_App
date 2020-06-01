@@ -8,7 +8,7 @@
 
         <variable
             name="dashboardViewModel"
-            type="com.example.services.views.home.DashboardViewModel" />
+            type="com.example.ecommerce.views.home.DashboardViewModel" />
 
     </data>
 
@@ -27,8 +27,8 @@
             app:layout_constraintStart_toStartOf="parent">
 
             <include
-                android:id="@+id/toolbar_common"
-                layout="@layout/common_toolbar"
+                android:id="@+id/toolbar_home"
+                layout="@layout/toolbar_home"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_toobar"
                 app:layout_constraintEnd_toEndOf="parent"

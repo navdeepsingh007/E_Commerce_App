@@ -7,11 +7,11 @@
 
         <variable
                 name="addressViewModel"
-                type="com.example.services.viewmodels.address.AddressViewModel" />
+                type="com.example.ecommerce.viewmodels.address.AddressViewModel" />
 
         <variable
                 name="profileModel"
-                type="com.example.services.model.LoginResponse.Body" />
+                type="com.example.ecommerce.model.LoginResponse.Body" />
 
     </data>
 

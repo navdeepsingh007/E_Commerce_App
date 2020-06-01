@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="com.example.ecommerce.common.BindingUtils" />
+
+        <!--        <variable
+                    name="homeViewModel"
+                    type="com.example.ecommerce.viewmodels.home.HomeViewModel" />-->
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="90dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp_2"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <!-- If change margin of cirlce change category name margin -->
+        <LinearLayout
+            android:id="@+id/topLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginLeft="@dimen/dp_5"
+            android:gravity="center"
+            android:elevation="@dimen/dp_10"
+            android:background="@drawable/circle_layout"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/toLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/ivCategory"
+                    android:layout_width="@dimen/dimen_30dp"
+                    android:layout_height="@dimen/dimen_30dp"
+                    android:layout_gravity="center_vertical"
+                    android:scaleType="center"
+                    android:src="@drawable/fm_shirt"
+                    android:visibility="visible" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- If change margin of cirlce change category name margin -->
+        <TextView
+            android:id="@+id/tvCategoryName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_5"
+            android:ellipsize="end"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:textColor="@color/colorGrey1"
+            android:maxLines="2" />
+
+    </LinearLayout>
+</layout>

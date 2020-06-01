@@ -20,6 +20,7 @@
     <!--Text Sizes here-->
 
     <dimen name="sp_20">20sp</dimen>
+    <dimen name="sp_26">20sp</dimen>
     <dimen name="sp_16">16sp</dimen>
     <dimen name="sp_14">14sp</dimen>
     <dimen name="sp_15">15sp</dimen>

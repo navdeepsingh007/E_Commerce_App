@@ -6,15 +6,15 @@
 
     <data>
 
-        <import type="com.example.services.common.BindingUtils" />
+        <import type="com.example.ecommerce.common.BindingUtils" />
 
         <variable
             name="servicesViewModel"
-            type="com.example.services.viewmodels.services.ServicesViewModel" />
+            type="com.example.ecommerce.viewmodels.services.ServicesViewModel" />
 
         <variable
             name="serviceDetail"
-            type="com.example.services.model.services.ServicesDetailResponse.Body" />
+            type="com.example.ecommerce.model.services.ServicesDetailResponse.Body" />
     </data>
 
     <RelativeLayout

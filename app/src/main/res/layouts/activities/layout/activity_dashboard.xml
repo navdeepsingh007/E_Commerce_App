@@ -8,7 +8,7 @@
 
         <variable
             name="dashboardViewModel"
-            type="com.example.services.views.home.DashboardViewModel" />
+            type="com.example.ecommerce.views.home.DashboardViewModel" />
 
     </data>
 

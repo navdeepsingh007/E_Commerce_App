@@ -18,20 +18,36 @@
         app:layout_constraintBottom_toTopOf="@+id/img_cost"
         app:layout_constraintTop_toTopOf="@+id/img_cost">
 
+        <!--        <ImageView
+                    android:id="@+id/toolbar"
+                    android:layout_width="@dimen/dp_60"
+                    android:layout_height="@dimen/dp_60"
+                    android:contentDescription="@string/todo"
+                    android:padding="@dimen/dp_15"
+                    android:rotation="-180"
+                    android:src="@drawable/ic_arrow_forward"
+                    android:tint="@color/colorBlack"
+                    app:backOnClick="@{ `back` }"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />-->
+
         <ImageView
             android:id="@+id/toolbar"
             android:layout_width="@dimen/dp_60"
             android:layout_height="@dimen/dp_60"
             android:contentDescription="@string/todo"
             android:padding="@dimen/dp_15"
-            android:rotation="-180"
-            android:src="@drawable/ic_arrow_forward"
+            android:src="@drawable/iosback"
             android:tint="@color/colorBlack"
             app:backOnClick="@{ `back` }"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <!--android:ellipsize="end"
+        android:maxEms="15"
+        android:singleLine="true"-->
         <TextView
             android:id="@+id/img_toolbar_text"
             android:layout_width="wrap_content"
@@ -39,7 +55,8 @@
             android:gravity="center"
             android:textColor="@color/colorBlack"
             android:textSize="@dimen/sp_16"
-            app:font="@{`semibold`}"
+            android:textStyle="bold"
+            app:font="@{`bold`}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/toolbar"
@@ -71,6 +88,15 @@
             android:contentDescription="@string/todo"
             android:onClick="@{onClick}"
             android:src="@drawable/ic_nav_edit_icon"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

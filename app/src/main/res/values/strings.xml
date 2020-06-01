@@ -1,4 +1,4 @@
-<!DOCTYPE resources [<!ENTITY app_name "Services App">]>
+<!DOCTYPE resources [<!ENTITY app_name "eCommerce App">]>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="app_name">&app_name;</string>
     <string name="internal_server_error">Internal server error, so please try after some time!</string>
@@ -367,11 +367,45 @@
     <string name="warning_rate_order">Do you want to rate this order?</string>
     <string name="warning_rate_cancel">Do you want to leave this screen?</string>
     <string name="warning_complete_order">Do you really want to complete this order?</string>
-    <string name="warning_clear_cart">Remove Cart Message</string>
+    <string name="warning_clear_cart">You have items in cart. Clear Cart?</string>
     <string name="enter_promo_code">Enter Promo Code</string>
     <string name="order_services_msg">Thank you for using our services</string>
     <string name="done">Done</string>
     <string name="success">Success</string>
     <string name="vendor">Vendors</string>
 
+    <!-- Home -->
+    <string name="recommended">Recommended</string>
+    <string name="product">Product</string>
+    <string name="recommendations">We recommend the best for you</string>
+    <string name="saleOffer">Super flash sale</string>
+    <string name="percent_off">50% off</string>
+
+    <!-- Categories -->
+    <string name="categories">Category</string>
+
+    <!-- Flash sale -->
+    <string name="flash_sale">Super Flash Sale</string>
+
+    <!-- Search Products -->
+    <string name="search_products">Search Products</string>
+    <string name="review_product">Review Product</string>
+
+    <!-- Product details -->
+    <string name="product_name">Nike Air Zoom Peagus 36 Miami</string>
+    <string name="review_see_more">See More</string>
+    <string name="product_style">CD0113-400</string>
+    <string name="total_review">(5 Reviews)</string>
+    <string name="avg_rating">4.5</string>
+    <string name="product_shown">Laser Blue/Anthracite/Watermelon/White</string>
+    <string name="product_details">The Nike Air Max 270. Nike first lifestyle Air unit flaunts an exaggerated heel Air Max unit (the tallest yet measuring 32-mm), a cleatie construction, a breathable knit and mesh upper in numerous colorways that collectively makes a statement and gives the silhouette its signature look</string>
+    <string name="customer_review">air max are always very comfortable fit, clean and just perfect in every way. just the box was too small and scrunched the sneakers up a little bit, not sure if the box was always this small but the 90s are and will always be one of my favorites.</string>
+
+    <!-- Customer reviews-->
+    <string name="title_customer_review">Customer Review</string>
+    <string name="review_date">December 10, 2016</string>
+    <string name="product_suggestions">You Might Also Like</string>
+
+    <!-- Favourite product-->
+    <string name="favourite_product">Favorite Product</string>
 </resources>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_15"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/ivCustomerPic"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/customer_profile" />
+
+
+        <TextView
+            android:id="@+id/tvProfileName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/ivCustomerPic"
+            android:fontFamily="sans-serif-black"
+            android:paddingStart="20dp"
+            android:text="James Lawson"
+            android:textColor="@color/headingColor"
+            android:textSize="@dimen/sp_18"
+            android:textStyle="bold" />
+
+        <RatingBar
+            android:id="@+id/custRating"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvProfileName"
+            android:layout_alignStart="@id/tvProfileName"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="@dimen/dimen_20dp"
+            android:layout_weight="1"
+            android:isIndicator="true"
+            android:numStars="5"
+            android:stepSize="0.1"
+            android:theme="@style/RatingBar" />
+
+        <TextView
+            android:id="@+id/tvCustReview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ivCustomerPic"
+            android:paddingTop="@dimen/dp_10"
+            android:text="@string/customer_review"
+            android:textColor="@color/naturalGrey" />
+
+        <ImageView
+            android:id="@+id/ivReviewedProductPic"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_below="@id/tvCustReview"
+            android:paddingRight="8dp"
+            android:src="@drawable/user_review_picture" />
+
+        <TextView
+            android:id="@+id/tvCustReviewDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ivReviewedProductPic"
+            android:paddingTop="@dimen/dp_10"
+            android:text="@string/review_date"
+            android:textColor="@color/naturalGrey" />
+    </RelativeLayout>
+
+</layout>

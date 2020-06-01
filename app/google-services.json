@@ -1,35 +1,58 @@
 {
   "project_info": {
-    "project_number": "637061013375",
-    "firebase_url": "https://salon-services-app.firebaseio.com",
-    "project_id": "salon-services-app",
-    "storage_bucket": "salon-services-app.appspot.com"
+    "project_number": "283677488039",
+    "firebase_url": "https://ecommerceapp-a0c53.firebaseio.com",
+    "project_id": "ecommerceapp-a0c53",
+    "storage_bucket": "ecommerceapp-a0c53.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:637061013375:android:37e9efc87c9351374d044a",
+        "mobilesdk_app_id": "1:283677488039:android:8f0cac0cead16acafcfc82",
         "android_client_info": {
-          "package_name": "com.example.services"
+          "package_name": "com.example.ecommerce"
         }
       },
       "oauth_client": [
         {
-          "client_id": "637061013375-88agteljb7e2r2lvmf5d708hmjo2rmj7.apps.googleusercontent.com",
+          "client_id": "283677488039-tltgcbrui2cuj2oouohg9rdc6dondca0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ecommerce",
+            "certificate_hash": "1b07d3421471215e0ce32432e09934d57e9a6ea0"
+          }
+        },
+        {
+          "client_id": "283677488039-03n1use79t6ct4gtvpdgh1q5cg0cnm4q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ecommerce",
+            "certificate_hash": "446a3dd568a6ed5783f3947579de81d4dad7ea1e"
+          }
+        },
+        {
+          "client_id": "283677488039-tk316tfp0mv9mqic9pl3p5ql52io31pp.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC_ZlqMqqGCzYAX2FkqxyQb1XDRraKYSvY"
+          "current_key": "AIzaSyB88b7RmUKQFr0CyqQy8P-QMnggO0hUwnk"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "637061013375-88agteljb7e2r2lvmf5d708hmjo2rmj7.apps.googleusercontent.com",
+              "client_id": "283677488039-tk316tfp0mv9mqic9pl3p5ql52io31pp.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "283677488039-b937694fi9s93rjp5d8s112ash2ruqh2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.ecommerse"
+              }
             }
           ]
         }
