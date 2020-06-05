@@ -7,25 +7,23 @@ import com.example.ecommerce.common.UtilsFunctions
 import com.example.ecommerce.model.CommonModel
 import com.example.ecommerce.model.LoginResponse
 import com.example.ecommerce.model.address.AddressResponse
+import com.example.ecommerce.model.fav.AddRemoveFavResponse
 import com.example.ecommerce.model.fav.FavouriteListResponse
 import com.example.ecommerce.repositories.favorite.FavoriteRepository
 import com.example.ecommerce.viewmodels.BaseViewModel
 
 class FavoriteViewModel : BaseViewModel() {
-    private var data: MutableLiveData<LoginResponse>? = null
-    private var addressDetail = MutableLiveData<AddressResponse>()
-    private var deleteAddress = MutableLiveData<CommonModel>()
-
     private var favList = MutableLiveData<FavouriteListResponse>()
     private var favoriteRepository = FavoriteRepository()
+    private var favRes = MutableLiveData<AddRemoveFavResponse>()
     private val mIsUpdating = MutableLiveData<Boolean>()
     private val btnClick = MutableLiveData<String>()
 
     init {
         if (UtilsFunctions.isNetworkConnectedWithoutToast()) {
             favList = favoriteRepository.favoriteList()
+            favRes = favoriteRepository.removeFav("")
         }
-
     }
 
     fun getFavListRes(): LiveData<FavouriteListResponse> {
@@ -57,7 +55,16 @@ class FavoriteViewModel : BaseViewModel() {
             favList = favoriteRepository.favoriteList()
             mIsUpdating.postValue(true)
         }
-
     }
 
+    fun removefavResponse(): LiveData<AddRemoveFavResponse> {
+        return favRes
+    }
+
+    fun removeFav(mJsonObject: String) {
+        if (UtilsFunctions.isNetworkConnected()) {
+            favRes = favoriteRepository.removeFav(mJsonObject)
+            mIsUpdating.postValue(true)
+        }
+    }
 }

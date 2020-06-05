@@ -67,24 +67,23 @@
                             android:id="@+id/llFilterOptions"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:visibility="gone"
                             android:layout_below="@+id/vLine"
                             android:background="@drawable/shape_filter_products"
                             android:elevation="@dimen/dp_10"
                             android:orientation="vertical"
-                            android:padding="@dimen/dp_10">
+                            android:padding="@dimen/dp_10"
+                            android:visibility="gone">
 
                             <RelativeLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                >
+                                android:layout_height="wrap_content">
 
                                 <TextView
                                     android:id="@+id/tvFilterOptionHeading"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Category"
                                     android:layout_centerVertical="true"
+                                    android:text="Category"
                                     android:textColor="@color/headingColor"
                                     android:textSize="@dimen/dimen_16sp"
                                     android:textStyle="bold" />
@@ -93,14 +92,13 @@
                                     android:id="@+id/tvDone"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:paddingTop="@dimen/dp_5"
-                                    android:paddingBottom="@dimen/dp_5"
-                                    android:paddingLeft="@dimen/dp_10"
-                                    android:paddingRight="@dimen/dp_10"
-                                    android:background="@drawable/round_blue_border"
                                     android:layout_alignParentEnd="true"
-                                    android:text="Done"
-                                    />
+                                    android:background="@drawable/round_blue_border"
+                                    android:paddingLeft="@dimen/dp_10"
+                                    android:paddingTop="@dimen/dp_5"
+                                    android:paddingRight="@dimen/dp_10"
+                                    android:paddingBottom="@dimen/dp_5"
+                                    android:text="Done" />
 
                             </RelativeLayout>
 
@@ -120,13 +118,13 @@
 
                         </LinearLayout>
 
-  <!--                      <ImageView
-                            android:id="@+id/ivBackgroundTint"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_below="@+id/llFilterOptions"
-                            android:background="#6F000000"
-                            android:elevation="@dimen/dp_5" />-->
+                        <!--                      <ImageView
+                                                  android:id="@+id/ivBackgroundTint"
+                                                  android:layout_width="match_parent"
+                                                  android:layout_height="match_parent"
+                                                  android:layout_below="@+id/llFilterOptions"
+                                                  android:background="#6F000000"
+                                                  android:elevation="@dimen/dp_5" />-->
 
                         <FrameLayout
                             android:layout_width="match_parent"
@@ -236,6 +234,16 @@
 
                                     </LinearLayout>
 
+                                    <androidx.viewpager.widget.ViewPager
+                                        android:id="@+id/offersViewpager"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="@dimen/dp_200"
+                                        android:layout_marginLeft="-15dp"
+                                        android:layout_marginTop="-10dp"
+                                        android:layout_marginRight="-15dp"
+                                        android:background="@drawable/no_image"
+                                        android:visibility="gone" />
+
                                     <!--android:background="@color/colorBlack"-->
                                     <com.example.ecommerce.views.home.viewpager.AutoScrollViewPager
                                         android:id="@+id/vpBanner"
@@ -244,7 +252,8 @@
                                         android:layout_marginLeft="-15dp"
                                         android:layout_marginTop="-10dp"
                                         android:layout_marginRight="-15dp"
-                                        android:background="@drawable/promo_image" />
+                                        android:background="@drawable/promo_image"
+                                        android:visibility="visible" />
                                 </RelativeLayout>
 
 
@@ -266,13 +275,23 @@
                                 android:id="@+id/ivBackgroundAlpha"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:visibility="gone"
                                 android:background="#6F000000"
-                                android:elevation="@dimen/dp_8" />
+                                android:elevation="@dimen/dp_8"
+                                android:visibility="gone" />
                         </FrameLayout>
                     </RelativeLayout>
                 </RelativeLayout>
             </ScrollView>
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_no_record"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/dp_cimage_100"
+            android:text="@string/no_record_found"
+            android:visibility="visible" />
     </RelativeLayout>
 </layout>

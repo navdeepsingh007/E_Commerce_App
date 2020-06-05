@@ -131,4 +131,10 @@ object GlobalConstants {
 
     @JvmStatic
     var PREF_COMPANY_ID = "companyId"
+
+    @JvmStatic
+    var PREF_DELIVERY_ADDRESS = "deliveryAddress"
+
+    @JvmStatic
+    var PREF_DELIVERY_ADDRESS_ID = "addressId"
 }

@@ -7,16 +7,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="@dimen/dp_3"
-    android:layout_marginTop="@dimen/dp_1"
-    android:layout_marginRight="@dimen/dp_3"
-    android:elevation="@dimen/dp_20"
-    android:padding="@dimen/dp_5">
+    >
     <!---->
     <androidx.cardview.widget.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:layout_gravity="center"
         android:elevation="@dimen/dp_5"
         android:paddingLeft="@dimen/dp_10"
@@ -36,7 +33,7 @@
                 android:textAllCaps="false"
                 android:textColor="@color/colorBlack" />
 
-            <ImageView
+            <!--<ImageView
                 android:id="@+id/img_service"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_150"
@@ -44,10 +41,20 @@
                 android:layout_marginTop="@dimen/dp_5"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_category"
-                android:visibility="visible" />
+                android:visibility="visible" />-->
             <!--android:scaleType="centerCrop"-->
         </LinearLayout>
     </androidx.cardview.widget.CardView>
+
+    <ImageView
+        android:id="@+id/img_service"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_200"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/dp_5"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_category"
+        android:visibility="visible" />
 
 </RelativeLayout>
 

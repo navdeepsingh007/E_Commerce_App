@@ -46,6 +46,9 @@
     <!-- Product details -->
     <color name="skyBlue">#40BFFF</color>
     <color name="orange">#FF7B00</color>
+    <color name="orangeTint2">#0DFF7B00</color>
     <color name="orangeTint">#B3FFBE82</color>
     <color name="naturalGrey">#9098B1</color>
+
+    <color name="dummy">#4F59A0</color>
 </resources>

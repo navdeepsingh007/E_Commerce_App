@@ -15,9 +15,9 @@
 
             <ImageView
                 android:id="@+id/ivCategory"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/fm_shirt"
+                android:layout_width="20dp"
+                android:layout_height="@dimen/dimen_20dp"
+                android:src="@drawable/no_image"
                 />
 
             <TextView

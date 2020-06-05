@@ -29,7 +29,7 @@
         android:elevation="@dimen/dp_5"-->
         <LinearLayout
             android:id="@+id/topLayout"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dp_5"
             android:background="@drawable/rectangle_grey_stroke_transparent"
@@ -43,7 +43,7 @@
             <ImageView
                 android:id="@+id/ivProduct"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="140dp"
                 android:layout_marginTop="5dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/fm_product2"
@@ -121,7 +121,7 @@
                         android:id="@+id/ivDelete"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:layout_marginLeft="@dimen/dp_5"
+                        android:layout_marginLeft="@dimen/dp_10"
                         android:src="@drawable/trash" />
                 </LinearLayout>
             </LinearLayout>

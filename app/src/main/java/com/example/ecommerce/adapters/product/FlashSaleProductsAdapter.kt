@@ -19,7 +19,8 @@ import com.example.ecommerce.views.product.ProductDetailsActivity
 
 class FlashSaleProductsAdapter(
     val context: Context,
-    val flashSaleList: ArrayList<HomeResponse.Sale>
+    val flashSaleList: ArrayList<HomeResponse.Sale>,
+    val currency: String
 //    val bannerUrls: ArrayList<String>,
 //    var delegate: ServicesFragment.IAdapter
 ) : RecyclerView.Adapter<FlashSaleProductsAdapter.TrendingServicesVH>() {
@@ -44,13 +45,13 @@ class FlashSaleProductsAdapter(
         val response = flashSaleList[position]
 
         holder.binding.tvProductName.text = response.name ?: ""
-        holder.binding.tvProductPrice.text = response.price ?: ""
-
+        val price = "$currency${response.price}"
+        holder.binding.tvProductPrice.text = price
 
         // Strike through off price
-
         if (!response.price.equals(response.originalPrice)) {
-            holder.binding.tvProductOff.text = response.originalPrice ?: ""
+            val originalPrice = "$currency${response.originalPrice}"
+            holder.binding.tvProductOff.text = originalPrice
             holder.binding.tvProductOff.setPaintFlags(holder.binding.tvProductOff.getPaintFlags() or Paint.STRIKE_THRU_TEXT_FLAG)
             val percentOff = "${response.offer}% off"
             holder.binding.tvProductPercentageOff.text = percentOff

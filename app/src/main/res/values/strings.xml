@@ -304,6 +304,7 @@
     <string name="select_address">Select Address</string>
     <string name="enter_address_details">Enter address details</string>
     <string name="warning_delete_address">Do you really want to delete this address?</string>
+    <string name="warning_delete_fav">Do you really want to delete this product from favourites?</string>
     <string name="warning_default_address">Do you really want to make this to default address?</string>
     <string name="address_management">Address Management</string>
     <string name="search_saved_locations">Search Saved Locations</string>

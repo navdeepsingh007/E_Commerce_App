@@ -27,7 +27,7 @@ class ProductDetailRepo {
     }
 
 
-    fun getProductDetailsResponse(categoryId: String): MutableLiveData<ProductDetailResponse> {
+    fun getProductDetailsResponse(categoryId: String, addressId: String): MutableLiveData<ProductDetailResponse> {
         ApiService<JsonObject>().get(object : ApiResponse<JsonObject> {
             override fun onResponse(mResponse: Response<JsonObject>) {
                 val loginResponse = if (mResponse.body() != null) {
@@ -48,7 +48,7 @@ class ProductDetailRepo {
                 UtilsFunctions.showToastError(MyApplication.instance.getString(R.string.internal_server_error))
                 data2.postValue(null)
             }
-        }, ApiClient.getApiInterface().getProductDetail(categoryId))
+        }, ApiClient.getApiInterface().getProductDetail(categoryId, addressId))
         return data2
     }
 }

@@ -12,6 +12,8 @@ import com.example.ecommerce.common.UtilsFunctions
 import com.example.ecommerce.model.CommonModel
 import com.example.ecommerce.model.homenew.HomeResponse
 import com.example.ecommerce.model.product.ProductListingResponse
+import com.example.ecommerce.model.sale.SalesListInput
+import com.example.ecommerce.model.sales.SalesListResponse
 import com.example.ecommerce.viewmodels.home.CategoriesListResponse
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
@@ -19,7 +21,7 @@ import retrofit2.Response
 
 class ProductListingRepo {
     private var data: MutableLiveData<ProductListingResponse>
-    private var data1: MutableLiveData<ProductListingResponse>
+    private var data1: MutableLiveData<SalesListResponse>
     private val gson = GsonBuilder().serializeNulls().create()
 
     init {
@@ -52,23 +54,23 @@ class ProductListingRepo {
         return data
     }
 
-    fun getFilteredProductListingResponse(
-        jsonObject: JsonObject?,
+    fun getSalesListingResponse(
+        salesListInput: SalesListInput?,
         page: String,
         limit: String
-    ): MutableLiveData<ProductListingResponse> {
-        if (jsonObject != null) {
+    ): MutableLiveData<SalesListResponse> {
+        if (salesListInput != null) {
             ApiService<JsonObject>().get(object : ApiResponse<JsonObject> {
                 override fun onResponse(mResponse: Response<JsonObject>) {
                     val loginResponse = if (mResponse.body() != null) {
-                        gson.fromJson<ProductListingResponse>(
+                        gson.fromJson<SalesListResponse>(
                             "" + mResponse.body(),
-                            ProductListingResponse::class.java
+                            SalesListResponse::class.java
                         )
                     } else {
-                        gson.fromJson<ProductListingResponse>(
+                        gson.fromJson<SalesListResponse>(
                             mResponse.errorBody()!!.charStream(),
-                            ProductListingResponse::class.java
+                            SalesListResponse::class.java
                         )
                     }
                     data1.postValue(loginResponse)
@@ -78,7 +80,7 @@ class ProductListingRepo {
                     UtilsFunctions.showToastError(MyApplication.instance.getString(R.string.internal_server_error))
                     data1.postValue(null)
                 }
-            }, ApiClient.getApiInterface().getFilteredProductListing(jsonObject, page, limit))
+            }, ApiClient.getApiInterface().getSalesListing(salesListInput, page, limit))
         }
         return data1
     }

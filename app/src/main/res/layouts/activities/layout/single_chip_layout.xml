@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.chip.Chip xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/CustomChipChoice"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:theme="@style/Theme.MaterialComponents.Light"/>
+    android:text="All"
+    app:chipStrokeColor="@color/light_grey"
+    app:chipStrokeWidth="@dimen/dp_1"
+    app:chipBackgroundColor="@color/colorWhite"
+    android:theme="@style/Theme.MaterialComponents.Light" />

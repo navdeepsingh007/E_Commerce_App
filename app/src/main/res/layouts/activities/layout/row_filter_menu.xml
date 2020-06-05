@@ -6,39 +6,45 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/rectangle_grey_stroke_transparent"
-        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginStart="@dimen/dp_5"
+        android:layout_marginEnd="@dimen/dp_5"
         android:layout_marginTop="@dimen/dp_10"
-        android:layout_marginBottom="@dimen/dp_10"
-        android:padding="@dimen/dp_10"
-        >
+        android:layout_marginBottom="@dimen/dp_10">
 
-        <TextView
-            android:id="@+id/tvFilterOption"
+        <RelativeLayout
+            android:id="@+id/rlFilterMenuItem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Menu"
-            android:textColor="@color/neutralDark"
-            />
+            android:paddingStart="@dimen/dp_10"
+            android:paddingEnd="@dimen/dp_5"
+            android:paddingBottom="@dimen/dp_8"
+            android:paddingTop="@dimen/dp_8">
 
-        <TextView
-            android:id="@+id/tvFilterCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/tvFilterOption"
-            android:layout_marginLeft="@dimen/dp_10"
-            android:visibility="gone"
-            android:textColor="@color/neutralDark"
-            />
+            <TextView
+                android:id="@+id/tvFilterOption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Menu"
+                android:textColor="@color/neutralDark" />
 
-        <ImageView
-            android:id="@+id/ivDropDown"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/tvFilterOption"
-            android:layout_marginLeft="@dimen/dp_10"
-            android:src="@drawable/ic_arrow_drop_down"
-            android:layout_centerVertical="true"
-            />
+            <!--android:textColor="@color/neutralDark"-->
+            <TextView
+                android:id="@+id/tvFilterCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_5"
+                android:layout_toRightOf="@+id/tvFilterOption"
+                android:textColor="@color/primary_orange"
+                android:visibility="gone" />
 
+            <ImageView
+                android:id="@+id/ivDropDown"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dp_5"
+                android:layout_toRightOf="@+id/tvFilterCount"
+                android:src="@drawable/ic_arrow_drop_down" />
+        </RelativeLayout>
     </RelativeLayout>
 </layout>

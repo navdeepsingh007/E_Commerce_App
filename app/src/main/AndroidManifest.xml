@@ -42,6 +42,16 @@
         tools:replace="android:allowBackup"
         tools:targetApi="n">
         <activity
+            android:name="com.example.ecommerce.views.SplashActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name="com.example.ecommerce.views.promocode.PromoCodeActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
@@ -119,17 +129,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/fileprovider" />
         </provider>
-
-        <activity
-            android:name="com.example.ecommerce.views.SplashActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <activity
             android:name="com.example.ecommerce.views.authentication.LoginActivity"
             android:launchMode="singleTop"

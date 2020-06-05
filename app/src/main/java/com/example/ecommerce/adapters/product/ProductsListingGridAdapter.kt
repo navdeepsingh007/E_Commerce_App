@@ -14,13 +14,15 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.ecommerce.R
 import com.example.ecommerce.model.product.ProductListingResponse
+import com.example.ecommerce.model.sales.SalesListResponse
 import com.example.ecommerce.utils.ExtrasConstants
 import com.example.ecommerce.views.product.ProductDetailsActivity
 
 class ProductsListingGridAdapter(
     val context: FragmentActivity,
-    val productsList: ArrayList<ProductListingResponse.Service>,
-    var activity: Context
+    val productsList: ArrayList<SalesListResponse.Service>,
+    var activity: Context,
+    val currency: String
 ) :
     ArrayAdapter<ProductsListingGridAdapter.ItemHolder>(activity, R.layout.category_item) {
 
@@ -62,14 +64,18 @@ class ProductsListingGridAdapter(
         val response = productsList[position]
 
         holder.name!!.text = response.name
-        holder.price!!.text = response.originalPrice
+
+        val price = "$currency${response.price}"
+        holder.price!!.text = price
         holder.rating!!.rating = response.rating?.toFloat() ?: 0f
 
         // Strike through off price
         if (!response.originalPrice.equals(response.price)) {
             holder.offPrice!!.setPaintFlags(holder.offPrice!!.getPaintFlags() or Paint.STRIKE_THRU_TEXT_FLAG)
             val percentOff = "${response.offer}% off"
-            holder.offPrice!!.text = response.price
+
+            val originalPrice = "$currency${response.originalPrice}"
+            holder.offPrice!!.text = originalPrice
             holder.offPercentage!!.text = percentOff
 
             holder.offPrice?.visibility = View.VISIBLE
@@ -91,7 +97,7 @@ class ProductsListingGridAdapter(
         return convertView
     }
 
-    private fun onProductClick(response: ProductListingResponse.Service) {
+    private fun onProductClick(response: SalesListResponse.Service) {
         val intent = Intent(context, ProductDetailsActivity::class.java)
         intent.putExtra(ExtrasConstants.SERVICE_ID, response.id)
         context.startActivity(intent)

@@ -21,8 +21,14 @@ class ProductDetailsVM : BaseViewModel() {
     private var productDetails = MutableLiveData<ProductDetailResponse>()
 
     init {
+//        if (UtilsFunctions.isNetworkConnectedWithoutToast()) {
+//            productDetails("05619abf-589d-4f4c-98c6-3d3a07d77ba4")
+//        }
+    }
+
+    fun initProductDetails(productId: String, addressId: String) {
         if (UtilsFunctions.isNetworkConnectedWithoutToast()) {
-            productDetails("05619abf-589d-4f4c-98c6-3d3a07d77ba4")
+            productDetails(productId, addressId)
         }
     }
 
@@ -42,9 +48,9 @@ class ProductDetailsVM : BaseViewModel() {
         isClick.value = v.resources.getResourceName(v.id).split("/")[1]
     }
 
-    private fun productDetails(categoryId: String) {
+    private fun productDetails(categoryId: String, addressId: String) {
         if (UtilsFunctions.isNetworkConnected()) {
-            productDetails = productDetailRepo.getProductDetailsResponse(categoryId)
+            productDetails = productDetailRepo.getProductDetailsResponse(categoryId, addressId)
             mIsUpdating.postValue(true)
         }
     }

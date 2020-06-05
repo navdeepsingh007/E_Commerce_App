@@ -5,10 +5,12 @@ data class HomeResponse(
     val code: Int? = 0,
     val message: String? = ""
 ) {
+
     data class Body(
         val categories: ArrayList<Category>? = arrayListOf(),
         val recommended: ArrayList<Recommended>? = arrayListOf(),
-        val sales: ArrayList<Sale>? = arrayListOf()
+        val sales: ArrayList<Sale>? = arrayListOf(),
+        val currency: String ?= ""
     )
 
     data class Category(
@@ -26,16 +28,16 @@ data class HomeResponse(
         val icon: String? = "",
         val id: String? = "",
         val name: String? = "",
-        val offer: String? = "",
+        val offer: Int? = 0,
         val originalPrice: String? = "",
-        val price: Int? = 0,
+        val price: String? = "",
+        val rating: Int? = 0,
         val thumbnail: String? = ""
     )
 
     data class Sale(
         val cart: String? = "",
         val favourite: String? = "",
-        val favourites: ArrayList<Any>? = arrayListOf(),
         val icon: String? = "",
         val id: String? = "",
         val name: String? = "",
@@ -57,6 +59,12 @@ data class HomeResponse(
         val id: String? = "",
         val productColor: String? = "",
         val productImages: ArrayList<String>? = arrayListOf(),
-        val stockQunatity: String? = ""
+        val stockQunatity: ArrayList<StockQunatity>? = arrayListOf()
+    )
+
+    data class StockQunatity(
+        val id: Int? = 0,
+        val size: String? = "",
+        val stock: String? = ""
     )
 }

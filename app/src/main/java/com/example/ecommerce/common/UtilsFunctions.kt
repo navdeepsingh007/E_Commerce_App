@@ -31,7 +31,7 @@ private val mPhoneList = ArrayList<String>()
 
 object UtilsFunctions {
     @JvmStatic
-    fun showToastError(message: String) {
+    fun showToastError(message: String?) {
         val binding =
             DataBindingUtil.inflate<ViewDataBinding>(
                 LayoutInflater.from(MyApplication.instance),
@@ -48,7 +48,7 @@ object UtilsFunctions {
         toast.show()
     }
     @JvmStatic
-    fun showToastSuccess(message: String) {
+    fun showToastSuccess(message: String?) {
         val binding =
             DataBindingUtil.inflate<ViewDataBinding>(
                 LayoutInflater.from(MyApplication.instance),

@@ -107,6 +107,8 @@ class LoginActivity : BaseActivity() {
                                 true
                             )
 
+                            startActivity(Intent(this, LandingMainActivity::class.java))
+
                             /* val intent = Intent(this, LandingMainActivity::class.java)
                              intent.putExtra("from","splash")
                              intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

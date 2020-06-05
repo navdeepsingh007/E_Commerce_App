@@ -11,12 +11,14 @@ import com.example.ecommerce.R
 import com.example.ecommerce.databinding.RowFlashSaleProductBinding
 import com.example.ecommerce.databinding.RowProductSelectSizeBinding
 import com.example.ecommerce.model.product.ProductSize
+import com.example.ecommerce.model.productdetail.ProductDetailResponse
 
 
 class ProductSizeAdapter(
     val context: Context,
-    val sizeList: ArrayList<ProductSize>
-//    val flashProductsList: ArrayList<ServicesResponse.TrendingServices>,
+    val sizeList: ArrayList<ProductSize>,
+    val allSizeList: ArrayList<ProductDetailResponse.StockQunatity>
+//    val allSizeList: ArrayList<ProductDetailResponse.ProductSpecification>
 //    val bannerUrls: ArrayList<String>,
 //    var delegate: ServicesFragment.IAdapter
 ) : RecyclerView.Adapter<ProductSizeAdapter.TrendingServicesVH>() {
@@ -24,8 +26,7 @@ class ProductSizeAdapter(
     private var selectedPos = 0
 
     override fun getItemCount(): Int {
-        return 4
-//        return flashProductsList.size
+        return allSizeList.size
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -43,6 +44,9 @@ class ProductSizeAdapter(
     }
 
     override fun onBindViewHolder(holder: TrendingServicesVH, position: Int) {
+        val response = allSizeList[position]
+        holder.binding.tvCategoryName.text = response.size
+
         if (sizeList[position].selected) {
             holder.binding.topLayout.visibility = View.VISIBLE
         } else {

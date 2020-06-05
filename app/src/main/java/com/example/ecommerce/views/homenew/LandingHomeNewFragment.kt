@@ -44,6 +44,7 @@ class LandingHomeNewFragment : BaseFragment() {
 
 //        setupDashboardBanner()
         clickListeners()
+        baseActivity.startProgressDialog()
     }
 
     private fun initHomeResponseObserver() {
@@ -54,14 +55,17 @@ class LandingHomeNewFragment : BaseFragment() {
                     val message = response.message
                     when {
                         response.code == 200 -> {
+                            val currency = response.body?.currency ?: ""
                             if (response.body?.recommended != null) {
-                                initProductsGrid(response.body.recommended)
+                                initProductsGrid(response.body.recommended, currency)
                             }
                             if (response.body?.categories != null) {
                                 initProductCategoriesAdapter(response.body.categories)
                             }
                             if (response.body?.sales != null) {
-                                initFlashSaleAdapter(response.body.sales)
+                                initFlashSaleAdapter(response.body.sales, currency)
+
+                                setupDashboardBanner(response.body.sales)
                             }
                         }
                         else -> message?.let {
@@ -72,23 +76,25 @@ class LandingHomeNewFragment : BaseFragment() {
             })
     }
 
-    private fun initProductsGrid(recommendedList: ArrayList<HomeResponse.Recommended>) {
+    private fun initProductsGrid(recommendedList: ArrayList<HomeResponse.Recommended>, currency: String) {
         if (!recommendedList.isEmpty()) {
             val adapter = ProductsGridListAdapter(
                 context,
                 recommendedList,
-                activity!!
+                activity!!,
+                currency
             )
             binding.gvProducts.adapter = adapter
         }
     }
 
-    private fun initFlashSaleAdapter(flashSaleList: ArrayList<HomeResponse.Sale>) {
+    private fun initFlashSaleAdapter(flashSaleList: ArrayList<HomeResponse.Sale>, currency: String) {
         if (!flashSaleList.isEmpty()) {
             binding.rvFlashSale.adapter =
                 FlashSaleProductsAdapter(
                     context,
-                    flashSaleList
+                    flashSaleList,
+                    currency
                 )
 
             binding.rvFlashSale.layoutManager = LinearLayoutManager(
@@ -117,12 +123,16 @@ class LandingHomeNewFragment : BaseFragment() {
     /**
      *  ViewPager advertisement
      */
-    private fun setupDashboardBanner() {
+    private fun setupDashboardBanner(salesBanners: ArrayList<HomeResponse.Sale>) {
 //        val banners = servicesResponse.body!!.banners!!
 
         var bannerUrls = ArrayList<String>()
-        bannerUrls.add("https://www.circleone.in/images/products_gallery_images/PVC-Banner.jpg")
-        bannerUrls.add("https://image.freepik.com/free-psd/online-shopping-with-discount_23-2148536749.jpg")
+        for (item in salesBanners) {
+            bannerUrls.add(item.icon ?: "")
+        }
+
+//        bannerUrls.add("https://www.circleone.in/images/products_gallery_images/PVC-Banner.jpg")
+//        bannerUrls.add("https://image.freepik.com/free-psd/online-shopping-with-discount_23-2148536749.jpg")
 
         val autoScrollPagerAdapter = AutoScrollPagerAdapter(fragmentManager, bannerUrls)
         binding.vpBanner.adapter = autoScrollPagerAdapter
@@ -165,5 +175,9 @@ class LandingHomeNewFragment : BaseFragment() {
         binding.tvSeeMore.setOnClickListener {
             startActivity(Intent(context, FlashSaleActivity::class.java))
         }
+    }
+
+    private fun clearAllFilters() {
+
     }
 }

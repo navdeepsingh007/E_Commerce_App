@@ -1,6 +1,7 @@
 package com.example.ecommerce.adapters.product
 
 import android.content.Context
+import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +10,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ecommerce.R
 import com.example.ecommerce.databinding.RowFilterMenuBinding
-import com.example.ecommerce.databinding.RowProductCategoriesBinding
 import com.example.ecommerce.views.homenew.FlashSaleActivity
 
 
@@ -85,8 +85,38 @@ class FilterProductsAdapter(
         if (countType > 0) {
             holder.binding.tvFilterCount.text = count
             holder.binding.tvFilterCount.visibility = View.VISIBLE
+
+            // Set background color
+            holder.binding.rlFilterMenu.setBackgroundResource(R.drawable.rectangle_orange_stroke_transparent)
+
+            holder.binding.rlFilterMenuItem.setBackgroundColor(
+                ContextCompat.getColor(
+                    context,
+                    R.color.orangeTint2
+                )
+            )
+
+//            holder.binding.rlFilterMenuItem.background.setColorFilter(
+//                ContextCompat.getColor(
+//                    context,
+//                    R.color.orangeTint2
+//                ),
+//                android.graphics.PorterDuff.Mode.SRC_IN
+//            )
+
+/*            holder.binding.rlFilterMenu.setColorFilter(
+                ContextCompat.getColor(
+                    this,
+                    R.color.red
+                ),
+//                    android.graphics.PorterDuff.Mode.SRC_IN
+                android.graphics.PorterDuff.Mode.SRC_IN
+            )*/
         } else {
             holder.binding.tvFilterCount.visibility = View.GONE
+
+            // Set background color
+            holder.binding.rlFilterMenu.setBackgroundResource(R.drawable.rectangle_grey_stroke_transparent)
 
 //            holder.binding.rlFilterMenu.setBackgroundColor(
 //                ContextCompat.getColor(

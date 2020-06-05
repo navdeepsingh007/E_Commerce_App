@@ -1,7 +1,9 @@
 package com.example.ecommerce.adapters.product
 
 import android.content.Context
+import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.PorterDuff
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -13,11 +15,15 @@ import com.example.ecommerce.application.MyApplication
 import com.example.ecommerce.databinding.RowFlashSaleProductBinding
 import com.example.ecommerce.databinding.RowProductSelectColorBinding
 import com.example.ecommerce.model.product.ProductColor
+import com.example.ecommerce.model.productdetail.ProductDetailResponse
+import com.example.ecommerce.views.product.ProductColorChangeListener
+import com.example.ecommerce.views.product.ProductDetailsActivity
 
 
 class ProductColorAdapter(
     val context: Context,
-    val selectedColors: ArrayList<ProductColor>
+    val selectedColors: ArrayList<ProductColor>,
+    val allColors: ArrayList<ProductDetailResponse.ProductSpecification>
 //    val flashProductsList: ArrayList<ServicesResponse.TrendingServices>,
 //    val bannerUrls: ArrayList<String>,
 //    var delegate: ServicesFragment.IAdapter
@@ -25,8 +31,7 @@ class ProductColorAdapter(
     private val TAG = "ProductColorAdapter"
 
     override fun getItemCount(): Int {
-        return 4
-//        return flashProductsList.size
+        return allColors.size
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrendingServicesVH {
@@ -40,7 +45,19 @@ class ProductColorAdapter(
     }
 
     override fun onBindViewHolder(holder: TrendingServicesVH, position: Int) {
-//        holder.binding.ivProductColor. = "Nike Air Max 270"
+
+        val response = allColors[position]
+        if (response.productColor != null) {
+//            holder.binding.ivProductColor.setImageResource(Color.parseColor(response.productColor!!))
+//            holder.binding.ivProductColor.setImageResource(R.color.orangeTint2)
+
+//            holder.binding.ivProductColor.setColorFilter(Color.parseColor(response.productColor), PorterDuff.Mode.SRC_ATOP)
+
+            holder.binding.ivProductColor.background.setColorFilter(
+                Color.parseColor(response.productColor),
+                PorterDuff.Mode.SRC_ATOP
+            )
+        }
 
         if (selectedColors[position].isSelected) {
             holder.binding.ivProductColor.borderWidth = 10
@@ -51,14 +68,20 @@ class ProductColorAdapter(
             holder.binding.ivProductColor.borderColor = 0
         }
 
-        Glide.with(context)
-            .load("")
-            .diskCacheStrategy(DiskCacheStrategy.ALL)
-            .placeholder(R.drawable.green)
-            .into(holder.binding.ivProductColor)
+//        Glide.with(context)
+//            .load("")
+//            .diskCacheStrategy(DiskCacheStrategy.ALL)
+//            .placeholder(R.drawable.green)
+//            .into(holder.binding.ivProductColor)
 
         holder.binding.root.setOnClickListener {
             onProductColorSelected(holder, position)
+
+            // productId of selected color
+            val productDtl = (context as ProductDetailsActivity)
+            if (productDtl is ProductColorChangeListener) {
+                (productDtl as ProductColorChangeListener).onColorChange(response.id!!)
+            }
         }
     }
 

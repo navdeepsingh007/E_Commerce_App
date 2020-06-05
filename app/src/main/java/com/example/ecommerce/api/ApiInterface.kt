@@ -1,6 +1,7 @@
 package com.example.ecommerce.api
 
 import com.example.ecommerce.model.ratnigreviews.RatingReviewListInput
+import com.example.ecommerce.model.sale.SalesListInput
 import com.google.gson.JsonObject
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -16,16 +17,27 @@ interface ApiInterface {
     @GET("mobile/services/getHome")
     fun getHome(): Call<JsonObject>
 
+    @GET("mobile/services/getSales")
+    fun getSalesListing(@Body jsonObject: JsonObject): Call<JsonObject>
+
     @GET("mobile/services/getServices")
     fun getProductsListing(@Query("category") serviceId: String): Call<JsonObject>
 
-    @POST("mobile/services/getFilterProducts")
-    fun getFilteredProductListing(@Body jsonObject: JsonObject,
-                                  @Query("page") page: String,
-                                  @Query("limit") limit: String): Call<JsonObject>
+    @POST("mobile/services/getSales")
+    fun getSalesListing(
+        @Body salesListInput: SalesListInput,
+        @Query("page") page: String,
+        @Query("limit") limit: String
+    ): Call<JsonObject>
+
+//    @POST("mobile/rating/addRating")
+//    fun addRatings(@Body mJsonObject: RatingReviewListInput): Call<JsonObject>
 
     @GET("mobile/services/detail")
-    fun getProductDetail(@Query("serviceId") serviceId: String): Call<JsonObject>
+    fun getProductDetail(
+        @Query("serviceId") serviceId: String,
+        @Query("addressId") addressId: String
+    ): Call<JsonObject>
 
     // API to check
     // CART
@@ -84,9 +96,14 @@ interface ApiInterface {
     @POST("mobile/coupan/removeCoupan")
     fun removeCoupon(@Body mJsonObject: JsonObject): Call<JsonObject>
 
+    // Categories
+    @GET("mobile/services/getParentCategories")
+    fun getCategoriesList(): Call<JsonObject>
 
 
 
+    @POST("mobile/rating/addRating")
+    fun addRatings(@Body mJsonObject: RatingReviewListInput): Call<JsonObject>
 
     /*@POST("login/")
     fun callLogin(@Body jsonObject : JsonObject) : Call<JsonObject>*/
@@ -166,14 +183,15 @@ interface ApiInterface {
     ): Call<JsonObject>
 
     @GET("mobile/services/getCompanies")
-    fun vendorList(@Query("categoryId") serviceId: String, @Query("latitude") page: String, @Query("longitude") limit: String): Call<JsonObject>
+    fun vendorList(
+        @Query("categoryId") serviceId: String,
+        @Query("latitude") page: String,
+        @Query("longitude") limit: String
+    ): Call<JsonObject>
 
 
     @GET("mobile/orders/detail/{id}")
     fun orderDetail(@Path("id") id: String): Call<JsonObject>
-
-    @POST("mobile/rating/addRating")
-    fun addRatings(@Body mJsonObject: RatingReviewListInput): Call<JsonObject>
 
     //    {id}
 //service_id

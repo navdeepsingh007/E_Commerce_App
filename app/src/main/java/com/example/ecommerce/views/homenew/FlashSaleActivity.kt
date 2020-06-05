@@ -19,9 +19,12 @@ import com.example.ecommerce.model.filteroptions.Category
 import com.example.ecommerce.model.filteroptions.Price
 import com.example.ecommerce.model.filteroptions.Rating
 import com.example.ecommerce.model.product.ProductListingResponse
+import com.example.ecommerce.model.sale.SalesListInput
+import com.example.ecommerce.model.sales.SalesListResponse
 import com.example.ecommerce.utils.BaseActivity
 import com.example.ecommerce.viewmodels.product.ProductListingVM
 import com.google.android.material.chip.Chip
+import com.uniongoods.adapters.SalesBannerAdapter
 
 
 class FlashSaleActivity : BaseActivity() {
@@ -29,17 +32,23 @@ class FlashSaleActivity : BaseActivity() {
     private lateinit var adapter: FilterProductsAdapter
     private lateinit var productListingVM: ProductListingVM
 
+    private val salesListing = ArrayList<SalesListResponse.Service>()
+
     // Filters count
     private var categoryCount = 0
     private var brandCount = 0
     private var ratingCount = 0
     private var priceCount = 0
 
-    // Filter options
+    // Filter Menu
     private val CATEGORY = "Category"
     private val BRAND = "Brand"
     private val RATING = "Rating"
     private val PRICE = "Price"
+
+    // Filter menu options
+    val category = Category()
+
 
     override fun getLayoutId(): Int {
         return R.layout.activity_flash_sale
@@ -50,22 +59,45 @@ class FlashSaleActivity : BaseActivity() {
         productListingVM = ViewModelProvider(this).get(ProductListingVM::class.java)
 
         initToolbar()
-//        initFlashProductsGrid()
+        initFlashProductsGrid("")
         initFilterListAdapter()
 
+//        productListingVM.listingResponse()
+        isLoadingObserver()
         initProductListingObserver()
+        productListingVM.salesListResponse(SalesListInput())
     }
 
     private fun initProductListingObserver() {
-        productListingVM.getProductListing().observe(this,
-            Observer<ProductListingResponse> { response ->
+        productListingVM.getSalesListing().observe(this,
+            Observer<SalesListResponse> { response ->
                 stopProgressDialog()
                 if (response != null) {
                     val message = response.message
                     when {
                         response.code == 200 -> {
                             if (response.body?.services != null) {
-                                initFlashProductsGrid(response.body.services)
+//                                initFlashProductsGrid(response.body.services)
+
+                                salesListing.clear()
+                                salesListing.addAll(response.body.services)
+                                initFlashProductsGrid(response.body.currency ?: "")
+
+                                // Category Items
+                                category.items.clear()
+                                if (response.body.filters?.categories != null) {
+                                    for (item in response.body.filters?.categories) {
+                                        category.optionList.put(item.name ?: "", false)
+
+                                        category.items.add(
+                                            Category.CatOptions(
+                                                id = item.id,
+                                                name = item.name,
+                                                isSelected = false
+                                            )
+                                        )
+                                    }
+                                }
                             }
                         }
                         else -> message?.let {
@@ -87,34 +119,39 @@ class FlashSaleActivity : BaseActivity() {
         )
     }
 
-    private fun initFlashProductsGrid(flashProductsList: ArrayList<ProductListingResponse.Service>) {
-        if (!flashProductsList.isEmpty()) {
-//            val categoriesList = ArrayList<Recommended>()
-            val adapter = ProductsListingGridAdapter(
-                this,
-                flashProductsList,
-                this
-            )
-            binding.gvFlashProducts.adapter = adapter
+    private fun initFlashProductsGrid(currency: String) {
+        val adapter = ProductsListingGridAdapter(
+            this,
+            salesListing,
+            this,
+            currency
+        )
+        binding.gvFlashProducts.adapter = adapter
+        if (salesListing.size > 0) {
+            binding.gvFlashProducts.visibility = View.VISIBLE
+            binding.tvNoRecord.visibility = View.GONE
+        } else {
+            binding.gvFlashProducts.visibility = View.GONE
+            binding.tvNoRecord.visibility = View.VISIBLE
         }
     }
 
     private fun initFilterListAdapter() {
         // CATEGORY
-        val chipsCategoryOptions = ArrayList<String>()
-        chipsCategoryOptions.add("All")
-        chipsCategoryOptions.add("Men's Sneakers")
-        chipsCategoryOptions.add("Shoes")
-        chipsCategoryOptions.add("Women's ethnic wear")
-        chipsCategoryOptions.add("Boy's flip flops")
-        chipsCategoryOptions.add("Girl's fashion sandals")
-        chipsCategoryOptions.add("Jeans")
 
-        val categoryList = HashMap<String, Boolean>()
-        for (pos in 0..chipsCategoryOptions.size - 1) {
-            categoryList.put(chipsCategoryOptions[pos], false)
-        }
-        val category = Category(categoryList)
+//        chipsCategoryOptions.add("All")
+//        chipsCategoryOptions.add("Men's Sneakers")
+//        chipsCategoryOptions.add("Shoes")
+//        chipsCategoryOptions.add("Women's ethnic wear")
+//        chipsCategoryOptions.add("Boy's flip flops")
+//        chipsCategoryOptions.add("Girl's fashion sandals")
+//        chipsCategoryOptions.add("Jeans")
+
+//        val categoryList = HashMap<String, Boolean>()
+//        for (pos in 0..chipsCategoryOptions.size - 1) {
+//            categoryList.put(chipsCategoryOptions[pos], false)
+//        }
+//        val category = Category(categoryList)
 
         // BRAND
         val chipsBrandOptions = ArrayList<String>()
@@ -194,10 +231,12 @@ class FlashSaleActivity : BaseActivity() {
     private fun initFilterChips(title: String, chipsData: Any) {
 //        binding.cgFilterChips
         var options = mutableMapOf<String, Boolean>()
+        var catItems = ArrayList<Category.CatOptions>()
 
         if (title.equals(CATEGORY)) {
 //            options.putAll((chipsData as Category).optionList)
             options = (chipsData as Category).optionList
+            catItems.addAll((chipsData as Category).items)
         } else if (title.equals(BRAND)) {
             options = (chipsData as Brand).optionList
         } else if (title.equals(RATING)) {
@@ -227,8 +266,12 @@ class FlashSaleActivity : BaseActivity() {
 
             // Change background color of selected chip
             if (value) {
-                chip.chipBackgroundColor =
+                chip.chipStrokeColor =
                     ColorStateList.valueOf(ContextCompat.getColor(this, R.color.orange))
+                chip.isChecked = value
+
+                chip.chipBackgroundColor =
+                    ColorStateList.valueOf(ContextCompat.getColor(this, R.color.orangeTint2))
             }
 
             // necessary to get single selection working
@@ -245,22 +288,41 @@ class FlashSaleActivity : BaseActivity() {
 
                 val selectedChip = chip.text.toString()
 
+                val selectedOptionName = ArrayList<String>()
+
                 // Save selected chip flag - true
                 for (entry in options.entries) {
                     if (entry.key.equals(selectedChip)) {
                         entry.setValue(true)
+
+                        selectedOptionName.add(entry.key)
                     }
                 }
 
                 updateFilterCount(title, options)
 
                 hideFilterOptionsAndRemoveBackgroundAlpha()
+
+                // Update filter products Grid
+                val selectedCats = ArrayList<String>()
+                if (title.equals(CATEGORY)) {
+                    // Get id's of selected items
+                    for (item in catItems) {
+                        for (i in 0..selectedOptionName.size-1)
+                            if (item.name.equals(selectedOptionName[i])) {
+                                selectedCats.add(item.id!!)
+                            }
+                    }
+
+                    productListingVM.salesListResponse(SalesListInput(catArray = selectedCats))
+                }
             }
         }
     }
 
     private fun updateFilterCount(title: String, options: MutableMap<String, Boolean>) {
         if (title.equals(CATEGORY)) {
+            categoryCount = 0
             for (entry in options.entries) {
                 // If any chip selected update count
                 if (entry.value) {
@@ -268,6 +330,7 @@ class FlashSaleActivity : BaseActivity() {
                 }
             }
         } else if (title.equals(BRAND)) {
+            brandCount = 0
             for (entry in options.entries) {
                 // If any chip selected update count
                 if (entry.value) {
@@ -275,6 +338,7 @@ class FlashSaleActivity : BaseActivity() {
                 }
             }
         } else if (title.equals(RATING)) {
+            ratingCount = 0
             for (entry in options.entries) {
                 // If any chip selected update count
                 if (entry.value) {
@@ -282,6 +346,7 @@ class FlashSaleActivity : BaseActivity() {
                 }
             }
         } else if (title.equals(PRICE)) {
+            priceCount = 0
             for (entry in options.entries) {
                 // If any chip selected update count
                 if (entry.value) {
@@ -290,8 +355,8 @@ class FlashSaleActivity : BaseActivity() {
             }
         }
 
-//        adapter.updateFilterCounter(categoryCount, brandCount, ratingCount, priceCount)
-//        adapter.notifyDataSetChanged()
+        adapter.updateFilterCounter(categoryCount, brandCount, ratingCount, priceCount)
+        adapter.notifyDataSetChanged()
     }
 
 
@@ -338,7 +403,22 @@ class FlashSaleActivity : BaseActivity() {
         binding.ivBackgroundAlpha.visibility = View.GONE
     }
 
+    fun isLoadingObserver() {
+        productListingVM.isLoading().observe(this, Observer<Boolean> { aBoolean ->
+            if (aBoolean!!) {
+                startProgressDialog()
+            } else {
+                stopProgressDialog()
+            }
+        })
+    }
+
     interface FilterCategorySelectListener {
         fun onCategorySelected(position: Int, option: String)
+    }
+
+    fun setViewpager(banners: ArrayList<String>) {
+        val adapter = SalesBannerAdapter(this, banners, this)
+        binding.offersViewpager.adapter = adapter
     }
 }

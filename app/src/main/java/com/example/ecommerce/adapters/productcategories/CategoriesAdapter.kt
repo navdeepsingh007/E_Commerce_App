@@ -7,14 +7,18 @@ import android.view.ViewGroup
 import androidx.annotation.NonNull
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.example.ecommerce.R
 import com.example.ecommerce.databinding.RowCategoriesBinding
 import com.example.ecommerce.model.productcateories.CategoriesResponse
+import com.example.ecommerce.model.productcateories.ParentCategoriesResponse
 
 
 class CategoriesAdapter(
     val context: Context,
-    val categoriesList: ArrayList<CategoriesResponse.Body>
+    val categoriesList: ArrayList<ParentCategoriesResponse.Service>
 ) : RecyclerView.Adapter<CategoriesAdapter.ViewHolder>() {
 
     @NonNull
@@ -29,7 +33,16 @@ class CategoriesAdapter(
     }
 
     override fun onBindViewHolder(@NonNull holder: ViewHolder, position: Int) {
-//        val result = categoriesList[position]
+        val result = categoriesList[position]
+
+        val categoryName = result.name
+        holder.binding.tvCategoryName.text = categoryName
+
+        Glide.with(context)
+            .load(result.icon)
+            .apply(RequestOptions.bitmapTransform(RoundedCorners(20)))
+            .placeholder(R.drawable.no_image)
+            .into(holder.binding.ivCategory)
 //
 //        holder.binding.tvNotificationName.text = result.notificationTitle
 //        holder.binding.tvAssignedDate.text = Utils(context).getDate(
@@ -41,8 +54,7 @@ class CategoriesAdapter(
     }
 
     override fun getItemCount(): Int {
-//        return categoriesList.count()
-        return 20
+        return categoriesList.count()
     }
 
     inner class ViewHolder
@@ -50,6 +62,6 @@ class CategoriesAdapter(
         v: View, val viewType: Int,
         val binding: RowCategoriesBinding,
         context: Context,
-        categoriesList: ArrayList<CategoriesResponse.Body>
+        categoriesList: ArrayList<ParentCategoriesResponse.Service>
     ) : RecyclerView.ViewHolder(v)
 }

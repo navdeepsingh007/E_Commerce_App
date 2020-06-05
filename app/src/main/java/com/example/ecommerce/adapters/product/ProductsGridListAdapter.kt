@@ -20,7 +20,8 @@ import com.example.ecommerce.views.product.ProductDetailsActivity
 class ProductsGridListAdapter(
     val context: FragmentActivity,
     val productsList: ArrayList<HomeResponse.Recommended>,
-    var activity: Context
+    var activity: Context,
+    val currency: String
 ) :
     ArrayAdapter<ProductsGridListAdapter.ItemHolder>(activity, R.layout.category_item) {
 
@@ -62,13 +63,28 @@ class ProductsGridListAdapter(
         val response = productsList[position]
 
         holder.name!!.text = response.name
-        holder.price!!.text = response.price.toString()
-        holder.offPrice!!.text = response.originalPrice
-        holder.offPercentage!!.text = response.offer
+
+        val price = "$currency${response.price}"
+        holder.price!!.text = price
+
 //        holder.rating!!.rating = response.rating?.toFloat() ?: 0f
 
         // Strike through off price
-        holder.offPrice!!.setPaintFlags(holder.offPrice!!.getPaintFlags() or Paint.STRIKE_THRU_TEXT_FLAG)
+        if (!response.originalPrice.equals(response.price.toString())) {
+            holder.offPrice!!.setPaintFlags(holder.offPrice!!.getPaintFlags() or Paint.STRIKE_THRU_TEXT_FLAG)
+
+            val originalPrice = "$currency${response.originalPrice}"
+            holder.offPrice!!.text = originalPrice
+
+            val percentOff = "${response.offer}% off"
+            holder.offPercentage!!.text = percentOff
+
+            holder.offPrice?.visibility = View.VISIBLE
+            holder.offPercentage?.visibility = View.VISIBLE
+        } else {
+            holder.offPrice?.visibility = View.INVISIBLE
+            holder.offPrice?.visibility = View.INVISIBLE
+        }
 
         holder.topLayout?.setOnClickListener { onProductClick(response) }
 

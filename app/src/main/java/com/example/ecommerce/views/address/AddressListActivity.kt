@@ -34,6 +34,7 @@ class AddressListActivity : BaseActivity(), DialogssInterface {
     var deletedAddressId = ""
     private val SECOND_ACTIVITY_REQUEST_CODE = 0
     var updateAddressObject = JsonObject()
+
     override fun getLayoutId(): Int {
         return R.layout.activity_address_list
     }
@@ -217,6 +218,18 @@ class AddressListActivity : BaseActivity(), DialogssInterface {
                     startProgressDialog()
                     addressViewModel.updateAddressDetail(updateAddressObject)
                 }
+
+                // Save default address
+                SharedPrefClass().putObject(
+                    this,
+                    GlobalConstants.PREF_DELIVERY_ADDRESS,
+                    updateAddressObject.get("addressName").toString()
+                )
+                SharedPrefClass().putObject(
+                    this,
+                    GlobalConstants.PREF_DELIVERY_ADDRESS_ID,
+                    updateAddressObject.get("addressId").toString()
+                )
             }
         }
     }
