@@ -8,6 +8,7 @@ import com.example.ecommerce.api.ApiService
 import com.example.ecommerce.application.MyApplication
 import com.example.ecommerce.common.UtilsFunctions
 import com.example.ecommerce.model.CommonModel
+import com.example.ecommerce.model.orders.OrdersDetailNewResponse
 import com.example.ecommerce.model.orders.OrdersListResponse
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
@@ -19,6 +20,7 @@ class OrdersRepository {
     private var data1: MutableLiveData<OrdersListResponse>? = null
     private var data3: MutableLiveData<OrdersListResponse>? = null
     private var data4: MutableLiveData<CommonModel>? = null
+    private var orderDetailResponse: MutableLiveData<OrdersDetailNewResponse>? = null
     private val gson = GsonBuilder().serializeNulls().create()
 
     init {
@@ -26,6 +28,7 @@ class OrdersRepository {
         data3 = MutableLiveData()
         data2 = MutableLiveData()
         data4 = MutableLiveData()
+        orderDetailResponse = MutableLiveData()
     }
 
     fun orderList(/*mJsonObject : String*/): MutableLiveData<OrdersListResponse> {
@@ -157,6 +160,39 @@ class OrdersRepository {
 
         }
         return data4!!
+
+    }
+
+    fun orderDetail(id : String): MutableLiveData<OrdersDetailNewResponse> {
+        //if (!TextUtils.isEmpty(mJsonObject)) {
+        val mApiService = ApiService<JsonObject>()
+        mApiService.get(
+            object : ApiResponse<JsonObject> {
+                override fun onResponse(mResponse: Response<JsonObject>) {
+                    val loginResponse = if (mResponse.body() != null)
+                        gson.fromJson<OrdersDetailNewResponse>(
+                            "" + mResponse.body(),
+                            OrdersDetailNewResponse::class.java
+                        )
+                    else {
+                        gson.fromJson<OrdersDetailNewResponse>(
+                            mResponse.errorBody()!!.charStream(),
+                            OrdersDetailNewResponse::class.java
+                        )
+                    }
+                    orderDetailResponse!!.postValue(loginResponse)
+                }
+
+                override fun onError(mKey: String) {
+                    UtilsFunctions.showToastError(MyApplication.instance.getString(R.string.internal_server_error))
+                    orderDetailResponse!!.postValue(null)
+                }
+
+            }, ApiClient.getApiInterface().orderDetail(id)
+        )
+
+        //}
+        return orderDetailResponse!!
 
     }
 

@@ -33,6 +33,7 @@ import com.example.ecommerce.views.favorite.FavoriteListActivity
 import com.example.ecommerce.views.homenew.LandingHomeNewFragment
 import com.example.ecommerce.views.homenew.SearchProductsActivity
 import com.example.ecommerce.views.notifications.NotificationsListActivity
+import com.example.ecommerce.views.orders.OrderDetailActivity
 import com.example.ecommerce.views.orders.OrdersHistoryListActivity
 import com.example.ecommerce.views.orders.OrdersListActivity
 import com.example.ecommerce.views.product.FavouriteProductsActivity
@@ -164,6 +165,8 @@ class LandingMainActivity : BaseActivity(),
 
                     }
                     "tv_nav_order" -> {
+                       /* val intent = Intent(this, OrderDetailActivity::class.java)
+                        startActivity(intent)*/
                         val intent = Intent(this, OrdersListActivity::class.java)
                         startActivity(intent)
                     }

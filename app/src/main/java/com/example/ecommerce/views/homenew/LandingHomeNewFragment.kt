@@ -16,7 +16,9 @@ import com.example.ecommerce.views.category.ProductCategoriesActivity
 import com.example.ecommerce.adapters.product.ProductsGridListAdapter
 import com.example.ecommerce.common.UtilsFunctions
 import com.example.ecommerce.common.UtilsFunctions.showToastError
+import com.example.ecommerce.constants.GlobalConstants
 import com.example.ecommerce.model.homenew.HomeResponse
+import com.example.ecommerce.sharedpreference.SharedPrefClass
 import com.example.ecommerce.viewmodels.homenew.HomeVM
 import java.util.*
 import kotlin.collections.ArrayList
@@ -56,6 +58,7 @@ class LandingHomeNewFragment : BaseFragment() {
                     when {
                         response.code == 200 -> {
                             val currency = response.body?.currency ?: ""
+                            SharedPrefClass().putObject(baseActivity,GlobalConstants.CurrencyPreference,currency)
                             if (response.body?.recommended != null) {
                                 initProductsGrid(response.body.recommended, currency)
                             }

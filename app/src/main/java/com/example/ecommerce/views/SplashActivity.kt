@@ -14,6 +14,7 @@ import com.example.ecommerce.utils.BaseActivity
 import com.example.ecommerce.views.authentication.LoginActivity
 import com.example.ecommerce.views.home.LandingMainActivity
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.FirebaseApp
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.gson.JsonObject
 import java.util.*
@@ -33,7 +34,6 @@ class SplashActivity : BaseActivity() {
 
         sharedPrefClass = SharedPrefClass()
         val token: String? = "sd"
-
         FirebaseInstanceId.getInstance().instanceId
             .addOnCompleteListener(OnCompleteListener { task ->
                 if (!task.isSuccessful) {

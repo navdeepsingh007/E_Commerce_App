@@ -240,4 +240,7 @@ interface ApiInterface {
     @GET("mobile/orders/list")
     fun orderHistroyList(@Query("progressStatus") progressStatus: String): Call<JsonObject>
 
+    /*@GET("mobile/orders/detail/{id}")
+    fun orderDetailNew(var progressStatus: String): Call<JsonObject>*/
+
 }

@@ -393,6 +393,11 @@
     <string name="review_product">Review Product</string>
 
     <!-- Product details -->
+    <string name="order_details">Order Details</string>
+    <string name="date_purchased">Purchase Date</string>
+    <string name="estimate_delivery">Estimated Delivery</string>
+    <string name="shipping">Shipping</string>
+    <string name="import_changes">Import Changes</string>
     <string name="product_name">Nike Air Zoom Peagus 36 Miami</string>
     <string name="review_see_more">See More</string>
     <string name="product_style">CD0113-400</string>

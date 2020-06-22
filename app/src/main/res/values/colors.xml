@@ -21,6 +21,7 @@
     <color name="colorBlack2">#464646</color>
     <color name="transparentColorBlack">#80464646</color>
     <color name="colorGolden">#F1B922</color>
+    <color name="colorGrey0">#D3D3D3</color>
     <color name="colorGrey1">#D0D0D0</color>
     <color name="colorGrey2">#E8E8E8</color>
     <color name="colorGrey3">#F6F6F6</color>
