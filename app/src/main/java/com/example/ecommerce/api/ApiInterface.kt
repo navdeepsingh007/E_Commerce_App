@@ -193,6 +193,9 @@ interface ApiInterface {
     @GET("mobile/orders/detail/{id}")
     fun orderDetail(@Path("id") id: String): Call<JsonObject>
 
+    @GET("mobile/orders/getCancelReasons")
+    fun getReason(): Call<JsonObject>
+
     //    {id}
 //service_id
     @Multipart
