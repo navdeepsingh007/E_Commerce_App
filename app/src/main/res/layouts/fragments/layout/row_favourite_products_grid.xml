@@ -121,7 +121,7 @@
                         android:id="@+id/ivDelete"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:layout_marginLeft="@dimen/dp_10"
+                        android:layout_marginLeft="@dimen/dp_20"
                         android:src="@drawable/trash" />
                 </LinearLayout>
             </LinearLayout>

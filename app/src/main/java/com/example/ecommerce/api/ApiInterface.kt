@@ -48,7 +48,7 @@ interface ApiInterface {
     @POST("mobile/cart/add")
     fun addCart(@Body mJsonObject: JsonObject): Call<JsonObject>
 
-    @PUT("cart/update")
+    @PUT("mobile/cart/update")
     fun updateCart(@Body mJsonObject: JsonObject): Call<JsonObject>
 
     @GET("mobile/cart/detail")

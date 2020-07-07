@@ -16,7 +16,7 @@ import com.example.ecommerce.databinding.RowFlashSaleProductBinding
 import com.example.ecommerce.databinding.RowProductSelectColorBinding
 import com.example.ecommerce.model.product.ProductColor
 import com.example.ecommerce.model.productdetail.ProductDetailResponse
-import com.example.ecommerce.views.product.ProductColorChangeListener
+import com.example.ecommerce.views.product.ProductChangeListener
 import com.example.ecommerce.views.product.ProductDetailsActivity
 
 
@@ -55,17 +55,15 @@ class ProductColorAdapter(
 
             holder.binding.ivProductColor.background.setColorFilter(
                 Color.parseColor(response.productColor),
-                PorterDuff.Mode.SRC_ATOP
+                PorterDuff.Mode.SRC
             )
         }
 
         if (selectedColors[position].isSelected) {
-            holder.binding.ivProductColor.borderWidth = 10
-            holder.binding.ivProductColor.borderColor =
-                context.resources.getColor(R.color.colorPrimary)
+            holder.binding.ivProductColorSelect.visibility = ViewGroup.VISIBLE
         } else {
-            holder.binding.ivProductColor.borderWidth = 0
-            holder.binding.ivProductColor.borderColor = 0
+            holder.binding.ivProductColorSelect.visibility = ViewGroup.INVISIBLE
+
         }
 
 //        Glide.with(context)
@@ -79,8 +77,8 @@ class ProductColorAdapter(
 
             // productId of selected color
             val productDtl = (context as ProductDetailsActivity)
-            if (productDtl is ProductColorChangeListener) {
-                (productDtl as ProductColorChangeListener).onColorChange(response.id!!)
+            if (productDtl is ProductChangeListener) {
+                (productDtl as ProductChangeListener).onColorChange(response.id!!)
             }
         }
     }

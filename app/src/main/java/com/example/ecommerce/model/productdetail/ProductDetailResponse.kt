@@ -24,7 +24,7 @@ data class ProductDetailResponse(
         val originalPrice: String? = "",
         val price: String? = "",
         val productSpecifications: ArrayList<ProductSpecification>? = arrayListOf(),
-        val rating: Int? = 0,
+        val rating: String? = "",
         val ratings: Ratings? = Ratings(),
         val recommended: ArrayList<Recommended>? = arrayListOf(),
         val shipment: String? = "",
@@ -73,7 +73,7 @@ data class ProductDetailResponse(
         val offerName: String? = "",
         val originalPrice: String? = "",
         val price: String? = "",
-        val rating: Int? = 0,
+        val rating: String? = "",
         val thumbnail: String? = ""
     )
 
@@ -84,7 +84,9 @@ data class ProductDetailResponse(
     data class StockQunatity(
         val id: Int? = 0,
         val size: String? = "",
-        val stock: String? = ""
+        val stock: String? = "",
+        val price: String? = "",
+        val originalPrice: String = ""
     )
 
     data class User(

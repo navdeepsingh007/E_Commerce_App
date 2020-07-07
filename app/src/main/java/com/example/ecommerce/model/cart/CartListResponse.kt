@@ -28,6 +28,17 @@ class CartListResponse {
         @Expose
         var sum: String? = null
 
+        @SerializedName("torderPrice")
+        @Expose
+        var torderPrice: String? = null
+
+        @SerializedName("serviceCharges")
+        @Expose
+        var serviceCharges: String? = null
+
+        @SerializedName("totalQunatity")
+        @Expose
+        var totalQunatity: String? = null
 
     }
 
@@ -36,6 +47,27 @@ class CartListResponse {
         @SerializedName("service")
         @Expose
         var service: Service? = null
+
+        @SerializedName("companyId")
+        @Expose
+        var companyId: String? = null
+
+        @SerializedName("color")
+        @Expose
+        var color: String? = null
+
+        @SerializedName("size")
+        @Expose
+        var size: String? = null
+
+        @SerializedName("orderPrice")
+        @Expose
+        var orderPrice: String? = null
+
+        @SerializedName("product")
+        @Expose
+        var product: Product? = null
+
         @SerializedName("id")
         @Expose
         var id: String? = null
@@ -57,6 +89,15 @@ class CartListResponse {
         @SerializedName("updated_at")
         @Expose
         var updated_at: String? = null
+    }
+
+    inner class Product {
+        @SerializedName("icon")
+        @Expose
+        var icon: String? = null
+        @SerializedName("name")
+        @Expose
+        var name: String? = null
     }
 
     inner class Service {

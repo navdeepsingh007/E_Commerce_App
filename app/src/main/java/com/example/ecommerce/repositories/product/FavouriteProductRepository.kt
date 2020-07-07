@@ -174,12 +174,12 @@ class FavouriteProductRepository {
             mApiService.get(
                     object : ApiResponse<JsonObject> {
                         override fun onResponse(mResponse: Response<JsonObject>) {
-                            val loginResponse = if (mResponse.body() != null)
+                            val loginResponse = if (mResponse.body() != null) {
                                 gson.fromJson<AddRemoveFavResponse>(
-                                        "" + mResponse.body(),
+                                    "" + mResponse.body(),
                                     AddRemoveFavResponse::class.java
                                 )
-                            else {
+                            } else {
                                 gson.fromJson<AddRemoveFavResponse>(
                                         mResponse.errorBody()!!.charStream(),
                                     AddRemoveFavResponse::class.java
@@ -193,8 +193,7 @@ class FavouriteProductRepository {
                             data3!!.postValue(null)
                         }
 
-                    }, ApiClient.getApiInterface().addFav(jsonObject)
-            )
+                    }, ApiClient.getApiInterface().addFav(jsonObject))
 
         }
         return data3!!

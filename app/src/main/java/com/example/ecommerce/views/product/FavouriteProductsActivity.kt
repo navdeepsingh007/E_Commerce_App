@@ -1,6 +1,7 @@
 package com.example.ecommerce.views.product
 
 import android.app.Dialog
+import android.content.Intent
 import android.graphics.Typeface
 import android.view.View
 import androidx.lifecycle.Observer
@@ -19,6 +20,7 @@ import com.example.ecommerce.model.fav.FavouriteListResponse
 import com.example.ecommerce.utils.DialogClass
 import com.example.ecommerce.utils.DialogssInterface
 import com.example.ecommerce.viewmodels.favorite.FavoriteViewModel
+import com.example.ecommerce.views.cart.CartListActivity
 
 class FavouriteProductsActivity : BaseActivity(), FavDeleteListener, DialogssInterface {
     private lateinit var binding: ActivityFavouriteProductsBinding
@@ -44,6 +46,10 @@ class FavouriteProductsActivity : BaseActivity(), FavDeleteListener, DialogssInt
         removeFavouriteObserver()
 
         setFavouriteProductsGrid()
+        binding.cartIcon.setOnClickListener{
+            val intent = Intent(this, CartListActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun initToolbar() {

@@ -18,6 +18,7 @@ import com.example.ecommerce.common.UtilsFunctions
 import com.example.ecommerce.common.UtilsFunctions.showToastError
 import com.example.ecommerce.model.homenew.HomeResponse
 import com.example.ecommerce.viewmodels.homenew.HomeVM
+import com.example.ecommerce.views.cart.CartListActivity
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -128,7 +129,7 @@ class LandingHomeNewFragment : BaseFragment() {
 
         var bannerUrls = ArrayList<String>()
         for (item in salesBanners) {
-            bannerUrls.add(item.icon ?: "")
+            bannerUrls.add(item.thumbnail ?: "")
         }
 
 //        bannerUrls.add("https://www.circleone.in/images/products_gallery_images/PVC-Banner.jpg")
@@ -174,6 +175,9 @@ class LandingHomeNewFragment : BaseFragment() {
         }
         binding.tvSeeMore.setOnClickListener {
             startActivity(Intent(context, FlashSaleActivity::class.java))
+        }
+        binding.cartIcon.setOnClickListener{
+            startActivity(Intent(context, CartListActivity::class.java))
         }
     }
 

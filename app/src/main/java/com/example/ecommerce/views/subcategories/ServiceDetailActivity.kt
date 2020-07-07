@@ -384,7 +384,7 @@ class ServiceDetailActivity : BaseActivity(), DialogssInterface {
         serviceDetailBinding.llSlots.visibility = View.VISIBLE
         //serviceDetailBinding.btnSubmit.visibility = View.GONE
         serviceDetailBinding.rvSlots.visibility = View.GONE
-        serviceDetailBinding.tvTimeSlots.visibility = View.GONE
+                serviceDetailBinding.tvTimeSlots.visibility = View.GONE
         var animation = AnimationUtils.loadAnimation(this, R.anim.anim)
         animation.setDuration(500)
         serviceDetailBinding.llSlots.setAnimation(animation)

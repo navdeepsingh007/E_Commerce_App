@@ -8,7 +8,9 @@
                     name="dashboardViewModel"
                     type="com.seasia.homeservices.viewmodels.DashboardVM" />-->
     </data>
-
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -306,4 +308,16 @@
                      android:verticalSpacing="0dp" />-->
         </RelativeLayout>
     </ScrollView>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/cart_icon"
+        android:layout_width="@dimen/dp_45"
+        android:layout_height="@dimen/dp_45"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="@dimen/dp_50"
+        android:layout_marginRight="@dimen/dp_30"
+        android:src="@mipmap/cart_float"
+        />
+    </RelativeLayout>
 </layout>

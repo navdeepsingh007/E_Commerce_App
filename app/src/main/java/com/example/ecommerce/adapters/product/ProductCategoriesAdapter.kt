@@ -41,7 +41,7 @@ class ProductCategoriesAdapter(
         holder.binding.tvCategoryName.text = response.name
 
         Glide.with(context)
-            .load(response.icon)
+            .load(response.thumbnail)
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .placeholder(R.drawable.no_image)
             .into(holder.binding.ivCategory)

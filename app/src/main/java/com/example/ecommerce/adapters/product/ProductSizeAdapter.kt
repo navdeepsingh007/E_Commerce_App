@@ -12,6 +12,8 @@ import com.example.ecommerce.databinding.RowFlashSaleProductBinding
 import com.example.ecommerce.databinding.RowProductSelectSizeBinding
 import com.example.ecommerce.model.product.ProductSize
 import com.example.ecommerce.model.productdetail.ProductDetailResponse
+import com.example.ecommerce.views.product.ProductChangeListener
+import com.example.ecommerce.views.product.ProductDetailsActivity
 
 
 class ProductSizeAdapter(
@@ -55,6 +57,12 @@ class ProductSizeAdapter(
 
         holder.binding.rlSize.setOnClickListener {
             onProductSizeSelected(position)
+            // productId of selected color
+            val productDtl = (context as ProductDetailsActivity)
+            if (productDtl is ProductChangeListener) {
+                (productDtl as ProductChangeListener).onSizeChange(response.id!!)
+            }
+
         }
     }
 
@@ -65,6 +73,21 @@ class ProductSizeAdapter(
         sizeList[position].selected = true
 
         notifyDataSetChanged()
+    }
+
+    fun selectFirstSize(position: Int) {
+        for (pos in 0..sizeList.size - 1) {
+            sizeList[pos].selected = false
+        }
+        sizeList[position].selected = true
+
+        val productDtl = (context as ProductDetailsActivity)
+        if (productDtl is ProductChangeListener) {
+            (productDtl as ProductChangeListener).onSizeChange(allSizeList.get(position).id!!)
+        }
+
+        notifyDataSetChanged()
+
     }
 
     inner class TrendingServicesVH(val binding: RowProductSelectSizeBinding) :

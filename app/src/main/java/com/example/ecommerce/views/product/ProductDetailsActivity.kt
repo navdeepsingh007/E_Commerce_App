@@ -5,9 +5,11 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
+import android.opengl.Visibility
 import android.os.Handler
 import android.text.TextUtils
 import android.view.View
+import android.view.animation.AnimationUtils
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,6 +26,7 @@ import com.example.ecommerce.application.MyApplication
 import com.example.ecommerce.common.UtilsFunctions
 import com.example.ecommerce.constants.GlobalConstants
 import com.example.ecommerce.databinding.ActivityProductDetailBinding
+import com.example.ecommerce.model.CommonModel
 import com.example.ecommerce.model.fav.AddRemoveFavResponse
 import com.example.ecommerce.model.homenew.HomeResponse
 import com.example.ecommerce.model.product.BottomDialogFragment
@@ -35,13 +38,18 @@ import com.example.ecommerce.utils.BaseActivity
 import com.example.ecommerce.utils.ExtrasConstants
 import com.example.ecommerce.viewmodels.product.FavouriteProductVM
 import com.example.ecommerce.viewmodels.product.ProductDetailsVM
+import com.example.ecommerce.views.cart.CartListActivity
+import com.example.ecommerce.views.home.LandingMainActivity
+import com.example.ecommerce.views.ratingreviews.ReviewsListActivity
 import com.google.gson.JsonObject
 import com.uniongoods.adapters.ProductBannerAdapter
 import java.util.*
 import kotlin.collections.ArrayList
 
 class ProductDetailsActivity : BaseActivity(), BottomDialogFragment.BottomSheetCloseListener,
-    ProductColorChangeListener {
+    ProductChangeListener {
+
+
     private lateinit var binding: ActivityProductDetailBinding
     private var searchList = ArrayList<ProductDetailResponse.Body>()
     private lateinit var productDetailsVM: ProductDetailsVM
@@ -50,11 +58,20 @@ class ProductDetailsActivity : BaseActivity(), BottomDialogFragment.BottomSheetC
     private lateinit var serviceId: String
     private lateinit var addressId: String
     private var favProductId: String = ""
+    private var mColorProductId: String = ""
     private val AUTO_SCROLL_THRESHOLD_IN_MILLI: Long = 3000
     private var dtlResponse: ProductDetailResponse.Body? = null
     private var sizeAdaper: ProductSizeAdapter? = null
     private var bannerAdapter: ProductBannerAdapter? = null
     private var pagerAdapter: AutoScrollPagerAdapter? = null
+    var quantityCount = 0
+    var price = 0
+    var priceAmount = 0
+    var estimateDelivery = ""
+    var serviceCharges = ""
+    var selectedColor = ""
+    var selectedSize = ""
+    var companyId = ""
 
 //    private val SERVICE_ID = "05619abf-589d-4f4c-98c6-3d3a07d77ba4"
 
@@ -66,7 +83,8 @@ class ProductDetailsActivity : BaseActivity(), BottomDialogFragment.BottomSheetC
         binding = viewDataBinding as ActivityProductDetailBinding
         productDetailsVM = ViewModelProvider(this).get(ProductDetailsVM::class.java)
         favouritesVM = ViewModelProvider(this).get(FavouriteProductVM::class.java)
-
+        binding.commonToolBar.imgRight.setImageResource(R.drawable.ic_cart)
+        binding.commonToolBar.imgRight.visibility = View.VISIBLE
         getExtras()
         startProgressDialog()
         productDetailsVM.initProductDetails(serviceId, addressId)
@@ -78,8 +96,15 @@ class ProductDetailsActivity : BaseActivity(), BottomDialogFragment.BottomSheetC
 
         initProductDetailsObserver()
         addRemoveFavouriteObserver()
+        addRemoveCartObserver()
         setAddress()
+        addProductToCart()
         initToolbar()
+        clickObserver()
+        /*binding.commonToolBar.imgRight.setOnClickListener() {
+            val intent = Intent(this, CartListActivity::class.java)
+            startActivity(intent)
+        }*/
     }
 
     private fun getExtras() {
@@ -89,7 +114,9 @@ class ProductDetailsActivity : BaseActivity(), BottomDialogFragment.BottomSheetC
             MyApplication.instance,
             GlobalConstants.PREF_DELIVERY_ADDRESS_ID
         )
-        addressId = defaultDeliveryAddress?.toString() ?: ""
+        var address = defaultDeliveryAddress?.toString() ?: ""
+        addressId = address.replace("\"", "");
+        //now result is "resultCode"
     }
 
     private fun initToolbar() {
@@ -172,6 +199,21 @@ class ProductDetailsActivity : BaseActivity(), BottomDialogFragment.BottomSheetC
 //        (binding.rvFlashSale.adapter as FlashSaleProductsAdapter).notifyDataSetChanged()
     }
 
+    private fun clickObserver() {
+        productDetailsVM.isClick().observe(
+            this, Observer<String>(function =
+            fun(it: String?) {
+                when (it) {
+                    "img_right" -> {
+                        val intent = Intent(this, CartListActivity::class.java)
+                        startActivity(intent)
+                    }
+                }
+            })
+        )
+
+    }
+
     private fun initProductDetailsObserver() {
         productDetailsVM.getProductDetails().observe(this,
             Observer<ProductDetailResponse> { response ->
@@ -230,6 +272,131 @@ class ProductDetailsActivity : BaseActivity(), BottomDialogFragment.BottomSheetC
                     }
                 }
             })
+    }
+
+    private fun addRemoveCartObserver() {
+        favouritesVM.addRemoveCartRes().observe(this,
+            Observer<CommonModel> { response ->
+                stopProgressDialog()
+                if (response != null) {
+                    val message = response.message
+                    when {
+                        response.code == 200 -> {
+                            showToastSuccess("product added to cart successfully")
+                            startActivity(Intent(this, CartListActivity::class.java))
+                        }
+                        else -> message?.let {
+                            UtilsFunctions.showToastError(it)
+                        }
+                    }
+                }
+            })
+    }
+
+
+    private fun addProductToCart() {
+
+
+        binding.addProductToCart.setOnClickListener() {
+            showCartInfoLayout()
+        }
+
+        binding.imgCross.setOnClickListener() {
+
+            binding.addProductToCart.isEnabled = true
+            binding.llSlots.visibility = View.GONE
+        }
+
+        binding.imgPlus.setOnClickListener() {
+            if (quantityCount <= 5) {
+                quantityCount++
+                binding.tvQuantity.setText(quantityCount.toString())
+                price = quantityCount * priceAmount.toInt()
+                binding.tvTotalPrice.setText(GlobalConstants.Currency + " " + price.toString())
+            }
+        }
+        binding.imgMinus.setOnClickListener() {
+
+            if (quantityCount > 0) {
+                quantityCount--
+                price = quantityCount * priceAmount.toInt()
+                binding.tvTotalPrice.setText(GlobalConstants.Currency + " " + price.toString())
+                //callGetTimeSlotsApi()
+            }
+            if (quantityCount == 0) {
+                binding.tvTotalPrice.setText("0")
+
+            }
+            binding.tvQuantity.setText(quantityCount.toString())
+        }
+
+        binding.btnSubmit.setOnClickListener() {
+            if (quantityCount == 0) {
+                showToastError(getString(R.string.select_quantity_msg))
+            } else {
+                callAddRemoveCartApi()
+            }
+        }
+
+        binding.tvSeeMore.setOnClickListener{
+            val intent = Intent(this, ReviewsListActivity::class.java)
+            intent.putExtra("serviceId", serviceId)
+            startActivity(intent)
+
+        }    }
+
+    private fun callAddRemoveCartApi() {
+        var cartObject = JsonObject()
+        cartObject.addProperty(
+            "serviceId", serviceId
+        )
+        cartObject.addProperty(
+            "addressId", addressId
+        )
+        cartObject.addProperty(
+            "orderPrice", priceAmount
+        )
+        cartObject.addProperty(
+            "orderTotalPrice", price
+        )
+        cartObject.addProperty(
+            "quantity", quantityCount
+        )
+        cartObject.addProperty(
+            "serviceCharges", serviceCharges
+        )
+        cartObject.addProperty(
+            "estimateDelivery", estimateDelivery
+        )
+        cartObject.addProperty(
+            "color", selectedColor
+        )
+        cartObject.addProperty(
+            "size", selectedSize
+        )
+        cartObject.addProperty(
+            "companyId", companyId
+        )
+
+        if (UtilsFunctions.isNetworkConnected()) {
+            favouritesVM.addCart(cartObject)
+            startProgressDialog()
+        }
+    }
+
+    private fun showCartInfoLayout() {
+        binding.tvTotalPrice.setText("0")
+        binding.llSlots.visibility = View.VISIBLE
+        //serviceDetailBinding.btnSubmit.visibility = View.GONE
+        var animation = AnimationUtils.loadAnimation(this, R.anim.anim)
+        animation.setDuration(500)
+        binding.llSlots.setAnimation(animation)
+        binding.llSlots.animate()
+        animation.start()
+        quantityCount = 0
+        binding.tvQuantity.setText(quantityCount.toString())
+        binding.addProductToCart.isEnabled = false
+
     }
 
     private fun setAddress() {
@@ -318,12 +485,31 @@ class ProductDetailsActivity : BaseActivity(), BottomDialogFragment.BottomSheetC
 
         // toolbar title
         binding.commonToolBar.imgToolbarText.text = response.name ?: ""
+        binding.webViewDescription.loadData(
+            response.company!!.document!!.aboutus,
+            "text/html; charset=utf-8",
+            "UTF-8"
+        )
 
         binding.tvProductName.text = response.name ?: ""
         binding.tvProductDetail.text = response.description ?: ""
+        binding.tvSellerName.text = response.company.companyName
+        Glide.with(this)
+            .load(response.company.logo1)
+            .apply(RequestOptions.bitmapTransform(RoundedCorners(20)))
+            .placeholder(R.drawable.no_image)
+            .into(binding.ivSellerPic)
         val price = "${response.currency}${response.price}"
         binding.tvProductPrice.text = price
-
+        priceAmount = response.price!!.toInt()
+        if (estimateDelivery != null && !estimateDelivery.equals("")) {
+            estimateDelivery = response.estimatDelivery!!
+        } else {
+            //TODO for testing remove after api bug fix
+            estimateDelivery = "12"
+        }
+        serviceCharges = response.shipment!!
+        companyId = response.companyId!!
         // Product isFavourite or not
         if (response.favourite != null) {
             if (!response.favourite.isEmpty()) {
@@ -351,9 +537,9 @@ class ProductDetailsActivity : BaseActivity(), BottomDialogFragment.BottomSheetC
 //        binding.rbOverallRating.rating = 4f
 //        binding.custRating.rating = 4f
 
-        binding.tvSeeMore.setOnClickListener {
+       /* binding.tvSeeMore.setOnClickListener {
             startActivity(Intent(this, CustomerAllReviewsActivity::class.java))
-        }
+        }*/
 
         binding.ivFavourite.setOnClickListener {
             val companyId = SharedPrefClass().getPrefValue(
@@ -403,9 +589,11 @@ class ProductDetailsActivity : BaseActivity(), BottomDialogFragment.BottomSheetC
             initProductSizeAdapter(sizeStock)
             val banners = response.productSpecifications[0].productImages!!
             setViewpager(banners)
+            selectedColor = response.productSpecifications[0].productColor!!
+            selectedSize = response.productSpecifications[0].stockQunatity!![0].size!!
 //            setupDashboardBanner(response.productSpecifications[0].productImages!!)
         } else {
-            // Hide size, color, customer review and title and set Image
+            // Hide size, color, customer review and title and set Imageadd
 
             binding.ivProductImage.visibility = View.VISIBLE
             binding.offersViewpager.visibility = View.GONE
@@ -433,9 +621,11 @@ class ProductDetailsActivity : BaseActivity(), BottomDialogFragment.BottomSheetC
 
         // Customer Review
         if (response.ratings != null) {
+            binding.rlProductRating.visibility = View.VISIBLE
             val custName = "${response.ratings.user?.firstName} ${response.ratings.user?.lastName}"
             binding.tvProfileName.text = custName
-            binding.custRating.rating = response.ratings.rating?.toFloat() ?: 0f
+            var rating = String.format("%.2f", response.ratings.rating?.toFloat())
+            binding.custRating.rating = rating.toFloat()
             binding.tvCustReview.text = response.ratings.review
             Glide.with(this)
                 .load(response.ratings.user?.image)
@@ -457,12 +647,59 @@ class ProductDetailsActivity : BaseActivity(), BottomDialogFragment.BottomSheetC
             }
             binding.tvCustReviewDate.text = "${response.ratings?.createdAt}"
 //        binding.ivReviewedProductPic.text = "${response.ratings?.createdAt}"
+        } else {
+            binding.rlProductRating.visibility = View.GONE
         }
+    }
+
+    override fun onSizeChange(sizeId: Int) {
+        startProgressDialog()
+
+        val response = dtlResponse
+
+        if (response != null) {
+            for (spec in response!!.productSpecifications!!) {
+                if (spec.id.equals(mColorProductId)) {
+
+                    for (stock in spec!!.stockQunatity!!) {
+
+                        if (stock.id!!.equals(sizeId)) {
+                            val price = "${response.currency}${stock.originalPrice}"
+                            binding.tvProductPrice.text = price
+                            selectedSize = stock.size!!
+                            priceAmount = stock.originalPrice!!.toInt()
+                            if (!stock.price.equals(stock.originalPrice)) {
+                                val percentOff = "${response.offer}% off"
+                                binding.tvProductPercentageOff.text = percentOff
+
+                                val offPrice = "${response.currency}${stock.price}"
+                                binding.tvProductOff.text = offPrice
+                                binding.tvProductOff.setPaintFlags(binding.tvProductOff.getPaintFlags() or Paint.STRIKE_THRU_TEXT_FLAG)
+
+                                binding.tvProductPercentageOff.visibility = View.VISIBLE
+                                binding.tvProductOff.visibility = View.VISIBLE
+                            } else {
+                                binding.tvProductPercentageOff.visibility = View.INVISIBLE
+                                binding.tvProductOff.visibility = View.INVISIBLE
+                            }
+                            break
+                        }
+
+                    }
+
+
+                }
+
+            }
+        }
+        stopProgressDialog()
+
     }
 
     override fun onColorChange(productId: String) {
         // show progress while changing product color
         startProgressDialog()
+        mColorProductId = productId
 
         val response = dtlResponse
 
@@ -470,6 +707,7 @@ class ProductDetailsActivity : BaseActivity(), BottomDialogFragment.BottomSheetC
             for (spec in response!!.productSpecifications!!) {
                 if (spec.id.equals(productId)) {
                     if (sizeAdaper != null) {
+                        selectedColor = spec.productColor!!
                         val adapter = sizeAdaper
                         adapter!!.allSizeList.clear()
 
@@ -482,7 +720,8 @@ class ProductDetailsActivity : BaseActivity(), BottomDialogFragment.BottomSheetC
 
                         // Size change notify adapter
                         adapter.allSizeList.addAll(spec.stockQunatity!!)
-                        adapter.notifyDataSetChanged()
+                        adapter.selectFirstSize(0)
+                        // adapter.notifyDataSetChanged()
 //                        binding.vpBanner.setBackgroundColor(Color.parseColor(spec.productColor!!))
                     }
                     if (bannerAdapter != null) {
@@ -518,6 +757,7 @@ class ProductDetailsActivity : BaseActivity(), BottomDialogFragment.BottomSheetC
     }
 }
 
-interface ProductColorChangeListener {
+interface ProductChangeListener {
     fun onColorChange(productId: String)
+    fun onSizeChange(sizeId: Int)
 }

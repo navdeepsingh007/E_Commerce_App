@@ -88,7 +88,7 @@ class ProductsListingGridAdapter(
         holder.topLayout?.setOnClickListener { onProductClick(response) }
 
         Glide.with(context)
-            .load(response.icon)
+            .load(response.thumbnail)
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .apply(RequestOptions.bitmapTransform(RoundedCorners(20)))
             .placeholder(R.drawable.no_image)

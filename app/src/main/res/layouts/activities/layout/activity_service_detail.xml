@@ -237,7 +237,7 @@
             android:elevation="@dimen/dp_10"
             android:orientation="vertical"
             android:padding="@dimen/dp_10"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <ImageView
                 android:id="@+id/img_cross"

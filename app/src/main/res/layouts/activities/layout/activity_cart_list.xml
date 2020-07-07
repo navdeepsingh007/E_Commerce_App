@@ -52,7 +52,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/totalItemsLay1"
-                android:layout_margin="@dimen/dp_5"
+                android:layout_marginStart="@dimen/dp_5"
+                android:layout_marginTop="@dimen/dp_5"
+                android:layout_marginEnd="@dimen/dp_5"
+                android:layout_marginBottom="@dimen/dp_5"
                 android:background="@drawable/round_back_transparent"
                 android:elevation="@dimen/dp_5"
                 android:gravity="center_vertical"
@@ -69,7 +72,7 @@
                     android:layout_height="@dimen/dp_30"
                     android:layout_gravity="center_vertical"
                     android:scaleType="fitXY"
-                    android:src="@drawable/ic_category" />
+                    android:src="@drawable/ic_coupon" />
 
                 <TextView
                     android:id="@+id/tvPromo"
@@ -142,6 +145,44 @@
                         android:textAppearance="@style/TextAppearance.AppCompat.Small"
                         android:textColor="@android:color/black"
                         app:font="@{`bold`}" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_1"
+                    android:background="@color/colorGrey1" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/totalPriceLay"
+                    android:orientation="horizontal"
+                    android:paddingLeft="@dimen/dp_20"
+                    android:paddingTop="@dimen/dp_10"
+                    android:paddingRight="@dimen/dp_20"
+                    android:paddingBottom="@dimen/dp_10">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:text="@string/shipping"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                        android:textStyle="bold"
+                        app:font="@{`bold`}" />
+
+                    <TextView
+                        android:id="@+id/tvshipping"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:gravity="right"
+                        android:singleLine="true"
+                        android:text="10"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                        android:textColor="@android:color/black"
+                        app:font="@{`bold`}" />
+
                 </LinearLayout>
 
                 <View

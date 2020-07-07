@@ -17,11 +17,11 @@ import com.example.ecommerce.model.cart.CartListResponse
 import com.example.ecommerce.views.cart.CartListActivity
 
 class CartListAdapter(
-        context: CartListActivity,
-        addressList: ArrayList<CartListResponse.Data>,
-        var activity: Context
+    context: CartListActivity,
+    addressList: ArrayList<CartListResponse.Data>,
+    var activity: Context
 ) :
-        RecyclerView.Adapter<CartListAdapter.ViewHolder>() {
+    RecyclerView.Adapter<CartListAdapter.ViewHolder>() {
     private val mContext: CartListActivity
     private var viewHolder: ViewHolder? = null
     private var addressList: ArrayList<CartListResponse.Data>
@@ -34,31 +34,47 @@ class CartListAdapter(
     @NonNull
     override fun onCreateViewHolder(@NonNull parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = DataBindingUtil.inflate(
-                LayoutInflater.from(parent.context),
-                R.layout.cart_item,
-                parent,
-                false
+            LayoutInflater.from(parent.context),
+            R.layout.cart_item,
+            parent,
+            false
         ) as CartItemBinding
         return ViewHolder(binding.root, viewType, binding, mContext, addressList)
     }
 
     override fun onBindViewHolder(@NonNull holder: ViewHolder, position: Int) {
         viewHolder = holder
-        holder.binding!!.tvCatName.text = addressList[position].service?.name
+        holder.binding!!.tvCatName.text = addressList[position].product!!.name
         holder.binding!!.tvQuantity.setText(mContext.resources.getString(R.string.quantity) + ": " + addressList[position].quantity)
+        holder.binding.tvQuantityCount.setText(addressList[position].quantity)
         holder.binding!!.tvOfferPrice.setText(
-                GlobalConstants.Currency + " " + addressList[position].price.toString()
+            GlobalConstants.Currency + " " + addressList[position].price.toString()
         )
         //holder.binding!!.rBar.setRating(addressList[position].rating?.toFloat())
         Glide.with(mContext)
-                .load(addressList[position].service?.icon)
-                .apply(RequestOptions.bitmapTransform(RoundedCorners(20)))
-                .placeholder(R.drawable.ic_category)
-                .into(holder.binding.imgCart)
+            .load(addressList[position].product!!.icon)
+            .apply(RequestOptions.bitmapTransform(RoundedCorners(20)))
+            .placeholder(R.drawable.ic_category)
+            .into(holder.binding.imgCart)
         //img_cat
         holder.binding!!.imgRemove.setOnClickListener {
             mContext.addRemoveToCart(position/*, holder.binding!!.imgCart.getText().toString()*/)
         }
+        holder.binding!!.ivFavourite.setOnClickListener{
+
+        }
+        holder.binding!!.imgPlus.setOnClickListener{
+            var quantiy = addressList[position].quantity!!.toInt()
+            mContext.updateCart(position,quantiy++)
+
+        }
+        holder.binding!!.imgMinus.setOnClickListener{
+            var quantiy = addressList[position].quantity!!.toInt()
+            mContext.updateCart(position,quantiy--)
+
+        }
+
+
         if (addressList[position].service?.timeSlotStatus.equals("false")) {
             holder.binding.tvNoSlotAvailable.visibility = View.VISIBLE
             holder.binding.serviceItem.setBackgroundColor(mContext.resources.getColor(R.color.colorGrey1))
@@ -73,15 +89,21 @@ class CartListAdapter(
     }
 
     inner class ViewHolder//This constructor would switch what to findViewBy according to the type of viewType
-    (
-            v: View, val viewType: Int, //These are the general elements in the RecyclerView
-            val binding: CartItemBinding?,
-            mContext: CartListActivity,
-            addressList: ArrayList<CartListResponse.Data>?
+        (
+        v: View, val viewType: Int, //These are the general elements in the RecyclerView
+        val binding: CartItemBinding?,
+        mContext: CartListActivity,
+        addressList: ArrayList<CartListResponse.Data>?
     ) : RecyclerView.ViewHolder(v) {
-        /*init {
-            binding.linAddress.setOnClickListener {
-                mContext.deleteAddress(adapterPosition)
+       /* init {
+            binding!!.imgPlus.setOnClickListener {
+
+            }
+            binding!!.imgMinus.setOnClickListener {
+
+            }
+            binding!!.imgRemove.setOnClickListener {
+
             }
         }*/
     }

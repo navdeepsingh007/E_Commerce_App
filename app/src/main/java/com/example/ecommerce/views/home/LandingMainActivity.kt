@@ -71,7 +71,7 @@ class LandingMainActivity : BaseActivity(),
         /** Show Rating Dialog here**/
         // checkForRating(0)
         /*****************/
-        activityLandingBinding!!.toolbarHome.toolbar.setImageResource(R.drawable.ic_menu)
+        activityLandingBinding!!.toolbarHome.toolbar.setImageResource(R.drawable.drawer)
         activityLandingBinding!!.toolbarHome.etSearchProducts.setOnClickListener { onSearchClick() }
         activityLandingBinding!!.toolbarHome.ivFavourite.setOnClickListener { onFavouritesClick() }
         activityLandingBinding!!.toolbarHome.ivAlert.setOnClickListener { onNotificationsClick() }
@@ -120,7 +120,7 @@ class LandingMainActivity : BaseActivity(),
             fun(it: String?) {
                 when (it) {
                     "tv_nav_fav" -> {
-                        val intent = Intent(this, FavoriteListActivity::class.java)
+                        val intent = Intent(this, FavouriteProductsActivity::class.java)
                         startActivity(intent)
                     }
                     "tv_nav_notification" -> {

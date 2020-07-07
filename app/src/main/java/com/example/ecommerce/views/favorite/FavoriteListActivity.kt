@@ -21,6 +21,7 @@ import com.google.gson.JsonObject
 import com.example.ecommerce.databinding.ActivityFavoriteListBinding
 import com.example.ecommerce.model.fav.FavListResponse
 import com.example.ecommerce.utils.DialogssInterface
+import com.example.ecommerce.views.cart.CartListActivity
 import com.example.ecommerce.views.subcategories.ServiceDetailActivity
 import com.uniongoods.adapters.FavoriteListAdapter
 
@@ -98,6 +99,11 @@ class FavoriteListActivity : BaseActivity(), DialogssInterface {
 
                     }
                 })
+
+        favoriteBinding.cartIcon.setOnClickListener{
+            val intent = Intent(this, CartListActivity::class.java)
+            startActivity(intent)
+        }
 
     }
 

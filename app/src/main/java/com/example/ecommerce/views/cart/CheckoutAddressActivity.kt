@@ -1,5 +1,6 @@
 package com.example.ecommerce.views.cart
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
@@ -52,6 +53,7 @@ import com.uniongoods.adapters.CheckoutAddressListAdapter
 import com.uniongoods.adapters.DateListAdapter
 import com.uniongoods.adapters.TimeSlotsListAdapter
 import org.json.JSONObject
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -95,6 +97,7 @@ class CheckoutAddressActivity : BaseActivity(), DialogssInterface {
         }
     }
 
+    @SuppressLint("NewApi")
     override fun initViews() {
         cartBinding = viewDataBinding as ActivityCheckoutAddressBinding
         cartViewModel = ViewModelProviders.of(this).get(CartViewModel::class.java)
@@ -155,7 +158,7 @@ class CheckoutAddressActivity : BaseActivity(), DialogssInterface {
                         response.code == 200 -> {
                             cartList.addAll(response.body!!.data!!)
                             payableAmount = response.body?.sum.toString()
-                            cartBinding.tvTotalItems.setText(cartList.size.toString())
+                            cartBinding.tvTotalItems.setText(response.body!!.totalQunatity)
                             cartBinding.tvOfferPrice.setText(GlobalConstants.Currency + " " + response.body?.sum)
                             cartBinding.tvPromo.setText(getString(R.string.apply_coupon))
                             cartBinding.rlRealPrice.visibility = View.GONE
@@ -362,31 +365,37 @@ class CheckoutAddressActivity : BaseActivity(), DialogssInterface {
                     }
                     "btnCheckout" -> {
 
-                        if (TextUtils.isEmpty(selectedDate)) {
+                        /*if (TextUtils.isEmpty(selectedDate)) {
                             showToastError("Please Select Date For The Service")
                         } else if (TextUtils.isEmpty(selectedTime)) {
                             showToastError("Please Select Time Slot For The Service")
-                        } else if (TextUtils.isEmpty(addressId)) {
+                        } else*/ if (TextUtils.isEmpty(addressId)) {
                             showToastError("Please Select Address")
                         } else {
 
 
                             val addressObject = JsonObject()
-                            addressObject.addProperty(
+                           /*  addressObject.addProperty(
                                 "addressId", addressId
-                            )
-                            addressObject.addProperty(
+                            )*/
+                            /*addressObject.addProperty(
                                 "serviceDateTime", selectedDate + " " + selectedTime
-                            )
+                            )*//*
                             addressObject.addProperty(
                                 "orderPrice", payableAmount
-                            )
+                            )*/
                             addressObject.addProperty(
-                                "serviceCharges", "0"
+                                "serviceCharges", payableAmount
                             )
+
+                            var sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+                            var currentDateandTime = sdf.format(Date())
                             addressObject.addProperty(
-                                "promoCode", couponCodeId
+                                "serviceDateTime", currentDateandTime
                             )
+                            /* addressObject.addProperty(
+                                 "promoCode", couponCodeId
+                             )*/
                             cartViewModel.orderPlace(addressObject)
 
 

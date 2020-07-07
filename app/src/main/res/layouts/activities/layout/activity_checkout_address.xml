@@ -58,7 +58,7 @@
                     android:elevation="@dimen/dp_5"
                     android:orientation="vertical"
                     android:padding="@dimen/dp_10"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
                     <RadioGroup
                         android:id="@+id/radio_group"
@@ -96,7 +96,7 @@
                         android:text="@string/when_do_you_want_this_service"
                         android:textAllCaps="false"
                         android:textColor="@color/colorBlack"
-                        android:visibility="visible"
+                        android:visibility="gone"
                         app:font="@{`bold`}"
                         tools:ignore="AllCaps" />
 
@@ -105,7 +105,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp_10"
-                        android:visibility="visible" />
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/tvDateRecord"
@@ -117,7 +117,7 @@
                         android:text="@string/no_date_slots_available"
                         android:textAllCaps="false"
                         android:textColor="@color/colorBlack"
-                        android:visibility="visible"
+                        android:visibility="gone"
                         app:font="@{`bold`}"
                         tools:ignore="AllCaps" />
 
@@ -131,7 +131,7 @@
                         android:text="@string/select_time"
                         android:textAllCaps="false"
                         android:textColor="@color/colorBlack"
-                        android:visibility="visible"
+                        android:visibility="gone"
                         app:font="@{`bold`}"
                         tools:ignore="AllCaps" />
 
@@ -140,7 +140,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp_10"
-                        android:visibility="visible" />
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/tvNoRecord"
@@ -152,7 +152,7 @@
                         android:text="@string/no_time_slots_available"
                         android:textAllCaps="false"
                         android:textColor="@color/colorBlack"
-                        android:visibility="visible"
+                        android:visibility="gone"
                         app:font="@{`bold`}"
                         tools:ignore="AllCaps" />
 
@@ -383,6 +383,44 @@
                             android:textAppearance="@style/TextAppearance.AppCompat.Small"
                             android:textColor="@android:color/black"
                             app:font="@{`bold`}" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_1"
+                        android:background="@color/colorGrey1" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@+id/totalPriceLay"
+                        android:orientation="horizontal"
+                        android:paddingLeft="@dimen/dp_20"
+                        android:paddingTop="@dimen/dp_10"
+                        android:paddingRight="@dimen/dp_20"
+                        android:paddingBottom="@dimen/dp_10">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:singleLine="true"
+                            android:text="@string/shipping"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                            android:textStyle="bold"
+                            app:font="@{`bold`}" />
+
+                        <TextView
+                            android:id="@+id/tv_shipping_price"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:gravity="right"
+                            android:singleLine="true"
+                            android:text="0"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                            android:textColor="@android:color/black"
+                            app:font="@{`bold`}" />
+
                     </LinearLayout>
 
                     <View

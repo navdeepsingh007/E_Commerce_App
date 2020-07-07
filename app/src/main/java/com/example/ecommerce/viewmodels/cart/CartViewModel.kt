@@ -19,6 +19,7 @@ class CartViewModel : BaseViewModel() {
     private var deleteAddress = MutableLiveData<CommonModel>()
     private var orderPlace = MutableLiveData<CreateOrdersResponse>()
     private var updatePaymentStatus = MutableLiveData<CommonModel>()
+    private var updateCart = MutableLiveData<CommonModel>()
 
     private var cartList = MutableLiveData<CartListResponse>()
     private var cartRepository = CartRepository()
@@ -30,6 +31,7 @@ class CartViewModel : BaseViewModel() {
             cartList = cartRepository.cartList()
             orderPlace = cartRepository.orderPlace(null)
             updatePaymentStatus = cartRepository.updatePaymentStatus(null)
+            updateCart = cartRepository.updateCart(null)
         }
 
     }
@@ -44,6 +46,10 @@ class CartViewModel : BaseViewModel() {
 
     fun getUpdatePayemntStatusRes(): LiveData<CommonModel> {
         return updatePaymentStatus
+    }
+
+    fun getOrderUpdateRes(): LiveData<CommonModel>{
+        return updateCart
     }
 
     override fun isLoading(): LiveData<Boolean> {
@@ -78,6 +84,13 @@ class CartViewModel : BaseViewModel() {
             mIsUpdating.postValue(true)
         }
 
+    }
+
+    fun updateCart(mJsonObject: JsonObject) {
+        if (UtilsFunctions.isNetworkConnected()) {
+            updateCart = cartRepository.updateCart(mJsonObject)
+            mIsUpdating.postValue(true)
+        }
     }
 
 }

@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_10"
@@ -11,11 +11,21 @@
         <!--app:civ_border_width="@dimen/dp_2"
         app:civ_border_color="@color/colorPrimary"-->
         <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/ivProductColor_select"
+            android:layout_width="@dimen/dp_55"
+            android:layout_height="@dimen/dp_55"
+            android:visibility="invisible"
+            android:background="@drawable/circle_orange"
+        />
+
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/ivProductColor"
+            android:layout_centerInParent="true"
             android:layout_width="@dimen/dp_50"
             android:layout_height="@dimen/dp_50"
+            android:padding="@dimen/dp_10"
             android:background="@drawable/circle_white"
             />
 
-    </LinearLayout>
+    </RelativeLayout>
 </layout>
