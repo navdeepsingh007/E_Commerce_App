@@ -137,4 +137,7 @@ object GlobalConstants {
 
     @JvmStatic
     var PREF_DELIVERY_ADDRESS_ID = "addressId"
+
+    @JvmStatic
+    var CurrencyPreference = "currency"
 }

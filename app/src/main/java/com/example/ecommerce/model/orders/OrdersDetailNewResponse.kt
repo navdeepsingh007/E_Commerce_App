@@ -1,9 +1,10 @@
 package com.example.ecommerce.model.orders
 
+import com.example.ecommerce.model.fav.FavouriteListResponse
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class OrdersListResponse {
+class OrdersDetailNewResponse {
     @SerializedName("code")
     @Expose
     var code: Int? = null
@@ -12,63 +13,21 @@ class OrdersListResponse {
     var message: String? = null
     @SerializedName("body")
     @Expose
-    var data: ArrayList<Body>? = null
+    var data: Body? = null
 
-    /* "address": {
-                    "addressName": "sectar 78",
-                    "addressType": "Home",
-                    "houseNo": "776",
-                    "town": "",
-                    "landmark": "",
-                    "city": "Mohali Punjab"
-                }*/
     inner class Body {
-
+        @SerializedName("orderNo")
+        @Expose
+        var orderNo: String? = null
         @SerializedName("id")
         @Expose
         var id: String? = null
-        @SerializedName("serviceDateTime")
-        @Expose
-        var serviceDateTime: String? = null
-        @SerializedName("orderPrice")
-        @Expose
-        var orderPrice: String? = null
-        @SerializedName("promoCode")
-        @Expose
-        var promoCode: String? = null
-        @SerializedName("offerPrice")
-        @Expose
-        var offerPrice: String? = null
-        @SerializedName("serviceCharges")
-        @Expose
-        var serviceCharges: String? = null
-        @SerializedName("totalOrderPrice")
-        @Expose
-        var totalOrderPrice: String? = null
-        @SerializedName("addressId")
-        @Expose
-        var addressId: String? = null
-        @SerializedName("companyId")
-        @Expose
-        var companyId: String? = null
-        @SerializedName("userId")
-        @Expose
-        var userId: String? = null
         @SerializedName("progressStatus")
         @Expose
         var progressStatus: String? = null
         @SerializedName("trackStatus")
         @Expose
         var trackStatus: String? = null
-        @SerializedName("assignedEmployees")
-        @Expose
-        var assignedEmployees: String? = null
-        @SerializedName("trackingLatitude")
-        @Expose
-        var trackingLatitude: String? = null
-        @SerializedName("trackingLongitude")
-        @Expose
-        var trackingLongitude: String? = null
         @SerializedName("cancellationReason")
         @Expose
         var cancellationReason: String? = null
@@ -78,31 +37,40 @@ class OrdersListResponse {
         @SerializedName("updatedAt")
         @Expose
         var updatedAt: String? = null
-        @SerializedName("address")
+        @SerializedName("addressId")
         @Expose
-        var address: Address? = null
+        var addressId: String? = null
+        @SerializedName("serviceDateTime")
+        @Expose
+        var serviceDateTime: String? = null
+        @SerializedName("orderPrice")
+        @Expose
+        var orderPrice: String? = null
+        @SerializedName("serviceCharges")
+        @Expose
+        var serviceCharges: String? = null
+        @SerializedName("offerPrice")
+        @Expose
+        var offerPrice: String? = null
+        @SerializedName("promoCode")
+        @Expose
+        var promoCode: String? = null
+        @SerializedName("totalOrderPrice")
+        @Expose
+        var totalOrderPrice: String? = null
+        @SerializedName("userId")
+        @Expose
+        var userId: String? = null
+        @SerializedName("companyId")
+        @Expose
+        var companyId: String? = null
         @SerializedName("suborders")
         @Expose
         var suborders: ArrayList<Suborders>? = null
-        @SerializedName("cancellable")
+        @SerializedName("assignedEmployees")
         @Expose
-        var cancellable: String? = null
-
-        @SerializedName("companyAddress")
-        @Expose
-        var companyAddress: CompanyAddress? = null
-
+        var assignedEmployees: ArrayList<AssignedEmployees>? = null
     }
-
-    inner class CompanyAddress {
-        @SerializedName("lat")
-        @Expose
-        var lat: String? = null
-        @SerializedName("long")
-        @Expose
-        var long: String? = null
-    }
-
     inner class Suborders {
         @SerializedName("id")
         @Expose
@@ -133,20 +101,33 @@ class OrdersListResponse {
         var otherReason: String? = null
         @SerializedName("product")
         @Expose
-        var service: Service? = null
+        var product: Product? = null
         @SerializedName("cancelReason")
         @Expose
         var cancelReason: String? = null
         @SerializedName("address")
         @Expose
         var address: Address? = null
-       /* @SerializedName("company")
+        @SerializedName("company")
         @Expose
-        var company: Company? = null*/
+        var company: Company? = null
 
     }
 
-    inner class Service {
+    inner class AssignedEmployees {
+        @SerializedName("id")
+        @Expose
+        var id: String? = null
+        @SerializedName("jobStatus")
+        @Expose
+        var jobStatus: String? = null
+        @SerializedName("employee")
+        @Expose
+        var employee: AssignedEmployees? = null
+
+    }
+
+    inner class Product {
         @SerializedName("icon")
         @Expose
         var icon: String? = null
@@ -171,9 +152,51 @@ class OrdersListResponse {
         @SerializedName("duration")
         @Expose
         var duration: String? = null
+        @SerializedName("offer")
+        @Expose
+        var offer: Int? = null
+        @SerializedName("offerName")
+        @Expose
+        var offerName: String? = null
         @SerializedName("brandName")
         @Expose
         var brandName: String? = null
+        @SerializedName("productSpecifications")
+        @Expose
+        var productSpecifications: ArrayList<ProductSpecification>? = null
+    }
+
+    inner class ProductSpecification {
+        @SerializedName("productImages")
+        @Expose
+        var productImages: ArrayList<String>? = null
+        @SerializedName("stockQunatity")
+        @Expose
+        var stockQunatity: ArrayList<StockQunatity>? = null
+        @SerializedName("id")
+        @Expose
+        var id: String? = null
+        @SerializedName("productColor")
+        @Expose
+        var productColor: String? = null
+    }
+
+    inner class StockQunatity {
+        @SerializedName("id")
+        @Expose
+        var id: Int? = null
+        @SerializedName("size")
+        @Expose
+        var size: String? = null
+        @SerializedName("stock")
+        @Expose
+        var stock: String? = null
+        @SerializedName("price")
+        @Expose
+        var price: String? = null
+        @SerializedName("originalPrice")
+        @Expose
+        var originalPrice: String? = null
 
     }
 
@@ -205,5 +228,26 @@ class OrdersListResponse {
         @SerializedName("city")
         @Expose
         var city: String? = null
+    }
+
+    inner class Company {
+        @SerializedName("logo1")
+        @Expose
+        var logo1: String? = null
+        @SerializedName("id")
+        @Expose
+        var id: String? = null
+        @SerializedName("companyName")
+        @Expose
+        var companyName: String? = null
+        @SerializedName("document")
+        @Expose
+        var document: Document? = null
+    }
+
+    inner class Document {
+        @SerializedName("aboutus")
+        @Expose
+        var aboutus: String? = null
     }
 }

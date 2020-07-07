@@ -31,7 +31,7 @@ data class HomeResponse(
         val offer: Int? = 0,
         val originalPrice: String? = "",
         val price: String? = "",
-        val rating: String? = "",
+        val rating: Int? = 0,
         val thumbnail: String? = ""
     )
 
@@ -45,7 +45,7 @@ data class HomeResponse(
         val originalPrice: String? = "",
         val price: String? = "",
         val productSpecifications: ArrayList<ProductSpecification>? = arrayListOf(),
-        val rating: String? = "",
+        val rating: Int? = 0,
         val thumbnail: String? = "",
         val validUpto: String? = ""
     )

@@ -1,5 +1,8 @@
 package com.uniongoods.adapters
 
+import android.content.Intent
+import android.graphics.Color
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,14 +10,19 @@ import androidx.annotation.NonNull
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.ecommerce.R
 import com.example.ecommerce.constants.GlobalConstants
 import com.example.ecommerce.databinding.OrderItemBinding
 import com.example.ecommerce.model.orders.OrdersListResponse
+import com.example.ecommerce.sharedpreference.SharedPrefClass
 import com.example.ecommerce.utils.BaseActivity
 import com.example.ecommerce.utils.Utils
+import com.example.ecommerce.views.orders.OrderDetailActivity
 import com.example.ecommerce.views.orders.OrdersListActivity
+import com.example.ecommerce.views.orders.cancelorder.CancelOrderActivity
 import com.google.gson.JsonObject
+import kotlinx.android.synthetic.main.row_categories.*
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -48,121 +56,31 @@ class OrderListAdapter(
 
     override fun onBindViewHolder(@NonNull holder: ViewHolder, position: Int) {
         viewHolder = holder
-        holder.binding!!.tvOrderOn.text = Utils(mContext).getDate(
-            "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
-            addressList[position].createdAt,
-            "HH:mm yyyy-MM-dd"
-        )
-        holder.binding!!.tvServiceOn.text = Utils(mContext).getDate(
+        holder.binding!!.tvCatName.text =  addressList.get(position).suborders!!.get(0).service!!.name
+        holder.binding!!.tvVendor.text = addressList.get(position).suborders!!.get(0).service!!.brandName
+        if (!TextUtils.isEmpty(addressList.get(position).suborders!!.get(0).color))
+        holder.binding!!.tvColorValue.setBackgroundColor(Color.parseColor(addressList.get(position).suborders!!.get(0).color))
+        holder.binding.tvSizeValue.text = addressList.get(position).suborders!!.get(0).size
+        holder.binding.tvUnitValue.text = addressList.get(position).suborders!!.get(0).quantity
+        holder.binding.tvOfferPrice.text = SharedPrefClass().getPrefValue(mContext,GlobalConstants.CurrencyPreference).toString()+addressList.get(position).totalOrderPrice
+        holder.binding!!.tvDateValue.text = Utils(mContext).getDate(
             "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
             addressList[position].serviceDateTime,
-            "HH:mm yyyy-MM-dd"
+            "EEE MMM dd, yyyy hh:mm aa"
         )
+        Glide.with(mContext).load(addressList.get(position).suborders!!.get(0).service!!.icon).
+        into(holder.binding!!.imgCart)
 
-        holder.binding!!.tvTotal.setText(GlobalConstants.Currency + " " + addressList[position].totalOrderPrice)
-////0-Pending/Not Confirmed, 1-> Confirmed , 2->Cancelled , 3->Processing,4//cancelled by company, 5->Completed
-        if (addressList[position].cancellable.equals("true")) {
-            holder.binding!!.tvCancel.setText("Cancel Order"/*addressList[position].progressStatus*/)
-            holder.binding!!.tvCancel.isEnabled = true
-        } else {
-
-            if (addressList[position].progressStatus.equals("0")) {
-                holder.binding!!.tvCancel.setText("Pending"/*addressList[position].progressStatus*/)
-                holder.binding!!.tvCancel.isEnabled = true
-                holder.binding!!.tvCancel.setBackgroundTintList(
-                    mContext.getResources().getColorStateList(
-                        R.color.colorStatus
-                    )
-                )
-
-            } else if (addressList[position].progressStatus.equals("1")) {
-                holder.binding!!.tvCancel.setText("Confirmed"/*addressList[position].progressStatus*/)
-                holder.binding!!.tvCancel.isEnabled = true
-                holder.binding!!.tvCancel.setBackgroundTintList(
-                    mContext.getResources().getColorStateList(
-                        R.color.colorStatus
-                    )
-                )
-
-            } else if (addressList[position].progressStatus.equals("2")) {
-                holder.binding!!.tvCancel.setText("Cancelled"/*addressList[position].progressStatus*/)
-                holder.binding!!.tvCancel.isEnabled = false
-            } else if (addressList[position].progressStatus.equals("3")) {
-                holder.binding!!.tvCancel.isEnabled = true
-                holder.binding!!.tvCancel.setBackgroundTintList(
-                    mContext.getResources().getColorStateList(
-                        R.color.colorStatus
-                    )
-                )
-
-                holder.binding!!.tvCancel.setText("Processing"/*addressList[position].progressStatus*/)
-            } else if (addressList[position].progressStatus.equals("4")) {
-                holder.binding!!.tvCancel.isEnabled = false
-                holder.binding!!.tvCancel.setText("Cancelled by company"/*addressList[position].progressStatus*/)
-            } else if (addressList[position].progressStatus.equals("5")) {
-                holder.binding!!.tvCancel.isEnabled = false
-                holder.binding!!.tvCancel.setText("Completed"/*addressList[position].progressStatus*/)
-                holder.binding!!.tvCancel.setBackgroundTintList(
-                    mContext.getResources().getColorStateList(
-                        R.color.colorSuccess
-                    )
-                )
-
-            }
+         holder.binding!!.rlOrderItem.setOnClickListener{
+              val intent = Intent(orderListActivity, OrderDetailActivity::class.java)
+            orderListActivity!!.startActivity(intent)
         }
 
         holder.binding!!.tvCancel.setOnClickListener {
-            if (orderListActivity != null) {
-
-            }
-            val mJsonObjectStartJob = JsonObject()
-            mJsonObjectStartJob.addProperty(
-                "orderId", addressList[position].id
-            )
-            mJsonObjectStartJob.addProperty(
-                "lat", addressList[position].address?.latitude
-            )
-            mJsonObjectStartJob.addProperty(
-                "lng", addressList[position].address?.longitude
-            )
-            mJsonObjectStartJob.addProperty(
-                "destLat", addressList[position].companyAddress?.lat
-            )
-            mJsonObjectStartJob.addProperty(
-                "destLong", addressList[position].companyAddress?.long
-            )
-
-           /* val intent = Intent(mContext, DriverTrackingActivity::class.java)
-            intent.putExtra("data", mJsonObjectStartJob.toString())
-            mContext.startActivity(intent)*/
-
-             if (addressList[position].cancellable.equals("true")) {
-                 if (orderListActivity != null)
-                     orderListActivity.cancelOrder(position)
-             } else {
-                 orderListActivity!!.completeOrder(position)
-             }
+            val intent = Intent(orderListActivity, CancelOrderActivity::class.java)
+            intent.putExtra("orderId", addressList.get(position).id)
+            orderListActivity!!.startActivity(intent)
         }
-
-
-        /* if (orderListActivity == null) {
-             holder.binding!!.tvCancel.visibility = View.GONE
-         } else {
-             holder.binding!!.tvCancel.visibility = View.VISIBLE
-         }*/
-        val orderListAdapter =
-            OrderServicesListAdapter(mContext, addressList[position].suborders, mContext)
-        val linearLayoutManager = LinearLayoutManager(mContext)
-        linearLayoutManager.orientation = RecyclerView.VERTICAL
-        holder.binding!!.rvOrderService.layoutManager = linearLayoutManager
-        holder.binding!!.rvOrderService.adapter = orderListAdapter
-        holder.binding!!.rvOrderService.addOnScrollListener(object :
-            RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-
-            }
-        })
-
     }
 
     fun getDaysAgo(daysAgo: Int): Date {
